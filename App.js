@@ -9,6 +9,9 @@ import CardDetail from './src/screens/CardDetail/Index';
 import Forums from './src/screens/Forums/Index';
 import Surveys from './src/screens/Surveys/Index';
 import NewsFeed from './src/screens/NewsFeed/Index';
+import Settings from './src/screens/Settings/Index';
+import PriavcyPolicy from './src/screens/PrivacyPolicy/Index';
+import Terms from './src/screens/Terms/Index';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +52,21 @@ const App = () => {
         <Stack.Screen
         name='NewsFeed'
         component={NewsFeed}
+        options={{headerShown:false}}
+        />
+        <Stack.Screen
+        name='Settings'
+        component={Settings}
+        options={{headerShown:false}}
+        />
+        <Stack.Screen
+        name='PrivacyPolicy'
+        component={PriavcyPolicy}
+        options={{headerShown:false}}
+        />
+        <Stack.Screen
+        name='Terms'
+        component={Terms}
         options={{headerShown:false}}
         />
       </Stack.Navigator>

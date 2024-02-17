@@ -17,6 +17,20 @@ const Styles = {
     flatcontainer:{
         alignItems:'center',
         marginTop:20
+    },
+    header:{
+        width:'100%',
+        height:50,
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'flex-end',
+        backgroundColor:'white',
+        elevation:5    
+    },
+    gear:{
+        height:30,
+        width:30,
+        margin:15
     }
 }
 

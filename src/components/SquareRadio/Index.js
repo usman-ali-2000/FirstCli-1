@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Image } from "react-native";
 import Styles from "./Style";
 
 const SquareRadio=(props)=>{
@@ -14,7 +14,7 @@ const SquareRadio=(props)=>{
     }
     return(
         <Pressable style={Styles.container} onPress={handleCondition}>
-            <View style={condition?Styles.square1:Styles.square}/>
+            {condition?<Image style={Styles.check} source={require('../../assets/images/check.png')}/>:<View style={Styles.square}/>}
             <Text style={Styles.text}>{props.text}</Text>
         </Pressable>
         )

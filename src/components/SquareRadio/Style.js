@@ -27,6 +27,10 @@ const Styles = {
         fontSize:16,
         color:'black',
         padding:5
+    },
+    check:{
+        height:20,
+        width:20
     }
 }
 export default Styles;

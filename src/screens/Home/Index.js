@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Alert, FlatList, Text, View } from "react-native";
+import { Alert, FlatList, Image, Pressable, Text, View } from "react-native";
 import Styles from "./Style";
 import FlatItem from "../../components/FlatItem/Index";
 
@@ -45,6 +45,11 @@ const Home=({navigation})=>{
 
     return(
         <View style={Styles.container}>
+            <Pressable onPress={()=>navigation.navigate('Settings')}>
+            <View style={Styles.header}>
+                <Image style={Styles.gear} source={require('../../assets/images/gear.png')}/>
+            </View>
+            </Pressable>
             <Text style={Styles.heading}>Projects Open For Feedback</Text>
             <FlatList
             showsVerticalScrollIndicator={false}
