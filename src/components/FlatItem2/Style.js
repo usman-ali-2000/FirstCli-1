@@ -1,0 +1,69 @@
+const Styles = {
+container:{
+    width:'100%',
+    flexDirection:'column',
+    height:130,
+    borderRadius:10,
+    margin:10,
+    elevation:5,
+    backgroundColor:'white',
+    padding:15,
+},
+image:{
+    height:70, 
+    width:70,
+    borderRadius:50
+},
+container2:{
+    flexDirection:'row',
+    alignItems:'flex-start',
+},
+heading:{
+    color:'black',
+    fontSize:20,
+    fontWeight:'bold',
+    width:300,
+    padding:10,
+    paddingBottom:5,
+},
+container3:{
+    flexDirection:'column',
+    width:300,
+},
+detail:{
+    width:300,
+    fontSize:13,
+    fontWeight:'bold',
+    paddingTop:0, 
+    padding:10,
+    color:'black'
+},
+btncontainer:{
+    backgroundColor:'white',
+    width:100,
+    height:25,
+    borderRadius:50,
+    borderWidth:1,
+    alignItems:'center',
+    justifyContent:'center',
+    margin:10
+},
+    btntxt:{
+        color:'black',
+        fontSize:14,
+    },
+    btncontainer2:{
+        backgroundColor:'#6CB4EE',
+        width:120,
+        height:25,
+        borderRadius:50,
+        alignItems:'center',
+        justifyContent:'center',
+        margin:10,
+    },
+        btntxt2:{
+            color:'white',
+            fontSize:14,
+        }
+}
+export default Styles;

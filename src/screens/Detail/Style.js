@@ -1,0 +1,69 @@
+const Styles = {
+    container:{
+     height:'100%',
+     width:'100%',
+     alignItems:'center',
+    //  backgroundColor:'rgba(255, 0, 0, 0.4)'
+},
+backimg:{
+    height:400,
+    width:'100%',
+    alignItems:'center',
+    justifyContent:'center'
+},
+backcontainer:{
+    height:270,
+    width:270,
+    alignItems:'flex-start',
+    backgroundColor:'rgba(0,0,0,0.5)'
+},
+backheading:{
+    padding:5,
+    fontSize:30,
+    fontWeight:'bold',
+    color:'white',
+    width:270,
+},
+backtext:{
+    color:'white',
+    width:270,
+    fontSize:16,
+    padding:5, 
+},
+followcontainer:{
+    backgroundColor:'#6CB4EE',
+    width:80,
+    height:30,
+    borderRadius:50,
+    alignItems:'center',
+    justifyContent:'center',
+    margin:10
+},
+followtxt:{
+    color:'white',
+    fontSize:15,
+    fontWeight:'bold'
+},
+text:{
+    padding:5,
+    width:400,
+    fontSize:16,
+    color:'black'
+},
+flatcontainer2:{
+    width:'100%',
+},
+flatcontainer:{
+    alignItems:'center',
+    width:'100%',
+},
+heading:{
+fontSize:20,
+fontWeight:'bold',
+width:400,
+padding:5,
+color:'black'
+}
+}
+
+export default Styles;

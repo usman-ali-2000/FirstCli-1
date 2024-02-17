@@ -1,0 +1,52 @@
+const Styles = {
+    container:{
+        width:'100%',
+        height:220,
+        padding:10,
+        margin:10,
+        backgroundColor:'#ffa07a'
+    },
+    image:{
+        height:80,
+        width:80,
+        marginLeft:20,
+        marginTop:10
+    },
+    heading:{
+        fontSize:16,
+        fontWeight:'bold',
+        color:'black', 
+        paddingLeft:20
+    },
+    text:{
+        fontSize:16,
+        color:'black', 
+        paddingLeft:20,
+        width:400,
+    },
+    btncontainer:{
+        backgroundColor:'#002244',
+        width:80,
+        height:35,
+        borderRadius:50,
+        alignItems:'center',
+        justifyContent:'center',
+        margin:10},
+        btntxt:{
+            color:'white',
+            fontSize:15,
+            fontWeight:'bold'},
+            container2:{
+               flexDirection:'row',
+            },
+            btncontainer2:{
+                backgroundColor:'#3cb371',
+                width:100,
+                height:35,
+                borderRadius:50,
+                alignItems:'center',
+                justifyContent:'center',
+                marginTop:10}
+}
+
+export default Styles;

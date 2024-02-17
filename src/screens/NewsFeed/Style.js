@@ -1,0 +1,53 @@
+const Styles = {
+    container:{
+        height:'100%',
+        width:'100%',
+        alignItems:'center'
+    },
+    image:{
+        height:250,
+        width:'100%'
+    },
+    heading:{
+        fontSize:25,
+        fontWeight:'bold',
+        padding:10,
+        color: '#002D62',
+        width:400
+    },
+    input:{
+        width:400,
+        height:200,
+        borderWidth:1,
+        borderColor:'grey',
+        backgroundColor:'white',
+        margin:5
+    },
+    submitcontainer:{
+        width:400
+    },
+    submit:{
+        backgroundColor:'white',
+        color:'#002D62',
+        fontSize:15,
+        fontWeight:'bold',
+        borderWidth:2,
+        borderColor:'#002D62',
+        width:100,
+        height:35,
+        paddingTop:7,
+        textAlign:'center',
+        margin:10,
+        borderRadius:30
+    },
+    comment:{
+        fontSize:20, 
+        fontWeight:'bold',
+        color:'#002D62',
+        width:400,
+    },
+    star:{
+        color:'red',
+    }
+}
+export default Styles;

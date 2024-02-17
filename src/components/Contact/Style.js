@@ -1,0 +1,41 @@
+const Styles = {
+    container:{
+        width:'100%',
+        alignItems:'center',
+        elevation:5,
+        backgroundColor:'white',
+        height:200,
+        margin:10
+    },
+    heading:{
+        fontSize:20,
+        fontWeight:'bold',
+        color:'white'
+    },
+    container1:{
+        borderWidth:1,
+        width:'100%',
+        padding:10,
+        borderTopRightRadius:15,
+        borderTopLeftRadius:15,
+        backgroundColor:'#002244',
+    },
+    text:{
+        fontSize:16,
+        fontWeight:'500',
+        color:'black',
+        width:380,
+        padding:10,
+    },
+    highlight:{
+        color:'#6CB4EE'
+    },
+    text2:{
+        fontSize:16,
+        fontWeight:'500',
+        color:'black',
+        width:380,
+        paddingLeft:10,
+    }
+}
+export default Styles;

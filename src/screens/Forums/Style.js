@@ -1,0 +1,84 @@
+const Styles ={
+    container:{
+        height:'100%',
+        width:'100%',
+        alignItems:'center'
+    },
+    heading:{
+        fontSize:25,
+        fontWeight:'bold',
+        padding:10,
+        color: '#002D62',
+        width:400
+    },
+    date:{
+        width:400,
+        padding:10
+    },
+    detail:{
+        fontSize:17,
+        fontWeight:'400', 
+        color:'black',
+        width:400,
+        padding:5
+    },
+    comment:{
+        fontSize:20, 
+        fontWeight:'bold',
+        color:'#002D62',
+        width:400,
+    },
+    star:{
+        color:'red',
+    },
+    input:{
+        width:400,
+        height:200,
+        borderWidth:1,
+        borderColor:'grey',
+        backgroundColor:'white',
+        margin:5
+    },
+    submitcontainer:{
+        width:400
+    },
+    submit:{
+        backgroundColor:'white',
+        color:'#002D62',
+        fontSize:15,
+        fontWeight:'bold',
+        borderWidth:2,
+        borderColor:'#002D62',
+        width:100,
+        height:35,
+        paddingTop:7,
+        textAlign:'center',
+        margin:10,
+        borderRadius:30
+    },
+    commentnumbers:{
+        fontSize:20, 
+        fontWeight:'bold',
+        color:'#002D62',
+        width:400,
+        height:40,
+        backgroundColor:'white',
+        padding:5,
+        margin:10,
+    },
+name:{
+    width:400,
+    fontSize:20,
+    color:'#002D62',
+    fontWeight:'bold',
+    backgroundColor:'white'
+},
+commenttext:{
+    width:400,
+    fontSize:17,
+    color:'#002D62',
+    padding:10,
+    backgroundColor:'white'
+}
+}
+export default Styles;
