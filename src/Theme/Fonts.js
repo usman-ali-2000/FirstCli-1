@@ -1,8 +1,6 @@
 export const Fonts={
-    N_Black:'Nunito-Black',
-    N_Bold:'Nunito-Bold',
-    N_SemiBold:'Nunito-Semibold',
-    N_Regular:'Nunito-Regular',
-    N_Medium:'Nunito-Medium',
-    N_Light:'Nunito-Light',
+    Gilroy_Bold:'Gilroy-Bold',
+    Gilroy_SemiBold:'Gilroy-Semibold',
+    Gilroy_Regular:'Gilroy-Regular',
+    Gilroy_Medium:'Gilroy-Medium',
 }

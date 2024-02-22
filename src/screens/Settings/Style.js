@@ -3,7 +3,8 @@ const Styles = {
         height:'100%',
         width:'100%',
         alignItems:'center',
-        backgroundColor:'white'
+        backgroundColor:'white',
+        padding:2
     }
 }
 export default Styles;

@@ -1,4 +1,5 @@
 import React from "react";
+import { Fonts } from "../../Theme/Fonts";
 
 const Styles = {
     container:{
@@ -13,14 +14,14 @@ const Styles = {
     },
     heading:{
         fontSize:20,
-        fontWeight:'bold',
+        fontFamily:Fonts.Gilroy_Bold,
         color: '#0066b2', 
         width:330,
         margin:10 
     },
     txt:{
         fontSize:16,
-        fontWeight:'400',
+        fontFamily:Fonts.Gilroy_SemiBold,
         color:'black',
         padding:10,
         width:330 

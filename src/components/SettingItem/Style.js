@@ -1,4 +1,7 @@
-const Styles = {
+import { StyleSheet } from "react-native";
+import { Fonts } from "../../Theme/Fonts";
+
+const Styles = StyleSheet.create({
     container:{
         height:45,
         borderBottomWidth:1,
@@ -11,13 +14,13 @@ const Styles = {
     },
     text:{
         fontSize:16,
-        fontWeight:'bold',
         color:'black',
+        fontFamily:Fonts.Gilroy_Bold,
     },
     arrow:{
         height:20,
         width:20
     }
-}
+})
 
 export default Styles;

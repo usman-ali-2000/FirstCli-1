@@ -77,7 +77,7 @@ Alert.alert('join pressed...');
             }
             
     const handlePressemail=()=>{
-        Alert.alert('Pressemail pressed...');
+        navigation.navigate('ContactUs');
             }
 
             
@@ -120,7 +120,7 @@ Alert.alert('join pressed...');
             renderItem={renderItem}
             />
             </View>
-            <Contact name={name} phone={phone} email={email} pressphone={handlePressphone} pressemail={handlePressemail}/>
+            <Contact name={name} phone={phone} email={email} pressphone={handlePressphone} pressemail={handlePressemail} presscontactus={()=>navigation.navigate('ContactUs')}/>
         </View>
         </ScrollView>
     )

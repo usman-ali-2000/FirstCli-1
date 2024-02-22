@@ -12,6 +12,8 @@ import NewsFeed from './src/screens/NewsFeed/Index';
 import Settings from './src/screens/Settings/Index';
 import PriavcyPolicy from './src/screens/PrivacyPolicy/Index';
 import Terms from './src/screens/Terms/Index';
+import ContactUs from './src/screens/ContactUs/Index';
+import FAQs from './src/screens/FAQs/Index';
 
 const Stack = createNativeStackNavigator();
 
@@ -67,6 +69,16 @@ const App = () => {
         <Stack.Screen
         name='Terms'
         component={Terms}
+        options={{headerShown:false}}
+        />
+        <Stack.Screen
+        name='ContactUs'
+        component={ContactUs}
+        options={{headerShown:false}}
+        />
+        <Stack.Screen
+        name='FAQs'
+        component={FAQs}
         options={{headerShown:false}}
         />
       </Stack.Navigator>
