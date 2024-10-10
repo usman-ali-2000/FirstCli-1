@@ -14,6 +14,12 @@ import PriavcyPolicy from './src/screens/PrivacyPolicy/Index';
 import Terms from './src/screens/Terms/Index';
 import ContactUs from './src/screens/ContactUs/Index';
 import FAQs from './src/screens/FAQs/Index';
+import Login from './src/screens/Login';
+import SignUp from './src/screens/SignUp';
+import AddCategory from './src/screens/AddCategory';
+import Product from './src/screens/Product';
+import ProductView from './src/screens/ProductView';
+import MyOrders from './src/screens/MyOrders';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,64 +28,89 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-        name='Home'
-        component={Home}
-        options={{headerShown:false}}
+          name='Login'
+          component={Login}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-        name='Detail'
-        component={Detail}
-        options={{headerShown:false}}
+          name='SignUp'
+          component={SignUp}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-        name='Card'
-        component={Card}
-        options={{headerShown:false}}
+          name='Home'
+          component={Home}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-        name='CardDetail'
-        component={CardDetail}
-        options={{headerShown:false}}
+          name='Detail'
+          component={Detail}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-        name='Forums'
-        component={Forums}
-        options={{headerShown:false}}
+          name='Card'
+          component={Card}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-        name='Surveys'
-        component={Surveys}
-        options={{headerShown:false}}
+          name='CardDetail'
+          component={CardDetail}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-        name='NewsFeed'
-        component={NewsFeed}
-        options={{headerShown:false}}
+          name='Forums'
+          component={Forums}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-        name='Settings'
-        component={Settings}
-        options={{headerShown:false}}
+          name='Surveys'
+          component={Surveys}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-        name='PrivacyPolicy'
-        component={PriavcyPolicy}
-        options={{headerShown:false}}
+          name='NewsFeed'
+          component={NewsFeed}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-        name='Terms'
-        component={Terms}
-        options={{headerShown:false}}
+          name='Settings'
+          component={Settings}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-        name='ContactUs'
-        component={ContactUs}
-        options={{headerShown:false}}
+          name='PrivacyPolicy'
+          component={PriavcyPolicy}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-        name='FAQs'
-        component={FAQs}
-        options={{headerShown:false}}
+          name='Terms'
+          component={Terms}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='ContactUs'
+          component={ContactUs}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='AddCategory'
+          component={AddCategory}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='Product'
+          component={Product}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='ProductView'
+          component={ProductView}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='MyOrders'
+          component={MyOrders}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

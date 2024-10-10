@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Alert, FlatList, Image, Pressable, Text, View } from "react-native";
-import Styles from "./Style";
-import FlatItem from "../../components/FlatItem/Index";
-import { BaseUrl } from "../../assets/Data";
+import FlatItem from "../components/FlatItem/Index";
+import { BaseUrl } from "../assets/Data";
+import Styles from "./Home/Style";
 
-const Home = ({ navigation }) => {
+const ProductView = ({ navigation, route }) => {
 
     const [column, setColumn] = useState(2);
     const [data1, setData1] = useState([]);
+    const name = route.params.category;
 
     const fetchData = async () => {
         try {
-            const response = await fetch(`${BaseUrl}/category`);
+            const response = await fetch(`${BaseUrl}/productCreate`);
             const json = await response.json();
-            console.log('json:', json);
-            setData1(json);
+            const productGet = await json.filter((item) => item.category === name);
+            console.log('json:', productGet);
+            setData1(productGet);
         } catch (e) {
             console.log('error fetching...', e);
             // console.log('url:',`${BaseUrl}/register`);
@@ -31,8 +33,8 @@ const Home = ({ navigation }) => {
         <View style={Styles.flatcontainer}>
             <FlatItem
                 image={item.imageUrl}
-                heading={item.category}
-                onPress={()=>navigation.navigate('ProductView',{category: item.category})}
+                heading={item.product}
+                price={item.price}
             // text={item.text}
             // lastupdate={item.lastupdate}
             // onpress={() => handleLearnMore()}
@@ -52,10 +54,10 @@ const Home = ({ navigation }) => {
         <View style={Styles.container}>
             <Pressable onPress={() => navigation.navigate('Settings')}>
                 <View style={Styles.header}>
-                    <Image style={Styles.gear} source={require('../../assets/images/gear.png')} />
+                    <Image style={Styles.gear} source={require('../assets/images/gear.png')} />
                 </View>
             </Pressable>
-            <Text style={Styles.heading}>Categories</Text>
+            <Text style={Styles.heading}>Products</Text>
             <FlatList
                 showsVerticalScrollIndicator={false}
                 data={data1}
@@ -67,4 +69,4 @@ const Home = ({ navigation }) => {
     )
 }
 
-export default Home;
+export default ProductView;

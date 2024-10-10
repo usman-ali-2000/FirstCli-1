@@ -7,17 +7,22 @@ const Styles = {
         height:'100%',
         width:'100%',
         flexDirection:'column',
-        alignItems: 'center',
+        // alignItems: 'center',
     },
     heading:{
         fontSize:25,
         fontFamily:Fonts.Gilroy_Bold,
         padding:10,
-        color: 'black' 
+        color: 'black' ,
+        width:'90%',
+        
     },
     flatcontainer:{
         alignItems:'center',
-        marginTop:20
+        marginTop:20, 
+        width:'46%',
+        marginLeft:'2%',
+        borderRadius:8
     },
     header:{
         width:'100%',

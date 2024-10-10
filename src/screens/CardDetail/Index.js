@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, ScrollView } from "react-native";
 import Styles from "./Style";
-import MapView, { Marker } from "react-native-maps";
+// import MapView, { Marker } from "react-native-maps";
 
 const CardDetail=()=>{
     const Data = [
@@ -51,7 +51,7 @@ const CardDetail=()=>{
                 <Text style={Styles.descheading}>Location</Text>
                 <Text style={Styles.desc}>{Data[0].heading}</Text>
                 <Text style={Styles.add}>Get Directions</Text>
-                <View style={Styles.mapcontainer}>
+                {/* <View style={Styles.mapcontainer}>
                     <MapView
                     style={Styles.map}
                      initialRegion={{
@@ -66,7 +66,7 @@ const CardDetail=()=>{
                             description="Marker Description"
                         />
                         </MapView>
-                </View>
+                </View> */}
                  </View>
         </ScrollView>
     )
