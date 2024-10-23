@@ -7,6 +7,7 @@ const theme = {
         background:'#F9F9FB',
         white:'white',
         blue:'#0097DB',
+        green:'green',
     },
     fonts:{
      bold :'Gilroy-Bold',

@@ -4,6 +4,10 @@ import LoginInput from "../components/LoginInput";
 import theme from "../Theme/GlobalTheme";
 import Button from "../components/Button";
 import { BaseUrl } from "../assets/Data";
+import GetLocation from "../components/GeoLocation";
+import StringAnimation from "./StringAnimation";
+import SnakeGame from "./SnakeGame";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 export default function Login({ navigation }) {
 
@@ -71,14 +75,18 @@ export default function Login({ navigation }) {
 
     return (
         <View style={{ flex: 1, width: '100%', justifyContent: 'center', backgroundColor: theme.colors.white, alignItems: 'center' }}>
-            <LoginInput text="Email" placeholder="Enter Your Email" value={email} onChangeText={(text) => setEmail(text)} />
+            {/* <Icon name="home" size={30} color={theme.colors.green}/> */}
+            <SnakeGame/>
+            {/* <StringAnimation/> */}
+            {/* <GetLocation/> */}
+            {/* <LoginInput text="Email" placeholder="Enter Your Email" value={email} onChangeText={(text) => setEmail(text)} />
             <LoginInput text="Password" placeholder="Enter Your Password" value={password} onChangeText={(text) => setPassword(text)} />
             <View style={{ width: '100%', alignItems: 'center', marginTop: '10%' }}>
                 {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button text="Login" onPress={handleSubmit} />}
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={{ marginTop: '2%', alignSelf: 'center', marginRight: '5%' }}>
                 <Text style={{ color: theme.colors.blue, fontSize: 14, fontWeight: 'bold', textDecorationLine: 'underline' }}>SignUp</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </View>
     )
 }
