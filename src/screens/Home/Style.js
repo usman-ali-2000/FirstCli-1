@@ -1,5 +1,6 @@
 import React from "react";
 import { Fonts } from "../../Theme/Fonts";
+import theme from "../../Theme/GlobalTheme";
 
 
 const Styles = {
@@ -7,6 +8,8 @@ const Styles = {
         height:'100%',
         width:'100%',
         flexDirection:'column',
+        backgroundColor:theme.colors.black,
+        justifyContent:'space-between'
         // alignItems: 'center',
     },
     heading:{

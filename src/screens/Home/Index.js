@@ -3,6 +3,11 @@ import { Alert, FlatList, Image, Pressable, Text, View } from "react-native";
 import Styles from "./Style";
 import FlatItem from "../../components/FlatItem/Index";
 import { BaseUrl } from "../../assets/Data";
+import SnakeGame from "../SnakeGame";
+import { TouchableOpacity } from "react-native";
+import theme from "../../Theme/GlobalTheme";
+import FastImage from "react-native-fast-image";
+import HomeHeader from "../../components/HomeHeader";
 
 const Home = ({ navigation }) => {
 
@@ -32,7 +37,7 @@ const Home = ({ navigation }) => {
             <FlatItem
                 image={item.imageUrl}
                 heading={item.category}
-                onPress={()=>navigation.navigate('ProductView',{category: item.category})}
+                onPress={() => navigation.navigate('ProductView', { category: item.category })}
             // text={item.text}
             // lastupdate={item.lastupdate}
             // onpress={() => handleLearnMore()}
@@ -50,19 +55,14 @@ const Home = ({ navigation }) => {
 
     return (
         <View style={Styles.container}>
-            <Pressable onPress={() => navigation.navigate('Settings')}>
-                <View style={Styles.header}>
-                    <Image style={Styles.gear} source={require('../../assets/images/gear.png')} />
-                </View>
-            </Pressable>
-            <Text style={Styles.heading}>Categories</Text>
-            <FlatList
-                showsVerticalScrollIndicator={false}
-                data={data1}
-                keyExtractor={(item) => item.id}
-                numColumns={column}
-                renderItem={renderItem}
-            />
+            <HomeHeader/>
+            <Text style={{ fontSize: 40, color: theme.colors.red, fontFamily: 'Gilroy-Bold', alignSelf:'center', marginTop:'30%' }}>Play Now!</Text>
+            <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between', height: '50%', marginBottom: '10%' }}>
+                <FastImage source={require('../../assets/images/icon.gif')} style={{ height: 150, width: 150, alignSelf: 'center' }} />
+                <TouchableOpacity onPress={()=>navigation.navigate('Game')} style={{ alignSelf: 'center', backgroundColor: theme.colors.green, height: 50, width: '70%', borderRadius: 10, alignItems: 'center', justifyContent: 'center', elevation: 5, }}>
+                    <Text style={{ fontSize: 20, color: theme.colors.white, fontFamily: 'Gilroy-SemiBold' }}>Play</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }

@@ -7,7 +7,6 @@ import { BaseUrl } from "../assets/Data";
 import GetLocation from "../components/GeoLocation";
 import StringAnimation from "./StringAnimation";
 import SnakeGame from "./SnakeGame";
-import Icon from "react-native-vector-icons/FontAwesome";
 
 export default function Login({ navigation }) {
 
@@ -75,8 +74,7 @@ export default function Login({ navigation }) {
 
     return (
         <View style={{ flex: 1, width: '100%', justifyContent: 'center', backgroundColor: theme.colors.white, alignItems: 'center' }}>
-            {/* <Icon name="home" size={30} color={theme.colors.green}/> */}
-            <SnakeGame/>
+            {/* <SnakeGame/> */}
             {/* <StringAnimation/> */}
             {/* <GetLocation/> */}
             {/* <LoginInput text="Email" placeholder="Enter Your Email" value={email} onChangeText={(text) => setEmail(text)} />

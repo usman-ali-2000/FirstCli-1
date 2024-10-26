@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, Dimensions, TouchableOpacity, Image, Pressable, Modal } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import Icon from "react-native-vector-icons/FontAwesome";
+import theme from '../Theme/GlobalTheme';
 
 const { width, height } = Dimensions.get('window');
 const GRID_SIZE = 15;
 const CELL_SIZE = width / GRID_SIZE;
 
-const SnakeGame = () => {
+const SnakeGame = ({navigation}) => {
     // Initial state of the snake and food
     const [snake, setSnake] = useState([[5, 5]]); // Array of coordinates [x, y]
     const [food, setFood] = useState([Math.floor(Math.random() * GRID_SIZE), Math.floor(Math.random() * GRID_SIZE)]);
@@ -59,11 +61,11 @@ const SnakeGame = () => {
     }, [timeLeft]);
 
     useEffect(() => {
-        // const interval = setInterval(() => {
-        //     if (!isGameOver && timeLeft !== 0) { moveSnake() };
-        //     setCoins((snake.length - 1) * 10);
-        // }, 200); // Speed of the game (200ms for each move)
-        // return () => clearInterval(interval);
+        const interval = setInterval(() => {
+            if (!isGameOver && timeLeft !== 0) { moveSnake() };
+            setCoins((snake.length - 1) * 10);
+        }, 200); // Speed of the game (200ms for each move)
+        return () => clearInterval(interval);
     }, [snake, direction, isGameOver]);
 
     const getHeadRotation = () => {
@@ -178,20 +180,25 @@ const SnakeGame = () => {
                 onRequestClose={() => {
                     setModalVisible(!modalVisible);
                 }}>
-                <Pressable style={{ flex: 1, width: '100%', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0, 0, 0, 0.55)' }}>
-                    <FastImage source={require('../assets/images/icon.gif')} style={{ height: CELL_SIZE * 4, width: CELL_SIZE * 4 }} />
-                    {timeLeft === 0 && (
-                        <TouchableOpacity onPress={restartGame}>
-                            <Text style={{ fontSize: 24, color: 'red' }}>Time's up!</Text>
-                        </TouchableOpacity>)}
-                    {isGameOver && (
-                        <TouchableOpacity onPress={restartGame}>
-                            <Text style={{ fontSize: 24, color: 'red' }}>GameOver</Text>
-                        </TouchableOpacity>)}
-                    <TouchableOpacity onPress={restartGame}>
-                        <Image source={require('../assets//images/refresh.png')} style={{ height: CELL_SIZE * 2, width: CELL_SIZE * 2, marginTop: '5%' }} />
+                <View style={{ flex: 1, marginBottom: '15%', width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.55)' }}>
+                    <TouchableOpacity onPress={()=>navigation.goBack()}>
+                    <Icon name="chevron-left" size={18} color={theme.colors.white} style={{marginTop:'10%',marginLeft:'5%'}}/>
                     </TouchableOpacity>
-                </Pressable>
+                    <Pressable style={{ flex: 1, marginBottom: '15%', width: '100%', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0, 0, 0, 0)' }}>
+                        <FastImage source={require('../assets/images/icon.gif')} style={{ height: CELL_SIZE * 4, width: CELL_SIZE * 4 }} />
+                        {timeLeft === 0 && (
+                            <TouchableOpacity onPress={restartGame}>
+                                <Text style={{ fontSize: 24, color: 'red' }}>Time's up!</Text>
+                            </TouchableOpacity>)}
+                        {isGameOver && (
+                            <TouchableOpacity onPress={restartGame}>
+                                <Text style={{ fontSize: 24, color: 'red' }}>GameOver</Text>
+                            </TouchableOpacity>)}
+                        <TouchableOpacity onPress={restartGame}>
+                            <Image source={require('../assets//images/refresh.png')} style={{ height: CELL_SIZE * 2, width: CELL_SIZE * 2, marginTop: '5%' }} />
+                        </TouchableOpacity>
+                    </Pressable>
+                </View>
             </Modal>
         </View>
     );

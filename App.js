@@ -20,6 +20,8 @@ import AddCategory from './src/screens/AddCategory';
 import Product from './src/screens/Product';
 import ProductView from './src/screens/ProductView';
 import MyOrders from './src/screens/MyOrders';
+import BottomNav from './src/navigations/BottomNav';
+import SnakeGame from './src/screens/SnakeGame';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,91 +29,96 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
+        {/* <Stack.Screen
           name='Login'
           component={Login}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name='SignUp'
           component={SignUp}
           options={{ headerShown: false }}
-        />
+        /> */}
         <Stack.Screen
           name='Home'
-          component={Home}
+          component={BottomNav}
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name='Game'
+          component={SnakeGame}
+          options={{ headerShown: false }}
+        />
+        {/* <Stack.Screen
           name='Detail'
           component={Detail}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name='Card'
           component={Card}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name='CardDetail'
           component={CardDetail}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name='Forums'
           component={Forums}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name='Surveys'
           component={Surveys}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name='NewsFeed'
           component={NewsFeed}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name='Settings'
           component={Settings}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name='PrivacyPolicy'
           component={PriavcyPolicy}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name='Terms'
           component={Terms}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name='ContactUs'
           component={ContactUs}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name='AddCategory'
           component={AddCategory}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name='Product'
           component={Product}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name='ProductView'
           component={ProductView}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name='MyOrders'
           component={MyOrders}
           options={{ headerShown: false }}
-        />
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   )
