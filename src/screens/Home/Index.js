@@ -55,7 +55,7 @@ const Home = ({ navigation }) => {
 
     return (
         <View style={Styles.container}>
-            <HomeHeader/>
+            <HomeHeader onpress={()=>navigation.openDrawer()}/>
             <Text style={{ fontSize: 40, color: theme.colors.red, fontFamily: 'Gilroy-Bold', alignSelf:'center', marginTop:'30%' }}>Play Now!</Text>
             <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between', height: '50%', marginBottom: '10%' }}>
                 <FastImage source={require('../../assets/images/icon.gif')} style={{ height: 150, width: 150, alignSelf: 'center' }} />

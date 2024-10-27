@@ -8,7 +8,8 @@ const theme = {
         white:'white',
         blue:'#0097DB',
         green:'green',
-        red:'red'
+        red:'red',
+        jetBlack:'#343434',
     },
     fonts:{
      bold :'Gilroy-Bold',

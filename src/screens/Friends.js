@@ -42,6 +42,7 @@ export default function Friends() {
 
         return (
             <View style={{ flex: 1, width: '100%', alignItems: 'center', backgroundColor: theme.colors.black }}>
+                <Text style={{ color: theme.colors.red, textAlign: 'center', width: "90%", fontSize: 16, fontFamily: "Gilroy-SemiBold" , marginTop:'4%'}}>Earned from friends</Text>
                 <Image source={require('../assets/images/coins.png')} style={{ height: 70, width: 70, marginTop: '5%' }} />
                 <Text style={{ fontSize: 20, fontFamily: 'Gilroy-Bold', color: theme.colors.white, marginTop: '3%' }}>{formatNumber(total)} <Text style={{ color: theme.colors.green, fontFamily: 'Gilroy-Medium' }}>$</Text></Text>
             </View>
@@ -67,7 +68,7 @@ export default function Friends() {
                 </TouchableOpacity>
             </View>
             {select === 1 && <Friends />}
-            {select === 2 && <Coins/>}
+            {select === 2 && <Coins />}
         </View>
     )
 }

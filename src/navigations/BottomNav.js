@@ -30,6 +30,7 @@ const BottomNav = () => {
       screenOptions={{
         tabBarStyle: {
           height: '8%',
+          backgroundColor:theme.colors.black
         },
         tabBarShowLabel: false,
       }}
