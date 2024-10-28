@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingTop: '5%',
         alignSelf: 'flex-start',
-        marginLeft: '6%'
+        marginLeft: '6%',
+        backgroundColor:theme.colors.black,
 
     },
     inputContainer: {
@@ -42,10 +43,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         borderBottomWidth: 1,
         borderColor: theme.colors.grey,
+        backgroundColor:theme.colors.black,
     },
     input: {
         height: 52,
-        color: theme.colors.black,
+        color: theme.colors.white,
         fontSize: 14,
         fontFamily: 'Poppins-Regular',
         textAlignVertical: 'center',
@@ -63,7 +65,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Gilroy-SemiBold',
         padding: '1%',
         paddingLeft: 0,
-        color: theme.colors.blue,
+        color: theme.colors.green,
     },
     warningContainer: {
         flexDirection: 'row',

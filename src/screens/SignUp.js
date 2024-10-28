@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ActivityIndicator, Alert, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import LoginInput from "../components/LoginInput";
 import theme from "../Theme/GlobalTheme";
 import Button from "../components/Button";
@@ -65,18 +65,21 @@ export default function SignUp({ navigation }) {
     };
 
     return (
-        <View style={{ flex: 1, width: '100%', justifyContent: 'center', backgroundColor: theme.colors.white, alignItems: 'center' }}>
-            <LoginInput text="Name" placeholder="Enter Your Name" value={name} onChangeText={(text) => setName(text)} />
-            <LoginInput text="Phone" placeholder="Enter Your Phone Number" value={phone} onChangeText={(text) => setPhone(text)} keyboardType="numeric" />
-            <LoginInput text="Email" placeholder="Enter Your Email" value={email} onChangeText={(text) => setEmail(text)} />
-            <LoginInput text="Password" placeholder="Enter Your Password" value={password} onChangeText={(text) => setPassword(text)} />
-            <LoginInput text="Confirm Password" placeholder="Confirm Password" value={confirm} onChangeText={(text) => setConfirm(text)} />
-            <View style={{ width: '100%', alignItems: 'center', marginTop: '10%' }}>
-                {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue}/> : <Button text="SignUp" onPress={handleSubmit} />}
-            </View>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')} style={{ marginTop: '2%', alignSelf: 'center', marginRight: '5%' }}>
-                <Text style={{ color: theme.colors.blue, fontSize: 14, fontWeight: 'bold', textDecorationLine: 'underline' }}>Login</Text>
-            </TouchableOpacity>
+        <View style={{ flex: 1, width: '100%', justifyContent: 'center', backgroundColor: theme.colors.black, alignItems: 'center' }}>
+            <ScrollView style={{ width: '100%', paddingTop:'10%' }} contentContainerStyle={{ alignItems: 'center' }}>
+                <LoginInput text="Name" placeholder="Enter Your Name" value={name} onChangeText={(text) => setName(text)} />
+                <LoginInput text="Phone" placeholder="Enter Your Phone Number" value={phone} onChangeText={(text) => setPhone(text)} keyboardType="numeric" />
+                <LoginInput text="Email" placeholder="Enter Your Email" value={email} onChangeText={(text) => setEmail(text)} />
+                <LoginInput text="Referal Id" placeholder="Enter Referal Id" value={confirm} onChangeText={(text) => setConfirm(text)} />
+                <LoginInput text="Password" placeholder="Enter Your Password" value={password} onChangeText={(text) => setPassword(text)} />
+                <LoginInput text="Confirm Password" placeholder="Confirm Password" value={confirm} onChangeText={(text) => setConfirm(text)} />
+                <View style={{ width: '100%', alignItems: 'center', marginTop: '5%' }}>
+                    {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.green} text="SignUp"  onPress={() => navigation.navigate('EnterOTP')} />}
+                </View>
+                <TouchableOpacity onPress={() => navigation.navigate('Login')} style={{ marginTop: '2%', alignSelf: 'center', marginRight: '5%' }}>
+                    <Text style={{ color: theme.colors.green, fontSize: 16, fontWeight: 'bold', textDecorationLine: 'underline' }}>Login</Text>
+                </TouchableOpacity>
+            </ScrollView>
         </View>
     );
 }

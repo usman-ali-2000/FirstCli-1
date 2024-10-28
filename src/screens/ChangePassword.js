@@ -8,11 +8,12 @@ import GetLocation from "../components/GeoLocation";
 import StringAnimation from "./StringAnimation";
 import SnakeGame from "./SnakeGame";
 
-export default function Login({ navigation }) {
+export default function ChangePassword({ navigation }) {
 
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirm, setConfrim] = useState('');
     const [loading, setLoading] = useState(false);
 
     const fetchData = async () => {
@@ -76,19 +77,16 @@ export default function Login({ navigation }) {
     return (
         <View style={{ flex: 1, width: '100%', justifyContent: 'space-between', backgroundColor: theme.colors.black, alignItems: 'center' }}>
             <View style={{ width: '100%', alignItems: 'center', marginTop: '50%', }}>
-                <LoginInput text="Email" placeholder="Enter Your Email" value={email} onChangeText={(text) => setEmail(text)} />
                 <LoginInput text="Password" placeholder="Enter Your Password" value={password} onChangeText={(text) => setPassword(text)} />
-                <TouchableOpacity onPress={()=>navigation.navigate('ForgotPassword')} style={{ width: '90%', alignItems: 'flex-end', marginTop: '2%' }}>
-                    <Text style={{ color: theme.colors.red, fontSize: 15, textDecorationLine: 'underline' }}>forgot password</Text>
-                </TouchableOpacity>
+                <LoginInput text="Confirm Password" placeholder="Enter Your Password" value={confirm} onChangeText={(text) => setConfrim(text)} />
             </View>
             <View style={{ width: '100%', alignItems: 'center' }}>
-                <View style={{ width: '100%', alignItems: 'center', marginTop: '10%', marginBottom: '5%' }}>
-                    {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.green} text="Login" onPress={handleSubmit} />}
+                <View style={{ width: '100%', alignItems: 'center', marginTop: '10%', marginBottom: '10%' }}>
+                    {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.green} text="Confirm" />}
                 </View>
-                <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={{ alignSelf: 'center', marginRight: '5%', marginBottom: '10%', justifyContent: 'flex-end' }}>
-                    <Text style={{ color: theme.colors.green, fontSize: 16, fontWeight: 'bold', textDecorationLine: 'underline' }}>SignUp</Text>
-                </TouchableOpacity>
+                {/* <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={{ alignSelf: 'center', marginRight: '5%', marginBottom: '10%', justifyContent: 'flex-end' }}>
+                    <Text style={{ color: theme.colors.green, fontSize: 16, fontWeight: 'bold', textDecorationLine: 'underline' }}></Text>
+                </TouchableOpacity> */}
             </View>
         </View>
     )

@@ -26,6 +26,10 @@ import SnakeGame from './src/screens/SnakeGame';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import theme from './src/Theme/GlobalTheme';
 import { TouchableOpacity } from 'react-native';
+import EnterOTP from './src/screens/EnterOTP';
+import ForgotPassword from './src/screens/ForgotPassword';
+import ForgotOTP from './src/screens/ForgotOTP';
+import ChangePassword from './src/screens/ChangePassword';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -81,16 +85,16 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen
+        <Stack.Screen
           name='Login'
           component={Login}
           options={{ headerShown: false }}
-        /> */}
-        {/* <Stack.Screen
+        />
+        <Stack.Screen
           name='SignUp'
           component={SignUp}
           options={{ headerShown: false }}
-        /> */}
+        />
         <Stack.Screen
           name='Home'
           component={MyDrawer}
@@ -99,6 +103,26 @@ const App = () => {
         <Stack.Screen
           name='Game'
           component={SnakeGame}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='EnterOTP'
+          component={EnterOTP}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='ForgotPassword'
+          component={ForgotPassword}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='ForgotOTP'
+          component={ForgotOTP}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='ChangePassword'
+          component={ChangePassword}
           options={{ headerShown: false }}
         />
         {/* <Stack.Screen
