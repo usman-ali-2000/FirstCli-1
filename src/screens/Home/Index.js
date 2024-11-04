@@ -1,28 +1,46 @@
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, Image, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Alert, FlatList, Image, Pressable, Text, ToastAndroid, View } from "react-native";
 import Styles from "./Style";
 import FlatItem from "../../components/FlatItem/Index";
-import { BaseUrl } from "../../assets/Data";
+import { BaseUrl, getCurrentDate } from "../../assets/Data";
 import SnakeGame from "../SnakeGame";
 import { TouchableOpacity } from "react-native";
 import theme from "../../Theme/GlobalTheme";
 import FastImage from "react-native-fast-image";
 import HomeHeader from "../../components/HomeHeader";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getCurrentPosition } from "react-native-geolocation-service";
+import NetInfo from '@react-native-community/netinfo';
 
 const Home = ({ navigation }) => {
 
     const [column, setColumn] = useState(2);
     const [data1, setData1] = useState([]);
+    const [attempts, setAttempts] = useState(0);
+    const [isConnected, setIsConnected] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [coins, setCoins] = useState(null);
 
     const fetchData = async () => {
+        const id = await AsyncStorage.getItem("id");
         try {
-            const response = await fetch(`${BaseUrl}/category`);
+            setLoading(true);
+            const response = await fetch(`${BaseUrl}/register/${id}`);
             const json = await response.json();
-            console.log('json:', json);
+            const date = getCurrentDate();
+            console.log('json:', json.attempts, json.date, `${date.day}/${date.month}/${date.year}`);
+            setCoins(json.coin);
+            setAttempts(json.attempts);
+            // if(json.date !== getCurrentPosition().toString()){
+            // }
+            // const id = await AsyncStorage.getItem("id");
+            const userId = await AsyncStorage.getItem("userId");
+            console.log('id:', id);
             setData1(json);
+            setLoading(false);
         } catch (e) {
+            setLoading(false);
             console.log('error fetching...', e);
-            // console.log('url:',`${BaseUrl}/register`);
         }
     }
 
@@ -50,18 +68,42 @@ const Home = ({ navigation }) => {
     }
 
     useEffect(() => {
+        // Subscribe to network state updates
+        const unsubscribe = NetInfo.addEventListener(state => {
+            setIsConnected(state.isConnected);
+            console.log("Connection type:", state.type);
+            console.log("Is connected?", state.isConnected);
+        });
+
+        // Unsubscribe when the component unmounts
+        return () => {
+            unsubscribe();
+        };
+    }, []);
+
+
+    const handlePlay = async () => {
+        if (isConnected) {
+            // await fetchData();
+            await navigation.navigate('Game', { attempt: attempts });
+        } else {
+            ToastAndroid.show('internet not connected!', ToastAndroid.SHORT);
+        }
+    }
+
+    useEffect(() => {
         // console.log('data:', Data);
     }, [])
 
     return (
         <View style={Styles.container}>
-            <HomeHeader onpress={()=>navigation.openDrawer()}/>
-            <Text style={{ fontSize: 40, color: theme.colors.red, fontFamily: 'Gilroy-Bold', alignSelf:'center', marginTop:'30%' }}>Play Now!</Text>
+            <HomeHeader onpress={() => navigation.openDrawer()} coin={coins} />
+            <Text style={{ fontSize: 40, color: theme.colors.red, fontFamily: 'Gilroy-Bold', alignSelf: 'center', marginTop: '30%' }}>Play Now!</Text>
             <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between', height: '50%', marginBottom: '10%' }}>
                 <FastImage source={require('../../assets/images/icon.gif')} style={{ height: 150, width: 150, alignSelf: 'center' }} />
-                <TouchableOpacity onPress={()=>navigation.navigate('Game')} style={{ alignSelf: 'center', backgroundColor: theme.colors.green, height: 50, width: '70%', borderRadius: 10, alignItems: 'center', justifyContent: 'center', elevation: 5, }}>
+                {loading || !isConnected ? <ActivityIndicator size={"large"} color={theme.colors.green} /> : <TouchableOpacity onPress={handlePlay} style={{ alignSelf: 'center', backgroundColor: theme.colors.green, height: 50, width: '70%', borderRadius: 10, alignItems: 'center', justifyContent: 'center', elevation: 5, }}>
                     <Text style={{ fontSize: 20, color: theme.colors.white, fontFamily: 'Gilroy-SemiBold' }}>Play</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
             </View>
         </View>
     )

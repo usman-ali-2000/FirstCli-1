@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import LoginInput from "../components/LoginInput";
 import theme from "../Theme/GlobalTheme";
 import Button from "../components/Button";
@@ -7,6 +7,8 @@ import { BaseUrl } from "../assets/Data";
 import GetLocation from "../components/GeoLocation";
 import StringAnimation from "./StringAnimation";
 import SnakeGame from "./SnakeGame";
+import { addEventListener } from "@react-native-community/netinfo";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login({ navigation }) {
 
@@ -14,6 +16,8 @@ export default function Login({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [isConnected, setIsConnected] = useState(null);
+    let unsubscribe = null;
 
     const fetchData = async () => {
         try {
@@ -26,13 +30,34 @@ export default function Login({ navigation }) {
         }
     }
 
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);
+    const checkConnection = () => {
+        unsubscribe = addEventListener(state => {
+            console.log("Connection type", state.type);
+            console.log("Is connected?", state.isConnected);
+            if (state.isConnected) {
+                setIsConnected(true);
+            } else {
+                ToastAndroid.show('internet not connected!', ToastAndroid.SHORT);
+            }
+        });
+    }
+    useEffect(() => {
+        // Subscribe to network state updates    
+        checkConnection();
+        // Unsubscribe
+        if (unsubscribe) {
+            unsubscribe();
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     const handleSubmit = async () => {
         setLoading(true);
 
+        checkConnection();
         // Validation
         if (!email || !password) {
             Alert.alert('All fields are mandatory');
@@ -59,7 +84,10 @@ export default function Login({ navigation }) {
             if (response.status === 400) {
                 Alert.alert('invalid credentials');
             }
-            console.log('response', json);
+            console.log('response', json.user.id);
+            await AsyncStorage.setItem("id", json.user.id);
+            await AsyncStorage.setItem("userId", json.user.userId);
+            await AsyncStorage.setItem("generatedId", json.user.generatedId);
             if (json?.user) {
                 console.log('successfull login', json.user.email);
                 navigation.replace('Home');
@@ -77,8 +105,8 @@ export default function Login({ navigation }) {
         <View style={{ flex: 1, width: '100%', justifyContent: 'space-between', backgroundColor: theme.colors.black, alignItems: 'center' }}>
             <View style={{ width: '100%', alignItems: 'center', marginTop: '50%', }}>
                 <LoginInput text="Email" placeholder="Enter Your Email" value={email} onChangeText={(text) => setEmail(text)} />
-                <LoginInput text="Password" placeholder="Enter Your Password" value={password} onChangeText={(text) => setPassword(text)} />
-                <TouchableOpacity onPress={()=>navigation.navigate('ForgotPassword')} style={{ width: '90%', alignItems: 'flex-end', marginTop: '2%' }}>
+                <LoginInput text="Password" placeholder="Enter Your Password" secureTextEntry={true} value={password} onChangeText={(text) => setPassword(text)} />
+                <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')} style={{ width: '90%', alignItems: 'flex-end', marginTop: '2%' }}>
                     <Text style={{ color: theme.colors.red, fontSize: 15, textDecorationLine: 'underline' }}>forgot password</Text>
                 </TouchableOpacity>
             </View>

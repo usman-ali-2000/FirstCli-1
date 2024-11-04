@@ -1,14 +1,41 @@
 import React, { useState } from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Text, ToastAndroid, View } from "react-native";
 import theme from "../Theme/GlobalTheme";
 import { TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { formatNumber } from "../assets/Data";
+import Share from 'react-native-share';
+import Clipboard from "@react-native-clipboard/clipboard";
 
 export default function Friends() {
 
     const [select, setSelect] = useState(1);
 
+    const shareWithOptions = async () => {
+        try {
+          const result = await Share.open({
+            title: 'Check this out!',
+            message: 'Here is an interesting link for you.',
+            url: 'https://www.example.com',
+            failOnCancel: false, // Prevents throwing an error if the user cancels the share action
+          });
+          console.log('Shared successfully:', result);
+        } catch (error) {
+          if (error.message !== 'User did not share') {
+            console.error('Error sharing:', error.message);
+          }
+        }
+      };
+      
+        const textToCopy = 'Hello, this text is copied to the clipboard!';
+      
+        const copyToClipboard = () => {
+          Clipboard.setString(textToCopy);
+          ToastAndroid.show('Copied to clipboard', ToastAndroid.SHORT);
+        };
+      
+      
+        
     const Friends = () => {
         return (
             <View style={{ width: '80%', flex: 1, justifyContent: 'space-between' }}>
@@ -25,10 +52,10 @@ export default function Friends() {
                     </View>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', width: '80%', justifyContent: 'space-between', marginBottom: "5%", alignSelf: 'center' }}>
-                    <TouchableOpacity style={{ width: '70%', height: 50, backgroundColor: theme.colors.green, borderRadius: 100, alignItems: 'center', justifyContent: 'center' }}>
+                    <TouchableOpacity onPress={shareWithOptions} style={{ width: '70%', height: 50, backgroundColor: theme.colors.green, borderRadius: 100, alignItems: 'center', justifyContent: 'center' }}>
                         <Text style={{ fontSize: 20, fontFamily: "Gilroy-Medium", color: theme.colors.white }}>Invite Friends</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ height: 50, width: 50, borderRadius: 100, backgroundColor: theme.colors.green, alignItems: 'center', justifyContent: 'center' }}>
+                    <TouchableOpacity onPress={copyToClipboard} style={{ height: 50, width: 50, borderRadius: 100, backgroundColor: theme.colors.green, alignItems: 'center', justifyContent: 'center' }}>
                         <Icon name="copy" size={20} color={theme.colors.white} />
                     </TouchableOpacity>
                 </View>
@@ -42,7 +69,7 @@ export default function Friends() {
 
         return (
             <View style={{ flex: 1, width: '100%', alignItems: 'center', backgroundColor: theme.colors.black }}>
-                <Text style={{ color: theme.colors.red, textAlign: 'center', width: "90%", fontSize: 16, fontFamily: "Gilroy-SemiBold" , marginTop:'4%'}}>Earned from friends</Text>
+                <Text style={{ color: theme.colors.red, textAlign: 'center', width: "90%", fontSize: 16, fontFamily: "Gilroy-SemiBold", marginTop: '4%' }}>Earned from friends</Text>
                 <Image source={require('../assets/images/coins.png')} style={{ height: 70, width: 70, marginTop: '5%' }} />
                 <Text style={{ fontSize: 20, fontFamily: 'Gilroy-Bold', color: theme.colors.white, marginTop: '3%' }}>{formatNumber(total)} <Text style={{ color: theme.colors.green, fontFamily: 'Gilroy-Medium' }}>$</Text></Text>
             </View>

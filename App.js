@@ -30,6 +30,7 @@ import EnterOTP from './src/screens/EnterOTP';
 import ForgotPassword from './src/screens/ForgotPassword';
 import ForgotOTP from './src/screens/ForgotOTP';
 import ChangePassword from './src/screens/ChangePassword';
+import Splash from './src/screens/Splash';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -44,10 +45,10 @@ const MyDrawer = () => {
           backgroundColor: theme.colors.jetBlack,
         },
       }}
-      drawerContent={({navigation}) => (
+      drawerContent={({ navigation }) => (
         <>
           <View style={{ flexDirection: 'row', alignItems: 'center', margin: '5%', height: 100 }}>
-            <TouchableOpacity onPress={()=>navigation.navigate('Home')} style={{ borderWidth: 2, borderColor: theme.colors.red, borderRadius: 100, flexDirection: 'row', height: 52, width: 52, alignItems: 'center', justifyContent: 'center' }}>
+            <TouchableOpacity onPress={() => navigation.navigate('Home')} style={{ borderWidth: 2, borderColor: theme.colors.red, borderRadius: 100, flexDirection: 'row', height: 52, width: 52, alignItems: 'center', justifyContent: 'center' }}>
               <Image style={{ height: 48, width: 48, borderRadius: 100, padding: 2 }} source={require('./src/assets/images/user.png')} />
             </TouchableOpacity>
             <View style={{ marginLeft: '5%', marginTop: '2%' }}>
@@ -85,6 +86,11 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name='Splash'
+          component={Splash}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name='Login'
           component={Login}

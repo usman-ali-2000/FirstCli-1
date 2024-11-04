@@ -1,18 +1,77 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Keyboard, ActivityIndicator } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Keyboard, ActivityIndicator, ToastAndroid, Alert } from "react-native";
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from "react-native-confirmation-code-field";
 import theme, { colors, wp } from "../Theme/GlobalTheme";
 import Button from "../components/Button";
+import { BaseUrl } from "../assets/Data";
 
 const CELL_COUNT = 6;
 
-const EnterOTP = ({navigation}) => {
+const EnterOTP = ({navigation, route}) => {
+
+  const name = route.params.name;
+  const phone = route.params.phone;
+  const email = route.params.email;
+  const password = route.params.password;
+  const otp = route.params.otp;
+  const referalId = route.params.referalId;
 
   const [value, setValue] = useState('');
-  const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useState(false);  
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({ value, setValue });
+
+  useEffect(()=>{
+    console.log('data:', name, email, phone, password, typeof(otp.toString()), typeof(value));
+  },[]);
+
+  const handleSubmit = async () => {
+
+      setLoading(true);
+
+      if(otp.toString() !== value){
+        ToastAndroid.show('incorrect OTP', ToastAndroid.SHORT);
+        setLoading(false);
+        return;
+      }
+
+      const data = {
+          name,
+          phone: Number(phone),
+          email,
+          userId: referalId,
+          password,
+      };
+
+      try {
+          // console.log("Sending data:", typeof data.phone);  // Add logging to see the payload sent
+          const response = await fetch(`${BaseUrl}/register`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+          });
+          const json = await response.json();
+          console.log("Response JSON:", json);  // Log the response from the server
+
+          if (response.status === 201) {
+              Alert.alert('Successfully Registered');
+              navigation.navigate('Login');  // Automatically redirect to login after successful registration
+          } else {
+              // Handle unsuccessful registration
+              Alert.alert('Registration failed', json.msg || 'Please try again');
+          }
+
+      } catch (e) {
+          console.log('Error during signup:', e);  // Log any network or API errors
+          Alert.alert('An error occurred during registration. Please try again later.');
+      }
+      setLoading(false);
+  };
+
+
+
 
   return (
     <View style={styles.MainContainer}>
@@ -37,8 +96,7 @@ const EnterOTP = ({navigation}) => {
               <Text
                 key={index}
                 style={[styles.cell, isFocused && styles.focusCell]}
-                onLayout={getCellOnLayoutHandler(index)}
-              >
+                onLayout={getCellOnLayoutHandler(index)}>
                 {symbol || (isFocused ? <Cursor /> : null)}
               </Text>
             )}
@@ -46,7 +104,7 @@ const EnterOTP = ({navigation}) => {
         </View>
       </View>
       <View style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-end', marginBottom: '10%' }}>
-        {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.green} text="Verify" onPress={()=>navigation.replace('Login')} />}
+        {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.green} text="Verify" onPress={handleSubmit} />}
       </View>
     </View>
   );

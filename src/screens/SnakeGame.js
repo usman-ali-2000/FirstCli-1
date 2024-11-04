@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, Dimensions, TouchableOpacity, Image, Pressable, Modal } from 'react-native';
+import { View, Text, Button, StyleSheet, Dimensions, TouchableOpacity, Image, Pressable, Modal, ActivityIndicator, Alert, BackHandler } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Icon from "react-native-vector-icons/FontAwesome";
 import theme from '../Theme/GlobalTheme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { addCoins, addReferCoins, BaseUrl, getCurrentDate } from '../assets/Data';
+import NetInfo from '@react-native-community/netinfo';
 
 const { width, height } = Dimensions.get('window');
 const GRID_SIZE = 15;
 const CELL_SIZE = width / GRID_SIZE;
 
-const SnakeGame = ({navigation}) => {
+const SnakeGame = ({ navigation, route }) => {
     // Initial state of the snake and food
+    const attempt = route.params.attempt;
     const [snake, setSnake] = useState([[5, 5]]); // Array of coordinates [x, y]
     const [food, setFood] = useState([Math.floor(Math.random() * GRID_SIZE), Math.floor(Math.random() * GRID_SIZE)]);
     const [direction, setDirection] = useState([1, 0]); // [x, y] direction
@@ -17,11 +21,80 @@ const SnakeGame = ({navigation}) => {
     const [coins, setCoins] = useState(snake.length - 1);
     const [timeLeft, setTimeLeft] = useState(60);
     const [modalVisible, setModalVisible] = useState(false);
+    const [isConnected, setIsConnected] = useState(null);
+    const [attempts, setAttempts] = useState(attempt);
+
+
+    const getCurrentDate = () => {
+        const date = new Date();
+      
+        const day = date.getDate();           // Day of the month (1-31)
+        const month = date.getMonth() + 1;     // Month (0-11, add 1 to get 1-12)
+        const year = date.getFullYear();       // Year (e.g., 2024)
+      
+        return { day, month, year };
+      };
+
+
+    const date = getCurrentDate();
+
+
 
     // Helper function to generate new food position
     const generateFood = () => {
         return [Math.floor(Math.random() * GRID_SIZE), Math.floor(Math.random() * GRID_SIZE)];
     };
+
+
+    const addAttempt = async (attempt, date) => {
+        const id = await AsyncStorage.getItem("id");
+        try {
+            const response = await fetch(`${BaseUrl}/attempts/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ attempt, date })
+            });
+
+            const data = await response.json();
+            console.log('response:', data);
+            if (response.ok) {
+                console.log("Attempt added successfully:", data);
+            } else {
+                const errorData = await response.json();
+                console.error("Failed to add attempt:", errorData);
+            }
+        } catch (error) {
+            console.error("An error occurred while adding attempt:", error);
+        }
+    };
+
+
+    const fetchData = async () => {
+        const id = await AsyncStorage.getItem("id");
+        try {
+            const response = await fetch(`${BaseUrl}/register/${id}`);
+            const json = await response.json();
+            console.log('json:', json.attempts, json.date);
+            setAttempts(json.attempts);
+            const formattedDate = `${date.day}/${date.month}/${date.year}`;
+            if (json.date !== formattedDate) {
+                console.log('json.date:', json.date, formattedDate, json.date === formattedDate);
+                addAttempt(0, `${date.day}/${date.month}/${date.year}`);
+            }
+            console.log('id:', id);
+        } catch (e) {
+            console.log('error fetching...', e);
+        }
+    }
+
+    useEffect(() => {
+        console.log('attempt:', attempt);
+        fetchData();
+    }, []);
+
+
 
     // Function to update snake's position
     const moveSnake = () => {
@@ -32,6 +105,14 @@ const SnakeGame = ({navigation}) => {
         if (newHead[0] < 0 || newHead[0] >= GRID_SIZE || newHead[1] < 0 || newHead[1] >= GRID_SIZE) {
             setIsGameOver(true);
             setModalVisible(true);
+            if (coins > 0) {
+                addCoins(coins);
+                addReferCoins(Math.floor(coins * 3 / 100));
+            }
+            if (attempts <= 15) {
+                addAttempt(attempts + 1, `${date.day}/${date.month}/${date.year}`);
+                setAttempts(attempts + 1);
+            }
             return;
         }
         // Check if snake eats food
@@ -45,10 +126,32 @@ const SnakeGame = ({navigation}) => {
         setSnake(newSnake);
     };
 
+    useEffect(() => {
+        // Subscribe to network state updates
+        const unsubscribe = NetInfo.addEventListener(state => {
+            setIsConnected(state.isConnected);
+            console.log("Connection type:", state.type);
+            console.log("Is connected?", state.isConnected);
+        });
+
+        // Unsubscribe when the component unmounts
+        return () => {
+            unsubscribe();
+        };
+    }, []);
+
     // Game loop for moving the snake periodically
     useEffect(() => {
         if (timeLeft === 0) {
             setModalVisible(true);
+            if (coins > 0) {
+                addCoins(coins);
+                addReferCoins(Math.floor(coins * 3 / 100));
+            }
+            if (attempts <= 15) {
+                addAttempt(attempts + 1, `${date.day}/${date.month}/${date.year}`);
+                setAttempts(attempts + 1);
+            }
             return;
         }; // Stop the timer when it reaches 0   
 
@@ -62,10 +165,13 @@ const SnakeGame = ({navigation}) => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if (!isGameOver && timeLeft !== 0) { moveSnake() };
+            if (!isGameOver && timeLeft !== 0) {
+                moveSnake()
+            };
             setCoins((snake.length - 1) * 10);
         }, 200); // Speed of the game (200ms for each move)
         return () => clearInterval(interval);
+
     }, [snake, direction, isGameOver]);
 
     const getHeadRotation = () => {
@@ -92,72 +198,79 @@ const SnakeGame = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            {/* {isGameOver ? (
-                <View style={styles.gameOver}>
-                    <Text style={styles.gameOverText}>Game Over</Text>
-                    <Button title="Restart" onPress={restartGame} />
-                </View>
-            ) : ( */}
-            <>
-                <View style={{ flexDirection: 'row', alignItems: 'center', width: '90%', justifyContent: 'space-between', marginBottom: '5%' }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Image source={require('../assets/images/time.png')} style={{ height: CELL_SIZE, width: CELL_SIZE }} />
-                        <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', marginLeft: '5%' }}>
-                            {Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? `0${timeLeft % 60}` : timeLeft % 60}
-                        </Text>
+            {!isConnected || attempts >= 15 ? (
+                <View style={{ flex: 1, width: '100%', backgroundColor: theme.colors.black, alignItems: 'center', justifyContent: 'space-between' }}>
+                    <TouchableOpacity style={{ width: '95%' }} onPress={() => navigation.goBack()}>
+                        <Icon name="chevron-left" size={18} color={theme.colors.white} style={{ marginTop: '10%', marginLeft: '5%' }} />
+                    </TouchableOpacity>
+                    <View style={{ width: '100%', alignItems: 'center', height: '60%' }}>
+                        {!isConnected && <FastImage source={require('../assets/images/dollar.gif')} style={{ height: CELL_SIZE * 2, width: CELL_SIZE * 2 }} />}
+                        {!isConnected && <Text style={{ color: theme.colors.white, fontSize: 14, marginTop: '5%' }}>Not Internet...</Text>}
+                        {attempts >= 15 && <Text style={{ color: theme.colors.white, fontSize: 18, marginTop: '5%', width: '70%', textAlign: 'center', fontFamily: 'Gilroy-SemiBold', lineHeight:25 }}>You Have Completed Your Today's 15 Attempts</Text>}
+                        {attempts >= 15 && <Text style={{ color: theme.colors.red, fontSize: 14, marginTop: '2%', width: '70%', textAlign: 'center', fontFamily: 'Gilroy-SemiBold' }}>Now! You Can Play On Next Day </Text>}
                     </View>
-                    {/* {timeLeft === 0 && (
+                </View>
+            ) : (
+                <>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', width: '90%', justifyContent: 'space-between', marginBottom: '5%' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Image source={require('../assets/images/time.png')} style={{ height: CELL_SIZE, width: CELL_SIZE }} />
+                            <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', marginLeft: '5%' }}>
+                                {Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? `0${timeLeft % 60}` : timeLeft % 60}
+                            </Text>
+                        </View>
+                        {/* {timeLeft === 0 && (
                             <TouchableOpacity onPress={restartGame}>
                                 <Text style={{ fontSize: 24, color: 'red' }}>Time's up!</Text>
                             </TouchableOpacity>)} */}
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <FastImage source={require('../assets/images/dollar.gif')} style={{ height: CELL_SIZE, width: CELL_SIZE }} />
-                        <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', }}>{coins}</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <FastImage source={require('../assets/images/dollar.gif')} style={{ height: CELL_SIZE, width: CELL_SIZE }} />
+                            <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', }}>{coins}</Text>
+                        </View>
                     </View>
-                </View>
-                <View style={styles.grid}>
-                    {/* Render snake */}
-                    {snake.map((segment, index) => {
-                        const isHead = index === snake.length - 1; // Check if the segment is the head
-                        return (
-                            isHead ? <View
-                                key={index}
-                                style={[
-                                    styles.snakeSegment,
-                                    {
-                                        left: segment[0] * CELL_SIZE,
-                                        top: segment[1] * CELL_SIZE,
-                                        transform: [{ rotate: getHeadRotation() }]
-                                    },
+                    <View style={styles.grid}>
+                        {/* Render snake */}
+                        {snake.map((segment, index) => {
+                            const isHead = index === snake.length - 1; // Check if the segment is the head
+                            return (
+                                isHead ? <View
+                                    key={index}
+                                    style={[
+                                        styles.snakeSegment,
+                                        {
+                                            left: segment[0] * CELL_SIZE,
+                                            top: segment[1] * CELL_SIZE,
+                                            transform: [{ rotate: getHeadRotation() }]
+                                        },
 
-                                ]}
+                                    ]}
 
-                            >
-                                <Image source={require('../assets/images/snake.png')} style={{ height: CELL_SIZE, width: CELL_SIZE }} />
-                            </View> : <View
-                                key={index}
-                                style={[
-                                    styles.snakeSegment,
-                                    {
-                                        left: segment[0] * CELL_SIZE,
-                                        top: segment[1] * CELL_SIZE,
-                                        backgroundColor: '#12AD2B',
-                                    },
-                                    // isHead && styles.snakeHead // Apply special style if it's the head
-                                ]}
-                            />
-                        );
-                    })}
-                    {/* Render food */}
-                    <View
-                        style={[styles.food, { left: food[0] * CELL_SIZE, top: food[1] * CELL_SIZE }]}
-                    >
-                        <FastImage source={require('../assets/images/dollar.gif')} style={{ height: CELL_SIZE, width: CELL_SIZE }} />
+                                >
+                                    <Image source={require('../assets/images/snake.png')} style={{ height: CELL_SIZE, width: CELL_SIZE }} />
+                                </View> : <View
+                                    key={index}
+                                    style={[
+                                        styles.snakeSegment,
+                                        {
+                                            left: segment[0] * CELL_SIZE,
+                                            top: segment[1] * CELL_SIZE,
+                                            backgroundColor: '#12AD2B',
+                                        },
+                                        // isHead && styles.snakeHead // Apply special style if it's the head
+                                    ]}
+                                />
+                            );
+                        })}
+                        {/* Render food */}
+                        <View
+                            style={[styles.food, { left: food[0] * CELL_SIZE, top: food[1] * CELL_SIZE }]}
+                        >
+                            <FastImage source={require('../assets/images/dollar.gif')} style={{ height: CELL_SIZE, width: CELL_SIZE }} />
+                        </View>
                     </View>
-                </View>
-            </>
-            {/* )} */}
-            <View style={styles.controls}>
+                </>
+            )}
+            {isConnected && attempts < 15 && <View style={styles.controls}>
                 <TouchableOpacity onPress={() => changeDirection([0, -1])} style={styles.button}>
                     <Image source={require('../assets/images/up.png')} style={{ height: 12, width: 12 }} />
                 </TouchableOpacity>
@@ -172,20 +285,23 @@ const SnakeGame = ({navigation}) => {
                 <TouchableOpacity onPress={() => changeDirection([0, 1])} style={styles.button}>
                     <Image source={require('../assets/images/down.png')} style={{ height: 12, width: 12 }} />
                 </TouchableOpacity>
-            </View>
-            <Modal
+            </View>}
+            {isConnected && attempts < 15 && <Modal
                 animationType="fade"
                 transparent={true}
                 visible={modalVisible}
-                onRequestClose={() => {
-                    setModalVisible(!modalVisible);
-                }}>
+            // onRequestClose={() => {
+            //     handleBackButton();
+            //     setModalVisible(!modalVisible);
+            // }}
+            >
                 <View style={{ flex: 1, marginBottom: '15%', width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.55)' }}>
-                    <TouchableOpacity onPress={()=>navigation.goBack()}>
-                    <Icon name="chevron-left" size={18} color={theme.colors.white} style={{marginTop:'10%',marginLeft:'5%'}}/>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <Icon name="chevron-left" size={18} color={theme.colors.white} style={{ marginTop: '10%', marginLeft: '5%' }} />
                     </TouchableOpacity>
                     <Pressable style={{ flex: 1, marginBottom: '15%', width: '100%', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0, 0, 0, 0)' }}>
                         <FastImage source={require('../assets/images/icon.gif')} style={{ height: CELL_SIZE * 4, width: CELL_SIZE * 4 }} />
+                        <Text style={{ fontSize: 24, color: 'white', fontFamily:'Gilroy-Bold' }}>Attempts Left {15 - attempts}</Text>
                         {timeLeft === 0 && (
                             <TouchableOpacity onPress={restartGame}>
                                 <Text style={{ fontSize: 24, color: 'red' }}>Time's up!</Text>
@@ -199,7 +315,7 @@ const SnakeGame = ({navigation}) => {
                         </TouchableOpacity>
                     </Pressable>
                 </View>
-            </Modal>
+            </Modal>}
         </View>
     );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import LoginInput from "../components/LoginInput";
 import theme from "../Theme/GlobalTheme";
 import Button from "../components/Button";
@@ -12,7 +12,6 @@ export default function ForgotPassword({ navigation }) {
 
 
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
     const fetchData = async () => {
@@ -34,19 +33,17 @@ export default function ForgotPassword({ navigation }) {
         setLoading(true);
 
         // Validation
-        if (!email || !password) {
-            Alert.alert('All fields are mandatory');
+        if (!email) {
+            ToastAndroid.show('enter your email', ToastAndroid.SHORT);
             setLoading(false);
             return;
         }
 
         const data = {
-            email,
-            password,
+            email
         };
-
         try {
-            const response = await fetch(`${BaseUrl}/login`, {
+            const response = await fetch(`${BaseUrl}/send-otp`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,19 +52,20 @@ export default function ForgotPassword({ navigation }) {
             });
             const json = await response.json();
             console.log("Response JSON:", json);  // Log the response from the server
+            const otp = json.otp;
 
-            if (response.status === 400) {
-                Alert.alert('invalid credentials');
-            }
-            console.log('response', json);
-            if (json?.user) {
-                console.log('successfull login', json.user.email);
-                navigation.replace('Home');
+            if (response.status === 200) {
+                ToastAndroid.show('OTP Sent!', ToastAndroid.SHORT);
+                navigation.navigate('ForgotOTP',{email: email, otp: otp });  // Automatically redirect to login after successful registration
+            } else if(response.status === 400 ) {
+                // Handle unsuccessful registration
+                ToastAndroid.show('Email Already Exist!', ToastAndroid.SHORT);
+            }else {
+                Alert.alert('Registration failed', json.msg || 'Please try again');
             }
 
         } catch (e) {
-            console.log('Error during signin:', e);
-            // Log any network or API errors
+            console.log('Error during signup:', e);  // Log any network or API errors
             Alert.alert('An error occurred during registration. Please try again later.');
         }
         setLoading(false);
@@ -80,7 +78,7 @@ export default function ForgotPassword({ navigation }) {
             </View>
             <View style={{ width: '100%', alignItems: 'center' }}>
                 <View style={{ width: '100%', alignItems: 'center', marginTop: '10%', marginBottom: '10%' }}>
-                    {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.green} text="Send" onPress={()=>navigation.navigate('ForgotOTP')} />}
+                    {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.green} text="Send" onPress={handleSubmit} />}
                 </View>
             </View>
         </View>

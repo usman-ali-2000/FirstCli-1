@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import LoginInput from "../components/LoginInput";
 import theme from "../Theme/GlobalTheme";
 import Button from "../components/Button";
@@ -8,10 +8,10 @@ import GetLocation from "../components/GeoLocation";
 import StringAnimation from "./StringAnimation";
 import SnakeGame from "./SnakeGame";
 
-export default function ChangePassword({ navigation }) {
+export default function ChangePassword({ navigation, route }) {
 
+    const email = route.params.email;
 
-    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirm, setConfrim] = useState('');
     const [loading, setLoading] = useState(false);
@@ -34,21 +34,19 @@ export default function ChangePassword({ navigation }) {
     const handleSubmit = async () => {
         setLoading(true);
 
-        // Validation
-        if (!email || !password) {
-            Alert.alert('All fields are mandatory');
+        if (password !== confirm) {
+            ToastAndroid.show('password not match with confirm password', ToastAndroid.SHORT);
             setLoading(false);
             return;
         }
 
         const data = {
-            email,
-            password,
+            password:password,
         };
 
         try {
-            const response = await fetch(`${BaseUrl}/login`, {
-                method: 'POST',
+            const response = await fetch(`${BaseUrl}/register/${email}`, {
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -61,9 +59,9 @@ export default function ChangePassword({ navigation }) {
                 Alert.alert('invalid credentials');
             }
             console.log('response', json);
-            if (json?.user) {
-                console.log('successfull login', json.user.email);
-                navigation.replace('Home');
+            if (json) {
+                // console.log('successfull login', json.user.email);
+                navigation.replace('Login');
             }
 
         } catch (e) {
@@ -74,15 +72,15 @@ export default function ChangePassword({ navigation }) {
         setLoading(false);
     };
 
-    return (
+    return (       
         <View style={{ flex: 1, width: '100%', justifyContent: 'space-between', backgroundColor: theme.colors.black, alignItems: 'center' }}>
             <View style={{ width: '100%', alignItems: 'center', marginTop: '50%', }}>
-                <LoginInput text="Password" placeholder="Enter Your Password" value={password} onChangeText={(text) => setPassword(text)} />
-                <LoginInput text="Confirm Password" placeholder="Enter Your Password" value={confirm} onChangeText={(text) => setConfrim(text)} />
+                <LoginInput text="Password" placeholder="Enter Your Password" value={password} secureTextEntry={true} onChangeText={(text) => setPassword(text)} />
+                <LoginInput text="Confirm Password" placeholder="Enter Your Password" value={confirm} secureTextEntry={true} onChangeText={(text) => setConfrim(text)} />
             </View>
             <View style={{ width: '100%', alignItems: 'center' }}>
                 <View style={{ width: '100%', alignItems: 'center', marginTop: '10%', marginBottom: '10%' }}>
-                    {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.green} text="Confirm" />}
+                    {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.green} text="Confirm" onPress={handleSubmit}/>}
                 </View>
                 {/* <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={{ alignSelf: 'center', marginRight: '5%', marginBottom: '10%', justifyContent: 'flex-end' }}>
                     <Text style={{ color: theme.colors.green, fontSize: 16, fontWeight: 'bold', textDecorationLine: 'underline' }}></Text>

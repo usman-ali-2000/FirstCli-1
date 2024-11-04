@@ -23,7 +23,7 @@ const HomeHeader = (props) => {
             </View>
             <View style={{flexDirection:'row', alignItems:'center', width:'30%', justifyContent:"flex-end", marginTop:'3%'}}>
                 <Image source={require('../assets/images/dollar.gif')} style={{ height: 20, width: 20, marginRight:'3%' }} />
-                <Text style={{fontSize:20, color:theme.colors.white, fontFamily:'Gilroy-SemiBold'}}>{formatNumber(5000)}</Text>
+                <Text style={{fontSize:20, color:theme.colors.white, fontFamily:'Gilroy-SemiBold'}}>{props.coin && formatNumber(props.coin)}</Text>
             </View>
         </View>
     )
