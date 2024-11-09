@@ -24,6 +24,7 @@ import BottomNav from './src/navigations/BottomNav';
 import 'react-native-gesture-handler';
 import SnakeGame from './src/screens/SnakeGame';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import theme from './src/Theme/GlobalTheme';
 import { TouchableOpacity } from 'react-native';
 import EnterOTP from './src/screens/EnterOTP';
@@ -31,10 +32,15 @@ import ForgotPassword from './src/screens/ForgotPassword';
 import ForgotOTP from './src/screens/ForgotOTP';
 import ChangePassword from './src/screens/ChangePassword';
 import Splash from './src/screens/Splash';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
+const handleLogout = async () => {
+  await AsyncStorage.removeItem("id");
+  await navigation.replace("Login");
+}
 
 const MyDrawer = () => {
   return (
@@ -56,6 +62,13 @@ const MyDrawer = () => {
               <Text style={{ fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.red }}>Level 22</Text>
             </View>
           </View>
+          <TouchableOpacity onPress={async () => {
+            await AsyncStorage.removeItem("id");
+            await navigation.replace("Login");
+          }} style={{ flexDirection: 'row', alignItems: 'center', width: '100%', padding: '5%', borderTopWidth: 1, borderBottomWidth: 1, borderColor: theme.colors.white }}>
+            <MaterialIcon name="logout" size={22} color={theme.colors.green} />
+            <Text style={{ fontSize: 16, color: theme.colors.white, marginLeft: '5%' }}>Logout</Text>
+          </TouchableOpacity>
         </>
       )}
     >

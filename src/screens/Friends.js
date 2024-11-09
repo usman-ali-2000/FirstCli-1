@@ -1,55 +1,101 @@
-import React, { useState } from "react";
-import { Image, Text, ToastAndroid, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, Image, Text, ToastAndroid, View } from "react-native";
 import theme from "../Theme/GlobalTheme";
 import { TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { formatNumber } from "../assets/Data";
+import { BaseUrl, formatNumber } from "../assets/Data";
 import Share from 'react-native-share';
 import Clipboard from "@react-native-clipboard/clipboard";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Friends() {
 
     const [select, setSelect] = useState(1);
+    const [friends, setFriends] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [coins, setCoins] = useState(null);
+
+
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            const generatedId = await AsyncStorage.getItem("generatedId");
+            const response = await fetch(`${BaseUrl}/register`);
+            const json = await response.json();
+            const friendData = await json.filter((item) => item.userId === generatedId);
+            setFriends(friendData);
+            console.log('json:', friendData);
+            setLoading(false);
+        } catch (e) {
+            console.log('error fetching friends', e);
+            setLoading(false);
+        }
+    }
+
+    const fetchReferCoin = async () => {
+        const id = await AsyncStorage.getItem("id");
+        try {
+            setLoading(true);
+            const response = await fetch(`${BaseUrl}/register/${id}`);
+            const json = await response.json();
+            console.log('json:', json.referCoin);
+            setCoins(json.referCoin);
+        } catch (e) {
+            setLoading(false);
+            console.log('error fetching...', e);
+        }
+    }
+
+    useEffect(() => {
+        fetchData();
+        fetchReferCoin();
+    }, []);
 
     const shareWithOptions = async () => {
         try {
-          const result = await Share.open({
-            title: 'Check this out!',
-            message: 'Here is an interesting link for you.',
-            url: 'https://www.example.com',
-            failOnCancel: false, // Prevents throwing an error if the user cancels the share action
-          });
-          console.log('Shared successfully:', result);
+            const result = await Share.open({
+                title: 'Check this out!',
+                message: 'Here is an interesting link for you.',
+                url: 'https://www.example.com',
+                failOnCancel: false, // Prevents throwing an error if the user cancels the share action
+            });
+            console.log('Shared successfully:', result);
         } catch (error) {
-          if (error.message !== 'User did not share') {
-            console.error('Error sharing:', error.message);
-          }
+            if (error.message !== 'User did not share') {
+                console.error('Error sharing:', error.message);
+            }
         }
-      };
-      
-        const textToCopy = 'Hello, this text is copied to the clipboard!';
-      
-        const copyToClipboard = () => {
-          Clipboard.setString(textToCopy);
-          ToastAndroid.show('Copied to clipboard', ToastAndroid.SHORT);
-        };
-      
-      
-        
+    };
+
+    const textToCopy = 'Hello, this text is copied to the clipboard!';
+
+    const copyToClipboard = () => {
+        Clipboard.setString(textToCopy);
+        ToastAndroid.show('Copied to clipboard', ToastAndroid.SHORT);
+    };
+
+
+
+
+
     const Friends = () => {
         return (
             <View style={{ width: '80%', flex: 1, justifyContent: 'space-between' }}>
                 <View style={{ flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-                    <View style={{ flexDirection: 'row', alignItems: "center", marginTop: '5%', width: '100%' }}>
+                    {!loading && friends.length !== 0 && <View style={{ flexDirection: 'row', alignItems: "center", marginTop: '5%', width: '100%' }}>
                         <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.green, fontFamily: 'Gilroy-SemiBold', paddingLeft: '2%', marginRight: '2%', width: '10%', }}>No.</Text>
                         <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.green, fontFamily: 'Gilroy-Medium', paddingLeft: '2%' }}>Name</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: '5%' }}>
-                        <View style={{ flexDirection: 'row', alignItems: "center", width: '100%' }}>
-                            <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.grey, fontFamily: 'Gilroy-SemiBold', paddingLeft: '2%', marginRight: '2%', width: '10%' }}>1</Text>
-                            <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.grey, fontFamily: 'Gilroy-Medium', paddingLeft: '2%' }}>Niaz Ahmed</Text>
-                        </View>
-                    </View>
+                    </View>}
+                    {loading ? <ActivityIndicator size={"large"} color={theme.colors.green} style={{ marginTop: '30%' }} /> : friends.length === 0 ? <Text style={{ color: theme.colors.white, alignSelf: 'center', fontSize: 20, marginTop: '30%' }}>No Friends Yet!</Text> : <FlatList
+                        showsVerticalScrollIndicator={false}
+                        style={{ width: '100%' }}
+                        data={friends}
+                        renderItem={({ item, index }) => (
+                            <View style={{ flexDirection: 'row', alignItems: "center", width: '100%', marginTop: '5%' }}>
+                                <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.grey, fontFamily: 'Gilroy-SemiBold', paddingLeft: '2%', marginRight: '2%', width: '10%' }}>{index + 1}</Text>
+                                <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.grey, fontFamily: 'Gilroy-Medium', paddingLeft: '2%' }}>{item.name}</Text>
+                            </View>
+                        )} />}
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', width: '80%', justifyContent: 'space-between', marginBottom: "5%", alignSelf: 'center' }}>
                     <TouchableOpacity onPress={shareWithOptions} style={{ width: '70%', height: 50, backgroundColor: theme.colors.green, borderRadius: 100, alignItems: 'center', justifyContent: 'center' }}>
@@ -71,7 +117,7 @@ export default function Friends() {
             <View style={{ flex: 1, width: '100%', alignItems: 'center', backgroundColor: theme.colors.black }}>
                 <Text style={{ color: theme.colors.red, textAlign: 'center', width: "90%", fontSize: 16, fontFamily: "Gilroy-SemiBold", marginTop: '4%' }}>Earned from friends</Text>
                 <Image source={require('../assets/images/coins.png')} style={{ height: 70, width: 70, marginTop: '5%' }} />
-                <Text style={{ fontSize: 20, fontFamily: 'Gilroy-Bold', color: theme.colors.white, marginTop: '3%' }}>{formatNumber(total)} <Text style={{ color: theme.colors.green, fontFamily: 'Gilroy-Medium' }}>$</Text></Text>
+                {loading ? <ActivityIndicator size={"large"} color={theme.colors.green} /> : <Text style={{ fontSize: 20, fontFamily: 'Gilroy-Bold', color: theme.colors.white, marginTop: '3%' }}>{coins && formatNumber(coins)} <Text style={{ color: theme.colors.green, fontFamily: 'Gilroy-Medium' }}>$</Text></Text>}
             </View>
         )
     }

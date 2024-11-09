@@ -3,12 +3,13 @@ import { ActivityIndicator, Alert, Text, ToastAndroid, TouchableOpacity, View } 
 import LoginInput from "../components/LoginInput";
 import theme from "../Theme/GlobalTheme";
 import Button from "../components/Button";
-import { BaseUrl } from "../assets/Data";
+import { BaseUrl, resetTimer } from "../assets/Data";
 import GetLocation from "../components/GeoLocation";
 import StringAnimation from "./StringAnimation";
 import SnakeGame from "./SnakeGame";
 import { addEventListener } from "@react-native-community/netinfo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import moment from "moment";
 
 export default function Login({ navigation }) {
 
@@ -88,6 +89,8 @@ export default function Login({ navigation }) {
             await AsyncStorage.setItem("id", json.user.id);
             await AsyncStorage.setItem("userId", json.user.userId);
             await AsyncStorage.setItem("generatedId", json.user.generatedId);
+            const newEndTime = moment().add(24, 'hours').format('MM/DD/YYYY HH : mm : ss');
+            await AsyncStorage.setItem('endTime', newEndTime);
             if (json?.user) {
                 console.log('successfull login', json.user.email);
                 navigation.replace('Home');
@@ -114,6 +117,7 @@ export default function Login({ navigation }) {
                 <View style={{ width: '100%', alignItems: 'center', marginTop: '10%', marginBottom: '5%' }}>
                     {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.green} text="Login" onPress={handleSubmit} />}
                 </View>
+
                 <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={{ alignSelf: 'center', marginRight: '5%', marginBottom: '10%', justifyContent: 'flex-end' }}>
                     <Text style={{ color: theme.colors.green, fontSize: 16, fontWeight: 'bold', textDecorationLine: 'underline' }}>SignUp</Text>
                 </TouchableOpacity>

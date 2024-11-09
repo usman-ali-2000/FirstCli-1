@@ -4,7 +4,7 @@ import FastImage from 'react-native-fast-image';
 import Icon from "react-native-vector-icons/FontAwesome";
 import theme from '../Theme/GlobalTheme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { addCoins, addReferCoins, BaseUrl, getCurrentDate } from '../assets/Data';
+import { addAttempt, addCoins, addReferCoins, BaseUrl, getCurrentDate } from '../assets/Data';
 import NetInfo from '@react-native-community/netinfo';
 
 const { width, height } = Dimensions.get('window');
@@ -43,31 +43,6 @@ const SnakeGame = ({ navigation, route }) => {
     // Helper function to generate new food position
     const generateFood = () => {
         return [Math.floor(Math.random() * GRID_SIZE), Math.floor(Math.random() * GRID_SIZE)];
-    };
-
-
-    const addAttempt = async (attempt, date) => {
-        const id = await AsyncStorage.getItem("id");
-        try {
-            const response = await fetch(`${BaseUrl}/attempts/${id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ attempt, date })
-            });
-
-            const data = await response.json();
-            console.log('response:', data);
-            if (response.ok) {
-                console.log("Attempt added successfully:", data);
-            } else {
-                const errorData = await response.json();
-                console.error("Failed to add attempt:", errorData);
-            }
-        } catch (error) {
-            console.error("An error occurred while adding attempt:", error);
-        }
     };
 
 
@@ -125,6 +100,30 @@ const SnakeGame = ({ navigation, route }) => {
         newSnake.push(newHead);
         setSnake(newSnake);
     };
+
+    // useEffect(() => {
+    //     if (isGameOver || timeLeft === 0) {
+    //         setModalVisible(true);
+    //         if (coins > 0) {
+    //             addCoins(coins);
+    //             addReferCoins(Math.floor(coins * 3 / 100));
+    //         }
+    //         if (attempts <= 15) {
+    //             addAttempt(attempts + 1, `${date.day}/${date.month}/${date.year}`)
+    //                 .then(() => fetchData()) // Refresh attempts after updating
+    //                 .catch((error) => console.error("Error fetching data:", error));
+    //             setAttempts((prev) => prev + 1); // Increment locally as well
+    //         }
+    //         return;
+    //     }
+    //     const timerInterval = setInterval(() => {
+    //         if (!isGameOver) {
+    //             setTimeLeft((prevTime) => prevTime - 1);
+    //         }
+    //     }, 1000);
+    //     return () => clearInterval(timerInterval);
+    // }, [timeLeft, isGameOver, attempts]); // Add `attempts` dependency here
+    
 
     useEffect(() => {
         // Subscribe to network state updates
