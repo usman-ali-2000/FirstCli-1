@@ -73,17 +73,17 @@ export default function ChangePassword({ navigation, route }) {
     };
 
     return (       
-        <View style={{ flex: 1, width: '100%', justifyContent: 'space-between', backgroundColor: theme.colors.black, alignItems: 'center' }}>
+        <View style={{ flex: 1, width: '100%', justifyContent: 'space-between', backgroundColor: theme.colors.white, alignItems: 'center' }}>
             <View style={{ width: '100%', alignItems: 'center', marginTop: '50%', }}>
                 <LoginInput text="Password" placeholder="Enter Your Password" value={password} secureTextEntry={true} onChangeText={(text) => setPassword(text)} />
                 <LoginInput text="Confirm Password" placeholder="Enter Your Password" value={confirm} secureTextEntry={true} onChangeText={(text) => setConfrim(text)} />
             </View>
             <View style={{ width: '100%', alignItems: 'center' }}>
                 <View style={{ width: '100%', alignItems: 'center', marginTop: '10%', marginBottom: '10%' }}>
-                    {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.green} text="Confirm" onPress={handleSubmit}/>}
+                    {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.darkYellow} text="Confirm" onPress={handleSubmit}/>}
                 </View>
                 {/* <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={{ alignSelf: 'center', marginRight: '5%', marginBottom: '10%', justifyContent: 'flex-end' }}>
-                    <Text style={{ color: theme.colors.green, fontSize: 16, fontWeight: 'bold', textDecorationLine: 'underline' }}></Text>
+                    <Text style={{ color: theme.colors.darkYellow, fontSize: 16, fontWeight: 'bold', textDecorationLine: 'underline' }}></Text>
                 </TouchableOpacity> */}
             </View>
         </View>

@@ -6,17 +6,23 @@ import theme from '../Theme/GlobalTheme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { addAttempt, addCoins, addReferCoins, BaseUrl, getCurrentDate } from '../assets/Data';
 import NetInfo from '@react-native-community/netinfo';
+import { AdEventType, InterstitialAd, TestIds } from 'react-native-google-mobile-ads';
 
 const { width, height } = Dimensions.get('window');
 const GRID_SIZE = 15;
 const CELL_SIZE = width / GRID_SIZE;
 
+
+const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-2692954530817995/2872900955';
+
+const interstitialAd = InterstitialAd.createForAdRequest(adUnitId);
+
 const SnakeGame = ({ navigation, route }) => {
-    // Initial state of the snake and food
+
     const attempt = route.params.attempt;
-    const [snake, setSnake] = useState([[5, 5]]); // Array of coordinates [x, y]
+    const [snake, setSnake] = useState([[5, 5]]);
     const [food, setFood] = useState([Math.floor(Math.random() * GRID_SIZE), Math.floor(Math.random() * GRID_SIZE)]);
-    const [direction, setDirection] = useState([1, 0]); // [x, y] direction
+    const [direction, setDirection] = useState([1, 0]);
     const [isGameOver, setIsGameOver] = useState(false);
     const [coins, setCoins] = useState(snake.length - 1);
     const [timeLeft, setTimeLeft] = useState(60);
@@ -27,13 +33,13 @@ const SnakeGame = ({ navigation, route }) => {
 
     const getCurrentDate = () => {
         const date = new Date();
-      
+
         const day = date.getDate();           // Day of the month (1-31)
         const month = date.getMonth() + 1;     // Month (0-11, add 1 to get 1-12)
         const year = date.getFullYear();       // Year (e.g., 2024)
-      
+
         return { day, month, year };
-      };
+    };
 
 
     const date = getCurrentDate();
@@ -64,6 +70,17 @@ const SnakeGame = ({ navigation, route }) => {
         }
     }
 
+
+    useEffect(() => {
+        const unsubscribe = interstitialAd.addAdEventListener(AdEventType.LOADED, () => {
+            interstitialAd.show();
+        });
+
+        interstitialAd.load();
+
+        return unsubscribe;
+    }, []);
+
     useEffect(() => {
         console.log('attempt:', attempt);
         fetchData();
@@ -84,7 +101,7 @@ const SnakeGame = ({ navigation, route }) => {
                 addCoins(coins);
                 addReferCoins(Math.floor(coins * 3 / 100));
             }
-            if (attempts <= 15) {
+            if (attempts <= 5) {
                 addAttempt(attempts + 1, `${date.day}/${date.month}/${date.year}`);
                 setAttempts(attempts + 1);
             }
@@ -108,7 +125,7 @@ const SnakeGame = ({ navigation, route }) => {
     //             addCoins(coins);
     //             addReferCoins(Math.floor(coins * 3 / 100));
     //         }
-    //         if (attempts <= 15) {
+    //         if (attempts <= 5) {
     //             addAttempt(attempts + 1, `${date.day}/${date.month}/${date.year}`)
     //                 .then(() => fetchData()) // Refresh attempts after updating
     //                 .catch((error) => console.error("Error fetching data:", error));
@@ -123,10 +140,11 @@ const SnakeGame = ({ navigation, route }) => {
     //     }, 1000);
     //     return () => clearInterval(timerInterval);
     // }, [timeLeft, isGameOver, attempts]); // Add `attempts` dependency here
-    
+
 
     useEffect(() => {
         // Subscribe to network state updates
+        const leftTime = timeLeft;
         const unsubscribe = NetInfo.addEventListener(state => {
             setIsConnected(state.isConnected);
             console.log("Connection type:", state.type);
@@ -136,6 +154,7 @@ const SnakeGame = ({ navigation, route }) => {
         // Unsubscribe when the component unmounts
         return () => {
             unsubscribe();
+            setTimeLeft(leftTime);
         };
     }, []);
 
@@ -147,7 +166,7 @@ const SnakeGame = ({ navigation, route }) => {
                 addCoins(coins);
                 addReferCoins(Math.floor(coins * 3 / 100));
             }
-            if (attempts <= 15) {
+            if (attempts <= 5) {
                 addAttempt(attempts + 1, `${date.day}/${date.month}/${date.year}`);
                 setAttempts(attempts + 1);
             }
@@ -197,16 +216,16 @@ const SnakeGame = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            {!isConnected || attempts >= 15 ? (
-                <View style={{ flex: 1, width: '100%', backgroundColor: theme.colors.black, alignItems: 'center', justifyContent: 'space-between' }}>
+            {!isConnected || attempts >= 5 ? (
+                <View style={{ flex: 1, width: '100%', backgroundColor: theme.colors.darkYellow, alignItems: 'center', justifyContent: 'space-between' }}>
                     <TouchableOpacity style={{ width: '95%' }} onPress={() => navigation.goBack()}>
                         <Icon name="chevron-left" size={18} color={theme.colors.white} style={{ marginTop: '10%', marginLeft: '5%' }} />
                     </TouchableOpacity>
                     <View style={{ width: '100%', alignItems: 'center', height: '60%' }}>
                         {!isConnected && <FastImage source={require('../assets/images/dollar.gif')} style={{ height: CELL_SIZE * 2, width: CELL_SIZE * 2 }} />}
-                        {!isConnected && <Text style={{ color: theme.colors.white, fontSize: 14, marginTop: '5%' }}>Not Internet...</Text>}
-                        {attempts >= 15 && <Text style={{ color: theme.colors.white, fontSize: 18, marginTop: '5%', width: '70%', textAlign: 'center', fontFamily: 'Gilroy-SemiBold', lineHeight:25 }}>You Have Completed Your Today's 15 Attempts</Text>}
-                        {attempts >= 15 && <Text style={{ color: theme.colors.red, fontSize: 14, marginTop: '2%', width: '70%', textAlign: 'center', fontFamily: 'Gilroy-SemiBold' }}>Now! You Can Play On Next Day </Text>}
+                        {!isConnected && <Text style={{ color: theme.colors.black, fontSize: 14, marginTop: '5%' }}>Not Internet...</Text>}
+                        {attempts >= 5 && <Text style={{ color: theme.colors.black, fontSize: 18, marginTop: '5%', width: '70%', textAlign: 'center', fontFamily: 'Gilroy-SemiBold', lineHeight: 25 }}>You Have Completed Your Today's 5 Attempts</Text>}
+                        {attempts >= 5 && <Text style={{ color: theme.colors.red, fontSize: 14, marginTop: '2%', width: '70%', textAlign: 'center', fontFamily: 'Gilroy-SemiBold' }}>Now! You Can Play On Next Day </Text>}
                     </View>
                 </View>
             ) : (
@@ -214,17 +233,13 @@ const SnakeGame = ({ navigation, route }) => {
                     <View style={{ flexDirection: 'row', alignItems: 'center', width: '90%', justifyContent: 'space-between', marginBottom: '5%' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={require('../assets/images/time.png')} style={{ height: CELL_SIZE, width: CELL_SIZE }} />
-                            <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', marginLeft: '5%' }}>
+                            <Text style={{ color: theme.colors.darkYellow, fontSize: 20, fontWeight: 'bold', marginLeft: '5%' }}>
                                 {Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? `0${timeLeft % 60}` : timeLeft % 60}
                             </Text>
                         </View>
-                        {/* {timeLeft === 0 && (
-                            <TouchableOpacity onPress={restartGame}>
-                                <Text style={{ fontSize: 24, color: 'red' }}>Time's up!</Text>
-                            </TouchableOpacity>)} */}
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <FastImage source={require('../assets/images/dollar.gif')} style={{ height: CELL_SIZE, width: CELL_SIZE }} />
-                            <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', }}>{coins}</Text>
+                            <Text style={{ color: theme.colors.darkYellow, fontSize: 20, fontWeight: 'bold', }}>{coins}</Text>
                         </View>
                     </View>
                     <View style={styles.grid}>
@@ -269,7 +284,7 @@ const SnakeGame = ({ navigation, route }) => {
                     </View>
                 </>
             )}
-            {isConnected && attempts < 15 && <View style={styles.controls}>
+            {isConnected && attempts < 5 && <View style={styles.controls}>
                 <TouchableOpacity onPress={() => changeDirection([0, -1])} style={styles.button}>
                     <Image source={require('../assets/images/up.png')} style={{ height: 12, width: 12 }} />
                 </TouchableOpacity>
@@ -285,7 +300,7 @@ const SnakeGame = ({ navigation, route }) => {
                     <Image source={require('../assets/images/down.png')} style={{ height: 12, width: 12 }} />
                 </TouchableOpacity>
             </View>}
-            {isConnected && attempts < 15 && <Modal
+            {isConnected && attempts < 5 && <Modal
                 animationType="fade"
                 transparent={true}
                 visible={modalVisible}
@@ -294,13 +309,13 @@ const SnakeGame = ({ navigation, route }) => {
             //     setModalVisible(!modalVisible);
             // }}
             >
-                <View style={{ flex: 1, marginBottom: '15%', width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.55)' }}>
+                <View style={{ flex: 1, width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.55)' }}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Icon name="chevron-left" size={18} color={theme.colors.white} style={{ marginTop: '10%', marginLeft: '5%' }} />
                     </TouchableOpacity>
                     <Pressable style={{ flex: 1, marginBottom: '15%', width: '100%', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0, 0, 0, 0)' }}>
                         <FastImage source={require('../assets/images/icon.gif')} style={{ height: CELL_SIZE * 4, width: CELL_SIZE * 4 }} />
-                        <Text style={{ fontSize: 24, color: 'white', fontFamily:'Gilroy-Bold' }}>Attempts Left {15 - attempts}</Text>
+                        <Text style={{ fontSize: 24, color: 'white', fontFamily: 'Gilroy-Bold' }}>Attempts Left {5 - attempts}</Text>
                         {timeLeft === 0 && (
                             <TouchableOpacity onPress={restartGame}>
                                 <Text style={{ fontSize: 24, color: 'red' }}>Time's up!</Text>
@@ -309,8 +324,8 @@ const SnakeGame = ({ navigation, route }) => {
                             <TouchableOpacity onPress={restartGame}>
                                 <Text style={{ fontSize: 24, color: 'red' }}>GameOver</Text>
                             </TouchableOpacity>)}
-                        <TouchableOpacity onPress={restartGame}>
-                            <Image source={require('../assets//images/refresh.png')} style={{ height: CELL_SIZE * 2, width: CELL_SIZE * 2, marginTop: '5%' }} />
+                        <TouchableOpacity onPress={restartGame} style={{ height: CELL_SIZE * 2, width: CELL_SIZE * 2, borderRadius: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: theme.colors.white }}>
+                            <Image source={require('../assets//images/refresh.png')} style={{ height: CELL_SIZE * 1, width: CELL_SIZE * 1, marginTop: '5%' }} />
                         </TouchableOpacity>
                     </Pressable>
                 </View>
@@ -324,16 +339,16 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'black',
+        backgroundColor: 'white',
         width: '100%',
     },
     grid: {
         width: width,
         height: width,
-        backgroundColor: 'black',
+        backgroundColor: 'white',
         position: 'relative',
         borderWidth: 1,
-        borderColor: 'red',
+        borderColor: theme.colors.darkYellow,
     },
     snakeSegment: {
         width: CELL_SIZE,
@@ -369,7 +384,7 @@ const styles = StyleSheet.create({
     },
     button: {
         padding: 20,
-        backgroundColor: '#12AD2B',
+        backgroundColor: theme.colors.darkYellow,
         borderRadius: 50,
         height: 50,
         width: 50,

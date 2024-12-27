@@ -6,29 +6,29 @@ import Button from "../components/Button";
 
 const CELL_COUNT = 6;
 
-const ForgotOTP = ({navigation, route}) => {
+const ForgotOTP = ({ navigation, route }) => {
 
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
-  const email = route.params.email;
-  const otp = route.params.otp;
+  const email = route?.params?.email;
+  const otp = route?.params?.otp;
 
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({ value, setValue });
 
-  const handleSubmit =()=>{
-    if(otp.toString() === value){
-      navigation.navigate('ChangePassword',{email: email});
-    }else{
+  const handleSubmit = () => {
+    if (otp.toString() === value) {
+      navigation.navigate('ChangePassword', { email: email });
+    } else {
       ToastAndroid.show('not correct', ToastAndroid.SHORT);
     }
   }
-  
+
 
   return (
     <View style={styles.MainContainer}>
-      <View style={{marginTop:'80%', width:'100%'}}> 
-        <Text style={{ color: theme.colors.white, width: '90%', marginBottom:'2%', fontFamily:'Gilroy-SemiBold', alignSelf:'center' }}>Enter OTP</Text>
+      <View style={{ marginTop: '80%', width: '100%' }}>
+        <Text style={{ color: theme.colors.white, width: '90%', marginBottom: '2%', fontFamily: 'Gilroy-SemiBold', alignSelf: 'center' }}>Enter OTP</Text>
         <View style={styles.BoxContainer}>
           <CodeField
             ref={ref}
@@ -56,7 +56,7 @@ const ForgotOTP = ({navigation, route}) => {
         </View>
       </View>
       <View style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-end', marginBottom: '10%' }}>
-        {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.green} text="Verify" onPress={handleSubmit} />}
+        {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.darkYellow} text="Verify" onPress={handleSubmit} />}
       </View>
     </View>
   );
@@ -66,7 +66,7 @@ export default ForgotOTP;
 
 const styles = StyleSheet.create({
   MainContainer: {
-    backgroundColor: theme.colors.black,
+    backgroundColor: theme.colors.white,
     width: '100%',
     flex: 1,
     alignItems: 'center',
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     borderWidth: 2,
-    borderColor: theme.colors.grey,
+    borderColor: theme.colors.darkYellow,
     backgroundColor: theme.colors.white,
     textAlign: "center",
     color: theme.colors.black,
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     paddingTop: '5%'
   },
   focusCell: {
-    borderColor: theme.colors.green,
+    borderColor: theme.colors.darkYellow,
     borderWidth: 2
   },
   BoxContainer: {

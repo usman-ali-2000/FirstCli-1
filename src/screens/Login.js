@@ -104,22 +104,24 @@ export default function Login({ navigation }) {
         setLoading(false);
     };
 
+
+
     return (
-        <View style={{ flex: 1, width: '100%', justifyContent: 'space-between', backgroundColor: theme.colors.black, alignItems: 'center' }}>
+        <View style={{ flex: 1, width: '100%', justifyContent: 'space-between', backgroundColor: theme.colors.white, alignItems: 'center' }}>
             <View style={{ width: '100%', alignItems: 'center', marginTop: '50%', }}>
                 <LoginInput text="Email" placeholder="Enter Your Email" value={email} onChangeText={(text) => setEmail(text)} />
                 <LoginInput text="Password" placeholder="Enter Your Password" secureTextEntry={true} value={password} onChangeText={(text) => setPassword(text)} />
                 <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')} style={{ width: '90%', alignItems: 'flex-end', marginTop: '2%' }}>
-                    <Text style={{ color: theme.colors.red, fontSize: 15, textDecorationLine: 'underline' }}>forgot password</Text>
+                    <Text style={{ color: theme.colors.darkYellow, fontSize: 15, textDecorationLine: 'underline' }}>forgot password</Text>
                 </TouchableOpacity>
             </View>
             <View style={{ width: '100%', alignItems: 'center' }}>
                 <View style={{ width: '100%', alignItems: 'center', marginTop: '10%', marginBottom: '5%' }}>
-                    {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.green} text="Login" onPress={handleSubmit} />}
+                    {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.darkYellow} text="Login" onPress={handleSubmit} />}
                 </View>
 
                 <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={{ alignSelf: 'center', marginRight: '5%', marginBottom: '10%', justifyContent: 'flex-end' }}>
-                    <Text style={{ color: theme.colors.green, fontSize: 16, fontWeight: 'bold', textDecorationLine: 'underline' }}>SignUp</Text>
+                    <Text style={{ color: theme.colors.darkYellow, fontSize: 16, fontWeight: 'bold', textDecorationLine: 'underline' }}>SignUp</Text>
                 </TouchableOpacity>
             </View>
         </View>

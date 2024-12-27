@@ -6,17 +6,17 @@ import theme from "../Theme/GlobalTheme";
 const LoginInput = (props) => {
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: props.backgroundColor ? props.backgroundColor : theme.colors.white }]}>
             <Text style={[styles.text]}>{props.text}</Text>
-            <View style={[styles.inputContainer]}>
+            <View style={[styles.inputContainer, { backgroundColor: props.backgroundColor ? props.backgroundColor : theme.colors.white }]}>
                 <TextInput
                     placeholder={props.placeholder}
-                    placeholderTextColor={theme.colors.grey}
+                    placeholderTextColor={theme.colors.darkGrey}
                     style={styles.input}
                     onChangeText={props.onChangeText}
-                    value={props.value} 
+                    value={props.value}
                     secureTextEntry={props?.secureTextEntry}
-                    keyboardType={props?.keyboardType}/>
+                    keyboardType={props?.keyboardType} />
             </View>
         </View>
     )
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         paddingTop: '5%',
         alignSelf: 'flex-start',
         marginLeft: '6%',
-        backgroundColor:theme.colors.black,
+
 
     },
     inputContainer: {
@@ -43,12 +43,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-evenly',
         borderBottomWidth: 1,
-        borderColor: theme.colors.grey,
-        backgroundColor:theme.colors.black,
+        borderColor: theme.colors.purple,
     },
     input: {
         height: 52,
-        color: theme.colors.white,
+        color: theme.colors.black,
         fontSize: 14,
         fontFamily: 'Poppins-Regular',
         textAlignVertical: 'center',
@@ -66,7 +65,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Gilroy-SemiBold',
         padding: '1%',
         paddingLeft: 0,
-        color: theme.colors.green,
+        color: theme.colors.purple,
     },
     warningContainer: {
         flexDirection: 'row',

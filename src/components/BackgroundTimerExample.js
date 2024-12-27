@@ -4,6 +4,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import theme from '../Theme/GlobalTheme';
 import { addCoins, addReferCoins } from '../assets/Data';
+import { AdEventType, InterstitialAd, TestIds } from 'react-native-google-mobile-ads';
+
+
+
+const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-2692954530817995/2872900955';
+
+const interstitialAd = InterstitialAd.createForAdRequest(adUnitId);
 
 const BackgroundCountdownTimer = (props) => {
   const [timeDiff, setTimeDiff] = useState('');
@@ -61,6 +68,7 @@ const BackgroundCountdownTimer = (props) => {
       addCoins(50);
       addReferCoins(Math.floor(50 * 3 / 100));
       await resetTimer();
+      ToastAndroid.show("You Got 50 Coins", ToastAndroid.LONG);
     } else {
       ToastAndroid.show("Wait ...", ToastAndroid.SHORT);
     }
@@ -77,10 +85,23 @@ const BackgroundCountdownTimer = (props) => {
     return `${hours} : ${minutes} : ${seconds}`;
   };
 
+
+  useEffect(() => {
+    const unsubscribe = interstitialAd.addAdEventListener(AdEventType.LOADED, () => {
+        interstitialAd.show();
+    });
+
+    interstitialAd.load();
+
+    return unsubscribe;
+}, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.timeContainer}>
-        <Text style={styles.timeText}>{timeDiff}</Text>
+        {timeDiff === "00 : 00 : 00" ?
+          <Text style={{ fontSize: 24, fontFamily: 'Gilroy-Bold', color: theme.colors.purple }}>Your Coins Are Ready...</Text> :
+          <Text style={styles.timeText}>{timeDiff}</Text>}
         <Text style={styles.description}>Claim Your Daily Coins</Text>
       </View>
       <Image source={require('../assets/images/coins.png')} style={styles.coinImage} />
@@ -102,21 +123,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: '10%',
-    paddingBottom: '10%',
+    paddingTop: '0%',
+    paddingBottom: '5%',
   },
   timeContainer: {
     alignItems: 'center',
     width: '100%',
+    marginTop: '10%'
   },
   timeText: {
     fontSize: 30,
-    color: theme.colors.white,
+    color: theme.colors.purple,
     fontFamily: 'Gilroy-SemiBold',
   },
   description: {
     fontSize: 14,
-    color: theme.colors.white,
+    color: theme.colors.purple,
     fontFamily: 'Gilroy-SemiBold',
     paddingTop: '5%',
     textAlign: 'center',
@@ -129,7 +151,7 @@ const styles = StyleSheet.create({
   },
   coinAmount: {
     fontSize: 30,
-    color: theme.colors.white,
+    color: theme.colors.purple,
     fontFamily: 'Gilroy-SemiBold',
   },
   buttonsContainer: {

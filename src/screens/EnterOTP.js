@@ -7,7 +7,7 @@ import { BaseUrl } from "../assets/Data";
 
 const CELL_COUNT = 6;
 
-const EnterOTP = ({navigation, route}) => {
+const EnterOTP = ({ navigation, route }) => {
 
   const name = route.params.name;
   const phone = route.params.phone;
@@ -17,57 +17,57 @@ const EnterOTP = ({navigation, route}) => {
   const referalId = route.params.referalId;
 
   const [value, setValue] = useState('');
-  const [loading, setLoading] = useState(false);  
+  const [loading, setLoading] = useState(false);
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({ value, setValue });
 
-  useEffect(()=>{
-    console.log('data:', name, email, phone, password, typeof(otp.toString()), typeof(value));
-  },[]);
+  useEffect(() => {
+    console.log('data:', name, email, phone, password, typeof (otp.toString()), typeof (value));
+  }, []);
 
   const handleSubmit = async () => {
 
-      setLoading(true);
+    setLoading(true);
 
-      if(otp.toString() !== value){
-        ToastAndroid.show('incorrect OTP', ToastAndroid.SHORT);
-        setLoading(false);
-        return;
-      }
-
-      const data = {
-          name,
-          phone: Number(phone),
-          email,
-          userId: referalId,
-          password,
-      };
-
-      try {
-          // console.log("Sending data:", typeof data.phone);  // Add logging to see the payload sent
-          const response = await fetch(`${BaseUrl}/register`, {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(data),
-          });
-          const json = await response.json();
-          console.log("Response JSON:", json);  // Log the response from the server
-
-          if (response.status === 201) {
-              Alert.alert('Successfully Registered');
-              navigation.navigate('Login');  // Automatically redirect to login after successful registration
-          } else {
-              // Handle unsuccessful registration
-              Alert.alert('Registration failed', json.msg || 'Please try again');
-          }
-
-      } catch (e) {
-          console.log('Error during signup:', e);  // Log any network or API errors
-          Alert.alert('An error occurred during registration. Please try again later.');
-      }
+    if (otp.toString() !== value) {
+      ToastAndroid.show('incorrect OTP', ToastAndroid.SHORT);
       setLoading(false);
+      return;
+    }
+
+    const data = {
+      name,
+      phone: Number(phone),
+      email,
+      userId: referalId,
+      password,
+    };
+
+    try {
+      // console.log("Sending data:", typeof data.phone);  // Add logging to see the payload sent
+      const response = await fetch(`${BaseUrl}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      const json = await response.json();
+      console.log("Response JSON:", json);  // Log the response from the server
+
+      if (response.status === 201) {
+        Alert.alert('Successfully Registered');
+        navigation.navigate('Login');  // Automatically redirect to login after successful registration
+      } else {
+        // Handle unsuccessful registration
+        Alert.alert('Registration failed', json.msg || 'Please try again');
+      }
+
+    } catch (e) {
+      console.log('Error during signup:', e);  // Log any network or API errors
+      Alert.alert('An error occurred during registration. Please try again later.');
+    }
+    setLoading(false);
   };
 
 
@@ -75,8 +75,8 @@ const EnterOTP = ({navigation, route}) => {
 
   return (
     <View style={styles.MainContainer}>
-      <View style={{marginTop:'80%', width:'100%'}}> 
-        <Text style={{ color: theme.colors.white, width: '90%', marginBottom:'2%', fontFamily:'Gilroy-SemiBold', alignSelf:'center' }}>Enter OTP</Text>
+      <View style={{ marginTop: '80%', width: '100%' }}>
+        <Text style={{ color: theme.colors.white, width: '90%', marginBottom: '2%', fontFamily: 'Gilroy-SemiBold', alignSelf: 'center' }}>Enter OTP</Text>
         <View style={styles.BoxContainer}>
           <CodeField
             ref={ref}
@@ -114,7 +114,7 @@ export default EnterOTP;
 
 const styles = StyleSheet.create({
   MainContainer: {
-    backgroundColor: theme.colors.black,
+    backgroundColor: theme.colors.white,
     width: '100%',
     flex: 1,
     alignItems: 'center',

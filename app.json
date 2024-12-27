@@ -1,4 +1,8 @@
 {
   "name": "FirstCli",
-  "displayName": "FirstCli"
+  "displayName": "WingedX",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-2692954530817995~2537960667",
+    "ios_app_id": "ca-app-pub-2692954530817995~2537960667"
+  }
 }

@@ -72,13 +72,13 @@ export default function ForgotPassword({ navigation }) {
     };
 
     return (
-        <View style={{ flex: 1, width: '100%', justifyContent: 'space-between', backgroundColor: theme.colors.black, alignItems: 'center' }}>
+        <View style={{ flex: 1, width: '100%', justifyContent: 'space-between', backgroundColor: theme.colors.white, alignItems: 'center' }}>
             <View style={{ width: '100%', alignItems: 'center', marginTop: '70%', }}>
                 <LoginInput text="Email" placeholder="Enter Your Email" value={email} onChangeText={(text) => setEmail(text)} />
             </View>
             <View style={{ width: '100%', alignItems: 'center' }}>
                 <View style={{ width: '100%', alignItems: 'center', marginTop: '10%', marginBottom: '10%' }}>
-                    {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.green} text="Send" onPress={handleSubmit} />}
+                    {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.darkYellow} text="Send" onPress={handleSubmit} />}
                 </View>
             </View>
         </View>

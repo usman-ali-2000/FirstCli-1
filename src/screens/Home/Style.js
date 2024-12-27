@@ -1,14 +1,17 @@
 import React from "react";
 import { Fonts } from "../../Theme/Fonts";
 import theme from "../../Theme/GlobalTheme";
+import { Dimensions } from "react-native";
 
+const { width, height } = Dimensions.get('window');
 
 const Styles = {
     container: {
-        height: '100%',
+        // height:'100%',
+        flex:1,
         width: '100%',
         flexDirection: 'column',
-        backgroundColor: theme.colors.black,
+        backgroundColor: 'rgba(0, 0, 0, 0)',
         // justifyContent: 'space-between'
         // alignItems: 'center',
     },
@@ -42,7 +45,7 @@ const Styles = {
         margin: 15
     },
     slide: {
-        backgroundColor: theme.colors.black,
+        backgroundColor: theme.colors.lightPink,
         padding: 5,
         paddingLeft: 15,
         alignItems: 'center',
@@ -51,6 +54,8 @@ const Styles = {
         width: 300,
         height: 100,
         borderRadius: 15,
+        borderWidth: 1,
+        borderColor: theme.colors.grey,
     },
     triangle: {
         width: 0,

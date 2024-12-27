@@ -1,6 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert, Linking, Text, TouchableOpacity, View } from "react-native";
+import { Menu } from "react-native-popup-menu";
+import theme from "../Theme/GlobalTheme";
 
 export const BaseUrl = "https://book-shop-api-sage.vercel.app";
+export const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dve7g3iz6/upload";
 // export const BaseUrl = "http://192.168.100.47:8000";
 
 export const getCurrentDate = () => {
@@ -11,6 +15,29 @@ export const getCurrentDate = () => {
     const year = date.getFullYear();       // Year (e.g., 2024)
 
     return { day, month, year };
+};
+
+export const addNfuc = async (additionalCoins, accType) => {
+    const id = await AsyncStorage.getItem("id");
+    try {
+        const response = await fetch(`${BaseUrl}/register/${id}/add-nfuc`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ additionalCoins, accType })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("Coins added successfully:", data);
+        } else {
+            const errorData = await response.json();
+            console.error("Failed to add coins:", errorData);
+        }
+    } catch (error) {
+        console.error("An error occurred while adding coins:", error);
+    }
 };
 
 
@@ -34,6 +61,34 @@ export const addCoins = async (additionalCoins) => {
         }
     } catch (error) {
         console.error("An error occurred while adding coins:", error);
+    }
+};
+
+
+export const addReferNfuc = async (nfucRefer) => {
+    const userId = await AsyncStorage.getItem("userId");
+    // console.log("userId", userId);
+    if (userId) {
+        console.log("userId", userId);
+        try {
+            const response = await fetch(`${BaseUrl}/register/generated/${userId}/refer-nfuc`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nfucRefer })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Refer coins added successfully:", data);
+            } else {
+                const errorData = await response.json();
+                console.error("Failed to add refer coins:", errorData);
+            }
+        } catch (error) {
+            console.error("An error occurred while adding refer coins:", error);
+        }
     }
 };
 
@@ -96,18 +151,6 @@ export const offerData = [
     require('../assets/images/offer1.png'),
 ]
 
-export const resetTimer = async () => {
-    // Clear the current interval
-    clearInterval(intervalId);
-
-    // Set the new end time to 24 hours from now
-    const newEndTime = moment().add(24, 'hours').format('MM/DD/YYYY HH:mm:ss');
-    await AsyncStorage.setItem('endTime', newEndTime);
-
-    // Restart the countdown with the new end time
-    setTimeDiff("24:00:00");
-    startCountdown(newEndTime);
-  };
 
 
 export const formatNumber = (num) => {
@@ -118,3 +161,110 @@ export const formatNumber = (num) => {
     }
     return num.toString();
 };
+
+
+export const openLink = async (webUrl) => {
+    try {
+        await Linking.openURL(webUrl); // Open the app URL if available, otherwise the web URL
+    } catch (error) {
+        Alert.alert('Failed to open link', error.message);
+    }
+};
+
+
+export const NfucMenu = (props) => {
+    return (
+        <View>
+            <Menu
+                onPressAction={({ nativeEvent }) => {
+                    Alert.alert('Selected Option', `You selected: ${nativeEvent.event}`);
+                }}
+                style={{
+                    backgroundColor: theme.colors.white,
+                    marginLeft: "10%",
+                    alignItems: 'center',
+                    padding: 5,
+                    width: 100,
+                    borderRadius: 5
+                }}
+            >
+                <TouchableOpacity onPress={props.onPress}>
+                    <Text style={{
+                        color: theme.colors.black,
+                        fontSize: 12,
+                        fontFamily: 'Gilroy-SemiBold',
+                        width: 100,
+                        textAlign:'center'
+                    }}>
+                        Send
+                    </Text>
+                </TouchableOpacity>
+            </Menu>
+        </View>
+    )
+}
+export const WxMenu = (props) => {
+    return (
+        <View>
+            <Menu
+                onPressAction={({ nativeEvent }) => {
+                    Alert.alert('Selected Option', `You selected: ${nativeEvent.event}`);
+                }}
+                style={{
+                    backgroundColor: theme.colors.white,
+                    marginLeft: "10%",
+                    alignItems: 'center',
+                    padding: 5,
+                    width: 100,
+                    borderRadius: 5
+                }}
+            >
+                <TouchableOpacity onPress={props.onPress}>
+                    <Text style={{
+                        color: theme.colors.black,
+                        fontSize: 12,
+                        fontFamily: 'Gilroy-SemiBold',
+                        width: 100,
+                        textAlign:'center'
+                    }}>
+                        Exchange
+                    </Text>
+                </TouchableOpacity>
+            </Menu>
+        </View>
+    )
+}
+export const UsdtMenu = (props) => {
+    return (
+        <View>
+            <Menu
+                onPressAction={({ nativeEvent }) => {
+                    Alert.alert('Selected Option', `You selected: ${nativeEvent.event}`);
+                }}
+                style={{
+                    backgroundColor: theme.colors.white,
+                    marginLeft: "10%",
+                    alignItems: 'center',
+                    padding: 5,
+                    width: 100,
+                    borderRadius: 5
+                }}
+            >
+                <TouchableOpacity onPress={props.onPress}>
+                    <Text style={{
+                        color: theme.colors.black,
+                        fontSize: 12,
+                        fontFamily: 'Gilroy-SemiBold',
+                        width: 100,
+                        textAlign:'center'
+                    }}>
+                        Withdraw
+                    </Text>
+                </TouchableOpacity>
+            </Menu>
+        </View>
+    )
+}
+
+// ca-app-pub-1125964563702406~7565257761
+// ca-app-pub-1125964563702406/6295444098

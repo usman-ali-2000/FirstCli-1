@@ -1,18 +1,21 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Image, Linking, Text, ToastAndroid, View } from "react-native";
+import { ActivityIndicator, Alert, FlatList, Image, Linking, ScrollView, Text, ToastAndroid, View } from "react-native";
 import theme from "../Theme/GlobalTheme";
 import { TouchableOpacity } from "react-native";
 import NetInfo from '@react-native-community/netinfo';
 import { addCoins, addReferCoins, BaseUrl } from "../assets/Data";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import LinearGradient from "react-native-linear-gradient";
+import Working from "./Working";
 
-export default function Task() {
+export default function Task({ navigation }) {
 
     const [select, setSelect] = useState(1);
     const [isConnected, setIsConnected] = useState(null);
     const [notViewed, setNotViewed] = useState([]);
     const [viewed, setViewed] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [accType, setAccType] = useState(null);
 
     const fetchTask = async () => {
         try {
@@ -30,14 +33,45 @@ export default function Task() {
         }
     }
 
+
+    const fetchAccType = async () => {
+        try {
+            setLoading(true);
+            const id = await AsyncStorage.getItem("id");
+            const response = await fetch(`${BaseUrl}/register/${id}`);
+            const json = await response.json();
+            console.log('json task:', json.accType);
+            setAccType(json.accType);
+            setLoading(false);
+        } catch (e) {
+            setLoading(false);
+            console.log('error fetching task', e);
+        }
+    }
+
     useEffect(() => {
         fetchTask();
     }, []);
 
+    const handleNonWorking = () => {
+        if (accType === "non-working" || accType === "fresh") {
+            navigation.navigate('Working', { type: "non-working" });
+        } else {
+            Alert.alert("Use another email for non-working account");
+        }
+    }
+    const handleWorking = () => {
+        if (accType === "working" || accType === "fresh") {
+            navigation.navigate('Working', { type: "working" });
+        } else {
+            Alert.alert("Use another email for working account");
+        }
+    }
+
 
     const openLink = async (webUrl) => {
         try {
-            await Linking.openURL(webUrl); // Open the app URL if available, otherwise the web URL
+            await Linking.openURL(webUrl);
         } catch (error) {
             Alert.alert('Failed to open link', error.message);
         }
@@ -79,6 +113,7 @@ export default function Task() {
     }
 
 
+
     const handleTask = async (url, postId) => {
         try {
             const id = await AsyncStorage.getItem("id");
@@ -97,7 +132,7 @@ export default function Task() {
     }
 
     const handleComplete = () => {
-        ToastAndroid.show('Already done1', ToastAndroid.SHORT);
+        ToastAndroid.show('Already done', ToastAndroid.SHORT);
     }
 
     const Pending = () => {
@@ -111,12 +146,12 @@ export default function Task() {
                                 contentContainerStyle={{ alignItems: 'center' }}
                                 data={notViewed}
                                 renderItem={({ item }) => (
-                                    <TouchableOpacity onPress={() => handleTask(item.link, item._id)} style={{ flexDirection: 'row', alignItems: 'center', width: '90%', marginTop: '5%', backgroundColor: theme.colors.grey, borderRadius: 8, elevation: 5, justifyContent: "space-between", paddingTop: 10, paddingLeft: 10 }}>
+                                    <TouchableOpacity onPress={() => handleTask(item.link, item._id)} style={{ flexDirection: 'row', alignItems: 'center', width: '90%', marginTop: '5%', backgroundColor: theme.colors.white, borderRadius: 8, elevation: 5, justifyContent: "space-between", paddingTop: 10, paddingLeft: 10 }}>
                                         <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center', marginBottom: 5 }}>
                                             <Image source={require('../assets/images/task.png')} style={{ height: 40, width: 40 }} />
                                         </View>
                                         <View style={{ flexDirection: 'column', paddingLeft: '4%', width: '80%', alignSelf: 'flex-ends' }}>
-                                            <Text style={{ colors: theme.colors.white, fontSize: 16, color: theme.colors.black, fontFamily: 'Gilroy-SemiBold', }}>{item.heading}</Text>
+                                            <Text style={{ colors: theme.colors.white, fontSize: 16, color: theme.colors.purple, fontFamily: 'Gilroy-SemiBold', }}>{item.heading}</Text>
                                             <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.red, fontFamily: 'Gilroy-Medium', paddingTop: '1%' }}>{item.subHeading}</Text>
                                             <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.white, fontFamily: 'Gilroy-Medium', padding: '1%', backgroundColor: theme.colors.green, width: 100, textAlign: 'center', alignSelf: 'flex-end', borderBottomRightRadius: 4, borderTopLeftRadius: 8, marginTop: 5 }}>pending</Text>
                                         </View>
@@ -138,7 +173,7 @@ export default function Task() {
                                 contentContainerStyle={{ alignItems: 'center' }}
                                 data={viewed}
                                 renderItem={({ item }) => (
-                                    <TouchableOpacity onPress={() => handleComplete()} style={{ flexDirection: 'row', alignItems: 'center', width: '90%', marginTop: '5%', backgroundColor: theme.colors.grey, borderRadius: 8, elevation: 5, justifyContent: "space-between", paddingTop: 10, paddingLeft: 10 }}>
+                                    <TouchableOpacity onPress={() => handleComplete()} style={{ flexDirection: 'row', alignItems: 'center', width: '90%', marginTop: '5%', backgroundColor: theme.colors.white, borderRadius: 8, elevation: 5, justifyContent: "space-between", paddingTop: 10, paddingLeft: 10 }}>
                                         <View style={{ width: '20%', alignItems: 'center', justifyContent: 'center', marginBottom: 5 }}>
                                             <Image source={require('../assets/images/task.png')} style={{ height: 40, width: 40 }} />
                                         </View>
@@ -153,28 +188,34 @@ export default function Task() {
                 }
             </>
         )
+
     }
 
     return (
-        <View style={{ flex: 1, width: '100%', alignItems: 'center', backgroundColor: theme.colors.black }}>
-            <Text style={{ color: theme.colors.white, textAlign: 'center', width: "90%", fontSize: 16, fontFamily: "Gilroy-SemiBold", marginTop: '5%' }}>Complete Task <Image source={require('../assets/images/coins.png')} style={{ height: 20, width: 20 }} /> & Get 50 Coins</Text>
-            <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors, backgroundColor: theme.colors.grey, height: 50, borderRadius: 12, marginTop: '10%' }}>
-                <TouchableOpacity onPress={() => setSelect(1)} style={{
-                    width: '50%', alignItems: 'center', justifyContent: 'center', backgroundColor: select === 1 ? theme.colors.green : theme.colors.grey
-                    , height: 50, borderRadius: 12
-                }}>
-                    <Text style={{ fontSize: 20, fontFamily: 'Gilroy-SemiBold', color: select === 1 ? theme.colors.white : theme.colors.black }}>Pending</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setSelect(2)} style={{
-                    width: '50%', alignItems: 'center', justifyContent: 'center', backgroundColor: select === 2 ? theme.colors.green : theme.colors.grey
-                    , height: 50, borderRadius: 12
-                }}>
-                    <Text style={{ fontSize: 20, fontFamily: 'Gilroy-SemiBold', color: select === 2 ? theme.colors.white : theme.colors.black }}>Complete</Text>
-                </TouchableOpacity>
+        <LinearGradient colors={[theme.colors.lightPink, theme.colors.lightPink, theme.colors.lightPink,]} style={{ width: '100%', flex: 1, alignItems: 'center' }}>
+            <Text style={{ color: theme.colors.purple, width: "90%", fontSize: 22, fontFamily: "Gilroy-SemiBold", marginTop: '10%', }}>Tasks</Text>
+            <View style={{ flex: 1, width: '100%', alignItems: 'center' }}>
+                <ScrollView style={{ width: '100%' }} contentContainerStyle={{ alignItems: 'center' }}>
+                    <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors.purple, backgroundColor: theme.colors.white, height: 50, borderRadius: 12, marginTop: '10%' }}>
+                        <TouchableOpacity onPress={() => setSelect(1)} style={{
+                            width: '50%', alignItems: 'center', justifyContent: 'center', backgroundColor: select === 1 ? theme.colors.purple : theme.colors.white
+                            , height: 50, borderRadius: 12
+                        }}>
+                            <Text style={{ fontSize: 16, fontFamily: 'Gilroy-SemiBold', color: select === 1 ? theme.colors.white : theme.colors.purple }}>Pending</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => setSelect(2)} style={{
+                            width: '50%', alignItems: 'center', justifyContent: 'center', backgroundColor: select === 2 ? theme.colors.purple : theme.colors.white
+                            , height: 50, borderRadius: 12
+                        }}>
+                            <Text style={{ fontSize: 16, fontFamily: 'Gilroy-SemiBold', color: select === 2 ? theme.colors.white : theme.colors.purple }}>Completed</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {loading ? <ActivityIndicator color={theme.colors.purple} style={{ marginTop: '50%' }} /> : <>
+                        {select === 1 && <Pending />}
+                        {select === 2 && <Complete />}
+                    </>}
+                </ScrollView>
             </View>
-            {loading ? (<ActivityIndicator size={"large"} color={theme.colors.green} style={{ marginTop: '5%' }} />) :
-                (select === 1 ? <Pending /> : select === 2 ? <Complete /> : null)
-            }
-        </View>
+        </LinearGradient>
     )
 }

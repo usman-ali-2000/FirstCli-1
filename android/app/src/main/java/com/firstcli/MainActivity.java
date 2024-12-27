@@ -1,4 +1,4 @@
-package com.firstcli;
+package com.myapp.wingedx;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

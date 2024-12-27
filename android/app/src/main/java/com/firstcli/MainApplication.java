@@ -1,4 +1,4 @@
-package com.firstcli;
+package com.myapp.wingedx;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

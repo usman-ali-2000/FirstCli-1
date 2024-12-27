@@ -12,6 +12,7 @@ import Profile from "../screens/Profile";
 import Task from "../screens/Task";
 import { TouchableOpacity } from "react-native";
 import BackgroundTimerExample from "../components/BackgroundTimerExample";
+import Plan from "../screens/Plan";
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +47,7 @@ const BottomNav = () => {
         }}
       >
         <Pressable onPress={() => setModalVisible(!modalVisible)} style={{ flex: 1, width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.55)', justifyContent: 'flex-end' }}>
-          <View style={{ backgroundColor: theme.colors.jetBlack, height: '50%', borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
+          <View style={{ backgroundColor: theme.colors.white, height: '50%', borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
             <BackgroundTimerExample onCancel={() => setModalVisible(!modalVisible)} />
           </View>
         </Pressable>
@@ -60,7 +61,7 @@ const BottomNav = () => {
         screenOptions={{
           tabBarStyle: {
             height: '8%',
-            backgroundColor: theme.colors.black
+            backgroundColor: theme.colors.lightPink
           },
           tabBarShowLabel: false,
         }}
@@ -73,17 +74,17 @@ const BottomNav = () => {
               fontSize: 12,
               fontFamily: "OpenSans-Regular",
             },
-            tabBarActiveBackgroundColor: theme.colors.black,
-            tabBarInactiveBackgroundColor: theme.colors.black,
-            tabBarActiveTintColor: theme.colors.green,
+            tabBarActiveBackgroundColor: theme.colors.lightPink,
+            tabBarInactiveBackgroundColor: theme.colors.lightPink,
+            tabBarActiveTintColor: theme.colors.purple,
             tabBarIcon: ({ focused }) => (
               <View style={{ alignItems: "center" }}>
-                <Icon name="home" size={28} color={focused ? theme.colors.green : theme.colors.white} />
+                <Icon name="home" size={28} color={focused ? theme.colors.purple : theme.colors.white} />
                 <Text
                   style={{
                     fontSize: 12,
                     fontFamily: "Gilroy-SemiBold",
-                    color: focused ? theme.colors.green : theme.colors.white,
+                    color: focused ? theme.colors.purple : theme.colors.white,
                   }}>
                   Home
                 </Text>
@@ -101,17 +102,17 @@ const BottomNav = () => {
               fontSize: 12,
               fontFamily: "OpenSans-Regular",
             },
-            tabBarActiveBackgroundColor: theme.colors.black,
-            tabBarInactiveBackgroundColor: theme.colors.black,
-            tabBarActiveTintColor: theme.colors.green,
+            tabBarActiveBackgroundColor: theme.colors.lightPink,
+            tabBarInactiveBackgroundColor: theme.colors.lightPink,
+            tabBarActiveTintColor: theme.colors.purple,
             tabBarIcon: ({ focused }) => (
               <View style={{ alignItems: "center" }}>
-                <MaterialIcon name="attribution" size={28} color={focused ? theme.colors.green : theme.colors.white} />
+                <MaterialIcon name="attribution" size={28} color={focused ? theme.colors.purple : theme.colors.white} />
                 <Text
                   style={{
                     fontSize: 12,
                     fontFamily: "Gilroy-SemiBold",
-                    color: focused ? theme.colors.green : theme.colors.white,
+                    color: focused ? theme.colors.purple : theme.colors.white,
                   }}>
                   Friends
                 </Text>
@@ -129,11 +130,11 @@ const BottomNav = () => {
               fontSize: 12,
               fontFamily: "OpenSans-Regular",
             },
-            tabBarActiveBackgroundColor: theme.colors.black,
-            tabBarInactiveBackgroundColor: theme.colors.black,
-            tabBarActiveTintColor: theme.colors.green,
+            tabBarActiveBackgroundColor: theme.colors.lightPink,
+            tabBarInactiveBackgroundColor: theme.colors.lightPink,
+            tabBarActiveTintColor: theme.colors.purple,
             tabBarIcon: ({ focused }) => (
-              <TouchableOpacity onPress={() => setModalVisible(true)} style={{ alignItems: "center", height: 60, width: 60, backgroundColor: "#FFBF00", alignItems: 'center', justifyContent: 'center', marginBottom: 50, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.black }}>
+              <TouchableOpacity onPress={() => setModalVisible(true)} style={{ alignItems: "center", height: 60, width: 60, backgroundColor: theme.colors.purple, alignItems: 'center', justifyContent: 'center', marginBottom: 50, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.white }}>
                 <MaterialIcon name="rocket-launch" size={36} color={theme.colors.white} />
               </TouchableOpacity>
             ),
@@ -149,25 +150,25 @@ const BottomNav = () => {
               fontSize: 12,
               fontFamily: "OpenSans-Regular",
             },
-            tabBarActiveBackgroundColor: theme.colors.black,
-            tabBarInactiveBackgroundColor: theme.colors.black,
-            tabBarActiveTintColor: theme.colors.green,
+            tabBarActiveBackgroundColor: theme.colors.lightPink,
+            tabBarInactiveBackgroundColor: theme.colors.lightPink,
+            tabBarActiveTintColor: theme.colors.purple,
             tabBarIcon: ({ focused }) => (
               <View style={{ alignItems: "center" }}>
-                <MaterialIcon name="article" size={26} color={focused ? theme.colors.green : theme.colors.white} />
+                <MaterialIcon name="assignment" size={26} color={focused ? theme.colors.purple : theme.colors.white} />
                 <Text
                   style={{
                     fontSize: 12,
                     fontFamily: "Gilroy-SemiBold",
-                    color: focused ? theme.colors.green : theme.colors.white,
+                    color: focused ? theme.colors.purple : theme.colors.white,
                   }}>
-                  Task
+                  Plan
                 </Text>
               </View>
             ),
           }}
-          name="Task"
-          component={Task}
+          name="Plan"
+          component={Plan}
         />
         <Tab.Screen
           options={{
@@ -177,17 +178,17 @@ const BottomNav = () => {
               fontSize: 12,
               fontFamily: "OpenSans-Regular",
             },
-            tabBarActiveBackgroundColor: theme.colors.black,
-            tabBarInactiveBackgroundColor: theme.colors.black,
-            tabBarActiveTintColor: theme.colors.green,
+            tabBarActiveBackgroundColor: theme.colors.lightPink,
+            tabBarInactiveBackgroundColor: theme.colors.lightPink,
+            tabBarActiveTintColor: theme.colors.purple,
             tabBarIcon: ({ focused }) => (
               <View style={{ alignItems: "center" }}>
-                <MaterialIcon name="ads-click" size={28} color={focused ? theme.colors.green : theme.colors.white} />
+                <MaterialIcon name="ads-click" size={28} color={focused ? theme.colors.purple : theme.colors.white} />
                 <Text
                   style={{
                     fontSize: 12,
                     fontFamily: "Gilroy-SemiBold",
-                    color: focused ? theme.colors.green : theme.colors.white,
+                    color: focused ? theme.colors.purple : theme.colors.white,
                   }}>
                   Leadership
                 </Text>

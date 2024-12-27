@@ -74,10 +74,10 @@ export default function AddCategory({ navigation }) {
 
     const handleSubmit = async (imageUrl) => {
 
-        const data = { imageUrl:imageUrl, category:category };
+        const data = { imageUrl: imageUrl, category: category };
 
         console.log('imageUrl:', imageUrl);
-        if(!imageUrl){
+        if (!imageUrl) {
             return;
         }
 
