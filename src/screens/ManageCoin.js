@@ -4,7 +4,7 @@ import theme from "../Theme/GlobalTheme";
 import Icon from "react-native-vector-icons/FontAwesome";
 import LoginInput from "../components/LoginInput";
 import Button from "../components/Button";
-import { decrementNfuc, incrementNfuc, transferNfuc } from "../assets/Data";
+import { decrementNfuc, incrementNfuc, sendNotification, transferNfuc } from "../assets/Data";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ManageCoin({ navigation, route }) {
@@ -30,15 +30,18 @@ export default function ManageCoin({ navigation, route }) {
         const [id, setId] = useState(null);
         const [loading, setLoading] = useState(false);
 
+        // receiverId, heading, subHeading, path, seen
 
         const handleSend = async () => {
             if (coins && id && generatedId) {
               setLoading(true);
               try {
                 await transferNfuc(generatedId, id, Number(coins));
+                await sendNotification(id, 'You have received coins', `you have received ${coins}`, 'Wallet');
                 console.log('id & coins:', id, Number(coins), generatedId);
                 setCoins(null);
                 setId(null);
+                // 2410291
               } catch (error) {
                 console.error('Error during transfer:', error);
               } finally {

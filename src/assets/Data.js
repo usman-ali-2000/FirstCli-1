@@ -17,6 +17,28 @@ export const getCurrentDate = () => {
     return { day, month, year };
 };
 
+export const timeAgo = (inputTime) => {
+    const now = new Date();
+    const past = new Date(inputTime);
+    const diffInMs = now - past;
+
+    const seconds = Math.floor(diffInMs / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const weeks = Math.floor(days / 7);
+    const months = Math.floor(days / 30);
+    const years = Math.floor(days / 365);
+
+    if (seconds < 60) return `${seconds} sec ago`;
+    if (minutes < 60) return `${minutes} mins ago`;
+    if (hours < 24) return `${hours} hr ago`;
+    if (days < 7) return `${days} day ago`;
+    if (weeks < 4) return `${weeks} week ago`;
+    if (months < 12) return `${months} mon ago`;
+    return `${years} yrs ago`;
+}
+
 export const addNfuc = async (additionalCoins, accType) => {
     const id = await AsyncStorage.getItem("id");
     try {
@@ -147,9 +169,8 @@ export const addAttempt = async (attempt, date) => {
 
 export const transferNfuc = async (senderId, receiverId, coins) => {
     const url = `${BaseUrl}/transfer-nfuc`;
-    // const url = `http://192.168.100.6:8000/transfer-nfuc`;
 
-    // await fetch(url);
+    // const url = `http://192.168.100.14:8000/transfer-nfuc`;
 
     try {
         const response = await fetch(url, {
@@ -160,7 +181,7 @@ export const transferNfuc = async (senderId, receiverId, coins) => {
             body: JSON.stringify({
                 senderId: senderId,
                 receiverId: receiverId,
-                amount: coins, 
+                amount: coins,
             }),
         });
 
@@ -177,6 +198,78 @@ export const transferNfuc = async (senderId, receiverId, coins) => {
         console.error('Error:', error);
     }
 };
+
+export const sendNotification = async (receiverId, heading, subHeading, path) => {
+
+    const url = `${BaseUrl}/notification`;
+
+    // const url = `http://192.168.100.14:8000/notification`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                receiver: receiverId,
+                heading: heading,
+                subHeading: subHeading,
+                path: path,
+            }),
+        });
+
+        const data = await response.json();
+        console.log('notification data:', data);
+
+        if (response.ok) {
+            console.log('Notification successful!');
+        } else {
+            console.error('Notification failed:', data);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+
+
+export const updateNotification = async (notificationId, updatedData) => {
+    const url = `${BaseUrl}/notification/${notificationId}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData), // Pass the updated fields here
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log('Notification updated successfully:', data);
+            return data; // Return the updated notification
+        } else {
+            console.error('Failed to update notification:', data);
+        }
+    } catch (error) {
+        console.error('Error updating notification:', error);
+    }
+};
+
+
+
+export const fetchData = async () => {
+    const id = await AsyncStorage.getItem("id");
+    try {
+        const response = await fetch(`${BaseUrl}/register/${id}`);
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log('error fetching...', e);
+    }
+}
 
 
 export const offerData = [

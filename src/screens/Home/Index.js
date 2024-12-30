@@ -77,7 +77,7 @@ const Home = ({ navigation }) => {
                 addAttempt(0, `${date.day}/${date.month}/${date.year}`);
             }
             const userId = await AsyncStorage.getItem("userId");
-            console.log('id:', id);
+            // console.log('id:', id, json.nfucRefer );
             setData1(json);
             setLoading(false);
         } catch (e) {
@@ -97,9 +97,7 @@ const Home = ({ navigation }) => {
     const onRefresh = () => {
         setRefreshing(true); // Show the refresh spinner
         setTimeout(() => {
-            // Simulate a data refresh
             fetchData();
-            //   setData([...data, `Item ${data.length + 1}`]);
             setRefreshing(false); // Hide the refresh spinner
         }, 2000); // Simulate a network request delay
     };
@@ -154,7 +152,7 @@ const Home = ({ navigation }) => {
     return (
         <LinearGradient colors={[theme.colors.lightPink, theme.colors.lightPink, theme.colors.lightPink,]} style={{ width: '100%', flex: 1 }}>
             <View style={Styles.container}>
-                <HomeHeader onpress={() => navigation.openDrawer()} rightPress={() => navigation.navigate('Wallet')} accType={accType} name={name} coin={coins} generatedId={generatedId} />
+                <HomeHeader onpress={() => navigation.openDrawer()} rightPress={() => navigation.navigate('Notification')} accType={accType} name={name} coin={coins} generatedId={generatedId} />
                 <ScrollView style={{ width: '100%', backgroundColor: 'transparent', marginTop: '5%' }} contentContainerStyle={{ alignItems: 'center' }}
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.colors.purple}

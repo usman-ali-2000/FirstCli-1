@@ -1,18 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, Pressable, ToastAndroid } from "react-native";
 import { StyleSheet } from "react-native";
 import theme from "../Theme/GlobalTheme";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { TouchableOpacity } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
-import { formatNumber } from "../assets/Data";
+import { BaseUrl, formatNumber } from "../assets/Data";
 import Clipboard from "@react-native-clipboard/clipboard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect } from "react";
 
 
 const HomeHeader = (props) => {
 
-    
+    const [unseen, setUnseen] = useState(0);
+
+    const fetchNotification = async () => {
+        try {
+            const id = await AsyncStorage.getItem('generatedId');
+            const response = await fetch(`${BaseUrl}/notification/${id}`);
+            const json = await response.json();
+            const notiNum = await json.filter((item) => item.seen === false);
+            setUnseen(notiNum.length);
+            // console.log('json:', notiNum.length);
+        } catch (e) {
+            console.log('error fetching data', e);
+        }
+    }
+    useEffect(() => {
+        fetchNotification()
+    }, []);
+
+
     const copyToClipboard = async () => {
         const textToCopy = `${props?.generatedId}`;
         Clipboard.setString(textToCopy);
@@ -36,6 +55,12 @@ const HomeHeader = (props) => {
                 <Icon name="check-circle" size={20} color={theme.colors.purple} style={{ marginLeft: "2%", marginTop: '3%' }} />
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', width: '30%', justifyContent: "flex-end", marginTop: '3%' }}>
+                <TouchableOpacity onPress={props.rightPress}>
+                    {unseen > 0 && <View style={styles.numberContainer}>
+                        <Text style={styles.number}>{unseen}</Text>
+                    </View>}
+                    <Icon name="bell" size={24} color={theme.colors.yellow} style={{ marginLeft: '3%' }} />
+                </TouchableOpacity>
                 {/* <TouchableOpacity
                 <TouchableOpacity onPress={props.rightPress} style={{ marginRight: '5%', backgroundColor: theme.colors.white, padding: 5, borderRadius: 5, width: 60 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
@@ -80,5 +105,24 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: 'black',
         fontWeight: 'bold'
+    },
+    numberContainer: {
+        height: 14,
+        width: 14,
+        backgroundColor: theme.colors.purple,
+        color: theme.colors.white,
+        borderRadius: 13,
+        position: 'absolute',
+        zIndex: 2,
+        marginLeft: 15,
+        alignItems: 'center'
+    },
+    number: {
+        fontSize: 6,
+        textAlign: 'center',
+        fontFamily: 'Gilroy-Regular',
+        color: theme.colors.white,
+        paddingTop: 2,
+        paddingLeft: 2
     }
 })

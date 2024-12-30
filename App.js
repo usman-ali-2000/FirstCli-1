@@ -42,6 +42,8 @@ import Task from './src/screens/Task';
 import { MenuProvider } from 'react-native-popup-menu';
 import ManageCoin from './src/screens/ManageCoin';
 import History from './src/screens/History';
+import Notification from './src/screens/Notification';
+import Help from './src/screens/Help';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -102,10 +104,10 @@ const MyDrawer = () => {
               <MaterialIcon name="wallet" size={26} color={theme.colors.darkGrey} />
               <Text style={{ fontSize: 16, color: theme.colors.darkGrey, marginLeft: '5%', fontFamily: 'Gilroy-SemiBold' }}>Wallet</Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity onPress={() => navigation.navigate('Wallet')} style={{ flexDirection: 'row', alignItems: 'center', width: '100%', padding: '5%', }}>
-              <MaterialIcon name="info" size={26} color={theme.colors.grey} />
-              <Text style={{ fontSize: 16, color: theme.colors.white, marginLeft: '5%', fontFamily: 'Gilroy-SemiBold' }}>Info</Text>
-            </TouchableOpacity> */}
+            <TouchableOpacity onPress={() => navigation.navigate('Help')} style={{ flexDirection: 'row', alignItems: 'center', width: '100%', padding: '5%', }}>
+              <MaterialIcon name="help" size={26} color={theme.colors.darkGrey} />
+              <Text style={{ fontSize: 16, color: theme.colors.darkGrey, marginLeft: '5%', fontFamily: 'Gilroy-SemiBold' }}>Help / Support</Text>
+            </TouchableOpacity>
             <TouchableOpacity onPress={async () => {
               await AsyncStorage.removeItem("id");
               await navigation.replace("Login");
@@ -223,6 +225,16 @@ const App = () => {
           <Stack.Screen
             name='History'
             component={History}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='Notification'
+            component={Notification}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='Help'
+            component={Help}
             options={{ headerShown: false }}
           />
           {/* <Stack.Screen
