@@ -41,6 +41,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import Task from './src/screens/Task';
 import { MenuProvider } from 'react-native-popup-menu';
 import ManageCoin from './src/screens/ManageCoin';
+import History from './src/screens/History';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -78,28 +79,28 @@ const MyDrawer = () => {
       initialRouteName="Home"
       screenOptions={{
         drawerStyle: {
-          backgroundColor: theme.colors.darkYellow,
+          backgroundColor: theme.colors.white,
         },
       }}
       drawerContent={({ navigation }) => (
         <>
           <View style={{ flexDirection: 'row', alignItems: 'center', margin: '5%', height: 100 }}>
-            <TouchableOpacity onPress={() => navigation.navigate('Home')} style={{ borderWidth: 2, borderColor: theme.colors.red, borderRadius: 100, flexDirection: 'row', height: 52, width: 52, alignItems: 'center', justifyContent: 'center' }}>
+            <TouchableOpacity onPress={() => navigation.navigate('Home')} style={{ borderWidth: 2, borderColor: theme.colors.purple, borderRadius: 100, flexDirection: 'row', height: 52, width: 52, alignItems: 'center', justifyContent: 'center', }}>
               <Image style={{ height: 48, width: 48, borderRadius: 100, padding: 2 }} source={require('./src/assets/images/user.png')} />
             </TouchableOpacity>
             <View style={{ marginLeft: '5%', marginTop: '2%', width: '70%', }}>
-              <Text style={{ fontSize: 18, fontFamily: 'Gilroy-Bold', color: theme.colors.white, width: '90%' }}>{userData?.name}</Text>
+              <Text style={{ fontSize: 18, fontFamily: 'Gilroy-Bold', color: theme.colors.black, width: '90%' }}>{userData?.name}</Text>
               <TouchableOpacity onPress={() => copyToClipboard('abcdef')} style={{ flexDirection: 'row', alignItems: 'center', marginTop: '1%', width: '90%' }}>
                 <Text style={{ fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.darkGrey, }}>ID: {userData?.generatedId}</Text>
                 <Icon name="copy" size={14} color={theme.colors.darkGrey} style={{ marginLeft: '3%' }} />
               </TouchableOpacity>
-              <Text style={{ fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.red, width: '90%' }}>Level {userData?.accType === 'fresh' ? 0 : userData?.accType === 'working' ? 'A' : 'B'}</Text>
+              <Text style={{ fontSize: 14, fontFamily: 'Gilroy-Bold', color: theme.colors.purple, width: '90%' }}>Level {userData?.accType === 'fresh' ? 0 : userData?.accType === 'working' ? 'A' : 'B'}</Text>
             </View>
           </View>
           <View style={{ width: '100%', alignItems: 'center', borderTopWidth: 0, borderBottomWidth: 0, borderColor: theme.colors.white }}>
             <TouchableOpacity onPress={() => navigation.navigate('Wallet')} style={{ flexDirection: 'row', alignItems: 'center', width: '100%', padding: '5%', }}>
-              <MaterialIcon name="wallet" size={26} color={theme.colors.white} />
-              <Text style={{ fontSize: 16, color: theme.colors.white, marginLeft: '5%', fontFamily: 'Gilroy-SemiBold' }}>Wallet</Text>
+              <MaterialIcon name="wallet" size={26} color={theme.colors.darkGrey} />
+              <Text style={{ fontSize: 16, color: theme.colors.darkGrey, marginLeft: '5%', fontFamily: 'Gilroy-SemiBold' }}>Wallet</Text>
             </TouchableOpacity>
             {/* <TouchableOpacity onPress={() => navigation.navigate('Wallet')} style={{ flexDirection: 'row', alignItems: 'center', width: '100%', padding: '5%', }}>
               <MaterialIcon name="info" size={26} color={theme.colors.grey} />
@@ -217,6 +218,11 @@ const App = () => {
           <Stack.Screen
             name='ManageCoin'
             component={ManageCoin}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='History'
+            component={History}
             options={{ headerShown: false }}
           />
           {/* <Stack.Screen

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, FlatList, Image, Pressable, ScrollView, Text, ToastAndroid, View } from "react-native";
+import { ActivityIndicator, Alert, FlatList, Image, Pressable, RefreshControl, ScrollView, Text, ToastAndroid, View } from "react-native";
 import Styles from "./Style";
 import FlatItem from "../../components/FlatItem/Index";
 import { addAttempt, BaseUrl, formatNumber, getCurrentDate, NfucMenu, openLink, UsdtMenu, WxMenu } from "../../assets/Data";
@@ -32,6 +32,7 @@ const Home = ({ navigation }) => {
     const [usdt, setUsdt] = useState(0);
     const [accType, setAccType] = useState(null);
     const [generatedId, setGeneratedId] = useState(null);
+    const [refreshing, setRefreshing] = useState(false);
     const [openMenu, setOpenMenu] = useState({
         m1: false,
         m2: false,
@@ -85,11 +86,23 @@ const Home = ({ navigation }) => {
         }
     }
 
+    useEffect(() => {
+        fetchData();
+    }, [])
 
     useEffect(() => {
         fetchLink();
-        fetchData();
     }, []);
+
+    const onRefresh = () => {
+        setRefreshing(true); // Show the refresh spinner
+        setTimeout(() => {
+            // Simulate a data refresh
+            fetchData();
+            //   setData([...data, `Item ${data.length + 1}`]);
+            setRefreshing(false); // Hide the refresh spinner
+        }, 2000); // Simulate a network request delay
+    };
 
 
     const move = (index) => {
@@ -142,7 +155,12 @@ const Home = ({ navigation }) => {
         <LinearGradient colors={[theme.colors.lightPink, theme.colors.lightPink, theme.colors.lightPink,]} style={{ width: '100%', flex: 1 }}>
             <View style={Styles.container}>
                 <HomeHeader onpress={() => navigation.openDrawer()} rightPress={() => navigation.navigate('Wallet')} accType={accType} name={name} coin={coins} generatedId={generatedId} />
-                <ScrollView style={{ width: '100%', backgroundColor: 'transparent', marginTop: '5%' }} contentContainerStyle={{ alignItems: 'center' }}>
+                <ScrollView style={{ width: '100%', backgroundColor: 'transparent', marginTop: '5%' }} contentContainerStyle={{ alignItems: 'center' }}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.colors.purple}
+                            colors={[theme.colors.lightGrey, theme.colors.darkGrey, theme.colors.purple]} // Android spinner colors
+                        />
+                    }>
                     {bannerData.length > 0 ? <View style={{ width: '90%', paddingRight: '2%', height: 130, backgroundColor: theme.colors.lightPink, marginTop: '5%' }}>
                         <ImageSlider
                             loopBothSides={false}
@@ -183,7 +201,7 @@ const Home = ({ navigation }) => {
                                 </View>
                                 <Text style={{ color: theme.colors.black, fontFamily: 'Gilroy-Bold', fontSize: 16, textAlign: 'center', width: '100%' }}>{nfuc}</Text>
                             </TouchableOpacity>
-                            {openMenu.m1 && <NfucMenu onPress={() => navigation.navigate('ManageCoin', { type: 'nfuc' })} />}
+                            {openMenu.m1 && <NfucMenu onPress={() => { navigation.navigate('ManageCoin', { type: 'nfuc' }); setOpenMenu({ m1: false, m2: false, m3: false }) }} />}
                         </View>
                         <View style={{ width: '30%' }}>
                             <TouchableOpacity onPress={() => setOpenMenu({ m1: false, m2: !openMenu.m2, m3: false })} style={{ marginRight: '5%', backgroundColor: theme.colors.whiteTransparent, padding: 5, borderRadius: 5, width: '100%' }}>
@@ -193,7 +211,7 @@ const Home = ({ navigation }) => {
                                 </View>
                                 <Text style={{ color: theme.colors.black, fontFamily: 'Gilroy-Bold', fontSize: 16, textAlign: 'center', width: '100%' }}>{coins}</Text>
                             </TouchableOpacity>
-                            {openMenu.m2 && <WxMenu onPress={() => navigation.navigate('ManageCoin', { type: 'wx' })} />}
+                            {openMenu.m2 && <WxMenu onPress={() => { navigation.navigate('ManageCoin', { type: 'wx' }); setOpenMenu({ m1: false, m2: false, m3: false }) }} />}
                         </View>
                         <View style={{ width: '30%' }}>
                             <TouchableOpacity onPress={() => setOpenMenu({ m1: false, m2: false, m3: !openMenu.m3 })} style={{ marginRight: '5%', backgroundColor: theme.colors.whiteTransparent, padding: 5, borderRadius: 5, width: '100%' }}>
@@ -203,7 +221,7 @@ const Home = ({ navigation }) => {
                                 </View>
                                 <Text style={{ color: theme.colors.black, fontFamily: 'Gilroy-Bold', fontSize: 16, textAlign: 'center', width: '100%' }}>{usdt}</Text>
                             </TouchableOpacity>
-                            {openMenu.m3 && <UsdtMenu onPress={() => navigation.navigate('ManageCoin', { type: 'usdt' })} />}
+                            {openMenu.m3 && <UsdtMenu onPress={() => { navigation.navigate('ManageCoin', { type: 'usdt' }); setOpenMenu({ m1: false, m2: false, m3: false }) }} />}
                         </View>
                     </View>
                     <Text style={{ color: theme.colors.purple, padding: 5, alignSelf: 'center', fontSize: 18, fontFamily: 'Gilroy-Bold', backgroundColor: 'rgba(0, 0, 0, 0)', width: '90%', marginTop: '10%' }}>Community</Text>

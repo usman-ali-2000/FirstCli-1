@@ -6,12 +6,12 @@ import theme from "../Theme/GlobalTheme";
 const LoginInput = (props) => {
 
     return (
-        <View style={[styles.container, { backgroundColor: props.backgroundColor ? props.backgroundColor : theme.colors.white }]}>
+        <View style={[styles.container, { backgroundColor: props.backgroundColor ? props.backgroundColor1 : theme.colors.white }]}>
             <Text style={[styles.text]}>{props.text}</Text>
             <View style={[styles.inputContainer, { backgroundColor: props.backgroundColor ? props.backgroundColor : theme.colors.white }]}>
                 <TextInput
                     placeholder={props.placeholder}
-                    placeholderTextColor={theme.colors.darkGrey}
+                    placeholderTextColor={theme.colors.black}
                     style={styles.input}
                     onChangeText={props.onChangeText}
                     value={props.value}
@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        borderBottomWidth: 1,
-        borderColor: theme.colors.purple,
+        borderWidth: 1,
+        borderColor: theme.colors.darkGrey,
     },
     input: {
         height: 52,
@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         textAlignVertical: 'center',
         paddingTop: 15,
-        width: '100%'
+        width: '100%',
+        paddingLeft:10
     },
     eye: {
         height: 14,
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Gilroy-SemiBold',
         padding: '1%',
         paddingLeft: 0,
-        color: theme.colors.purple,
+        color: theme.colors.jetBlack,
     },
     warningContainer: {
         flexDirection: 'row',

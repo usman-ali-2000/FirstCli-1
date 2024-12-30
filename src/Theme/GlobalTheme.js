@@ -14,11 +14,12 @@ const theme = {
         darkYellow: '#FFBF00',
         lightyYellow: '#FFEA00',
         midYellow: '#FDDA0D',
-        lightPink:'rgb(248, 200, 220)',
-        purple:'purple',
-        cerise:'rgb(222, 49, 99)',
-        darkGrey:'#A9A9A9',
-        whiteTransparent:'rgba(255, 255, 255, 0.6)'
+        lightPink: 'rgb(248, 200, 220)',
+        purple: 'purple',
+        cerise: 'rgb(222, 49, 99)',
+        darkGrey: '#A9A9A9',
+        whiteTransparent: 'rgba(255, 255, 255, 0.6)',
+        lightGrey: "rgba(229, 228, 226, 0.5)"
     },
     fonts: {
         bold: 'Gilroy-Bold',

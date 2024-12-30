@@ -143,6 +143,42 @@ export const addAttempt = async (attempt, date) => {
     }
 };
 
+
+
+export const transferNfuc = async (senderId, receiverId, coins) => {
+    const url = `${BaseUrl}/transfer-nfuc`;
+    // const url = `http://192.168.100.6:8000/transfer-nfuc`;
+
+    // await fetch(url);
+
+    try {
+        const response = await fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                senderId: senderId,
+                receiverId: receiverId,
+                amount: coins, 
+            }),
+        });
+
+        const data = await response.json();
+        console.log('Transfer result:', data, senderId, receiverId);
+
+        if (response.ok) {
+            console.log('Transfer successful!');
+            Alert.alert('Tranfer Successfull');
+        } else {
+            console.error('Transfer failed:', data);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+
+
 export const offerData = [
     require('../assets/images/offer1.png'),
     require('../assets/images/offer2.png'),
@@ -194,7 +230,7 @@ export const NfucMenu = (props) => {
                         fontSize: 12,
                         fontFamily: 'Gilroy-SemiBold',
                         width: 100,
-                        textAlign:'center'
+                        textAlign: 'center'
                     }}>
                         Send
                     </Text>
@@ -225,7 +261,7 @@ export const WxMenu = (props) => {
                         fontSize: 12,
                         fontFamily: 'Gilroy-SemiBold',
                         width: 100,
-                        textAlign:'center'
+                        textAlign: 'center'
                     }}>
                         Exchange
                     </Text>
@@ -256,7 +292,7 @@ export const UsdtMenu = (props) => {
                         fontSize: 12,
                         fontFamily: 'Gilroy-SemiBold',
                         width: 100,
-                        textAlign:'center'
+                        textAlign: 'center'
                     }}>
                         Withdraw
                     </Text>
