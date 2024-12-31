@@ -41,7 +41,11 @@ export default function Help({ navigation }) {
         }
 
         const url = `${BaseUrl}/send-email`;
-        const emailData = { email, text, subject };
+        const emailData = {
+            email: email,
+            text: `${text} from: ${email}`,
+            subject: subject,
+        };
 
         try {
             const response = await fetch(url, {

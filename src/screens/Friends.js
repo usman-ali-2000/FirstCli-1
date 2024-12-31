@@ -93,27 +93,27 @@ export default function Friends() {
             <View style={{ width: '80%', flex: 1, justifyContent: 'space-between' }}>
                 <View style={{ flexDirection: 'column', alignItems: 'center', width: '100%' }}>
                     {!loading && friends.length !== 0 && <View style={{ flexDirection: 'row', alignItems: "center", marginTop: '5%', width: '100%' }}>
-                        <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.darkYellow, fontFamily: 'Gilroy-Bold', paddingLeft: '2%', marginRight: '2%', width: '15%', }}>No.</Text>
-                        <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.darkYellow, fontFamily: 'Gilroy-Bold', paddingLeft: '2%', width: '85%' }}>Name</Text>
+                        <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.purple, fontFamily: 'Gilroy-Bold', paddingLeft: '2%', marginRight: '2%', width: '15%', }}>No.</Text>
+                        <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.purple, fontFamily: 'Gilroy-Bold', paddingLeft: '2%', width: '85%' }}>Name</Text>
                     </View>}
-                    {loading ? <ActivityIndicator size={"large"} color={theme.colors.darkYellow} style={{ marginTop: '30%' }} /> : friends.length === 0 ? <Text style={{ color: theme.colors.white, alignSelf: 'center', fontSize: 20, marginTop: '30%' }}>No Friends Yet!</Text> : <FlatList
+                    {loading ? <ActivityIndicator size={"large"} color={theme.colors.purple} style={{ marginTop: '30%' }} /> : friends.length === 0 ? <Text style={{ color: theme.colors.white, alignSelf: 'center', fontSize: 20, marginTop: '30%' }}>No Friends Yet!</Text> : <FlatList
                         showsVerticalScrollIndicator={false}
                         style={{ width: '100%' }}
                         data={friends}
                         renderItem={({ item, index }) => (
                             <View style={{ flexDirection: 'row', alignItems: "center", width: '100%', marginTop: '5%' }}>
-                                <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.white, fontFamily: 'Gilroy-SemiBold', paddingLeft: '2%', marginRight: '2%', width: '15%' }}>{index + 1}</Text>
-                                <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.white, fontFamily: 'Gilroy-Medium', paddingLeft: '2%', width:'85%' }}>{item.name}</Text>
+                                <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.black, fontFamily: 'Gilroy-SemiBold', paddingLeft: '2%', marginRight: '2%', width: '15%' }}>{index + 1}</Text>
+                                <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.black, fontFamily: 'Gilroy-SemiBold', paddingLeft: '2%', width:'85%' }}>{item.name}</Text>
                             </View>
                         )} />}
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', width: width * 0.6, justifyContent: 'space-between', marginBottom: "5%", alignSelf: 'center', zIndex: 3, position: 'absolute', top: height * 0.50 }}>
-                    <LinearGradient colors={[theme.colors.darkYellow, theme.colors.midYellow, theme.colors.lightyYellow,]} style={{ width: '70%', height: 50, borderRadius: 100, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: theme.colors.white }}>
+                    <LinearGradient colors={[theme.colors.purple, theme.colors.purple, theme.colors.purple,]} style={{ width: '70%', height: 50, borderRadius: 100, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: theme.colors.white }}>
                         <TouchableOpacity onPress={shareWithOptions}>
                             <Text style={{ fontSize: 20, fontFamily: "Gilroy-Medium", color: theme.colors.white }}>Invite Friends</Text>
                         </TouchableOpacity>
                     </LinearGradient>
-                    <LinearGradient colors={[theme.colors.darkYellow, theme.colors.midYellow, theme.colors.lightyYellow,]} style={{ height: 50, width: 50, borderRadius: 100, backgroundColor: theme.colors.lightyYellow, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: theme.colors.white }}>
+                    <LinearGradient colors={[theme.colors.purple, theme.colors.purple, theme.colors.purple,]} style={{ height: 50, width: 50, borderRadius: 100, backgroundColor: theme.colors.lightyYellow, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: theme.colors.white }}>
                         <TouchableOpacity onPress={copyToClipboard}>
                             <Icon name="copy" size={20} color={theme.colors.white} />
                         </TouchableOpacity>
@@ -128,27 +128,27 @@ export default function Friends() {
             <View style={{ flex: 1, width: '100%', alignItems: 'center' }}>
                 <Text style={{ color: theme.colors.red, textAlign: 'center', width: "90%", fontSize: 16, fontFamily: "Gilroy-SemiBold", marginTop: '4%' }}>Earned from friends/referrals</Text>
                 <Image source={require('../assets/images/coins.png')} style={{ height: 70, width: 70, marginTop: '5%' }} />
-                {loading ? <ActivityIndicator size={"large"} color={theme.colors.darkYellow} /> : <Text style={{ fontSize: 20, fontFamily: 'Gilroy-Bold', color: theme.colors.white, marginTop: '3%' }}>{coins && formatNumber(coins)} <Text style={{ color: theme.colors.darkYellow, fontFamily: 'Gilroy-Medium' }}>$</Text></Text>}
+                {loading ? <ActivityIndicator size={"large"} color={theme.colors.purple} /> : <Text style={{ fontSize: 20, fontFamily: 'Gilroy-Bold', color: theme.colors.black, marginTop: '3%' }}>{coins && formatNumber(coins)} <Text style={{ color: theme.colors.purple, fontFamily: 'Gilroy-Medium' }}>$</Text></Text>}
             </View>
         )
     }
 
     return (
-        <LinearGradient colors={[theme.colors.lightyYellow, theme.colors.midYellow, theme.colors.darkYellow,]} style={{ width: '100%', flex: 1 }}>
+        <LinearGradient colors={[theme.colors.white, theme.colors.white, theme.colors.white,]} style={{ width: '100%', flex: 1 }}>
             <View style={{ flex: 1, width: '100%', alignItems: 'center' }}>
                 <Text style={{ color: theme.colors.black, textAlign: 'center', width: "90%", fontSize: 20, fontFamily: "Gilroy-SemiBold", marginTop: '20%' }}>Invite Friends <Image source={require('../assets/images/friend.png')} style={{ height: 20, width: 20 }} /> & Get Rewards</Text>
                 <Text style={{ color: theme.colors.black, textAlign: 'center', width: "90%", fontSize: 14, fontFamily: "Gilroy-Mediums",textDecorationStyle:'solid' }}>Invite Friends and get 50 coins for each</Text>
                 <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors, backgroundColor: theme.colors.white, height: 50, borderRadius: 12, marginTop: '10%' }}>
                     <TouchableOpacity onPress={() => setSelect(1)} style={{
-                        width: '50%', alignItems: 'center', justifyContent: 'center', backgroundColor: select === 1 ? theme.colors.darkYellow : theme.colors.white, height: 50, borderRadius: 12
+                        width: '50%', alignItems: 'center', justifyContent: 'center', backgroundColor: select === 1 ? theme.colors.purple : theme.colors.white, height: 50, borderRadius: 12
                     }}>
-                        <Text style={{ fontSize: 20, fontFamily: 'Gilroy-SemiBold', color: select === 1 ? theme.colors.white : theme.colors.darkYellow }}>Friends</Text>
+                        <Text style={{ fontSize: 20, fontFamily: 'Gilroy-SemiBold', color: select === 1 ? theme.colors.white : theme.colors.purple }}>Friends</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => setSelect(2)} style={{
-                        width: '50%', alignItems: 'center', justifyContent: 'center', backgroundColor: select === 2 ? theme.colors.darkYellow : theme.colors.white
+                        width: '50%', alignItems: 'center', justifyContent: 'center', backgroundColor: select === 2 ? theme.colors.purple : theme.colors.white
                         , height: 50, borderRadius: 12
                     }}>
-                        <Text style={{ fontSize: 20, fontFamily: 'Gilroy-SemiBold', color: select === 2 ? theme.colors.white : theme.colors.darkYellow }}>Coins</Text>
+                        <Text style={{ fontSize: 20, fontFamily: 'Gilroy-SemiBold', color: select === 2 ? theme.colors.white : theme.colors.purple }}>Coins</Text>
                     </TouchableOpacity>
                 </View>
                 {select === 1 && <Friends />}

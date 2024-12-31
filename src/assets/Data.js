@@ -199,6 +199,40 @@ export const transferNfuc = async (senderId, receiverId, coins) => {
     }
 };
 
+
+export const withdraw = async (senderId, receiverId, amount) => {
+    const url = `${BaseUrl}/transhistory`;
+
+    // const url = `http://192.168.100.14:8000/transfer-nfuc`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                sender: senderId,
+                receiver: receiverId,
+                usdt: amount,
+            }),
+        });
+
+        const data = await response.json();
+        console.log('Transfer result:', data, senderId, receiverId);
+
+        if (response.ok) {
+            console.log('Withdraw request successful!');
+            Alert.alert('Withdraw request sent Successfull');
+        } else {
+            console.error('Withdraw failed:', data);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+
+
 export const sendNotification = async (receiverId, heading, subHeading, path) => {
 
     const url = `${BaseUrl}/notification`;

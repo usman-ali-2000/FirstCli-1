@@ -32,7 +32,7 @@ export default function Leadership() {
     }, []);
 
     return (
-        <LinearGradient colors={[theme.colors.lightyYellow, theme.colors.midYellow, theme.colors.darkYellow,]} style={{ width: '100%', flex: 1 }}>
+        <LinearGradient colors={[theme.colors.white, theme.colors.white, theme.colors.white,]} style={{ width: '100%', flex: 1 }}>
             <View style={{ flex: 1, width: '100%', alignItems: 'center' }}>
                 <ScrollView style={{width:'100%'}} contentContainerStyle={{alignItems:'center', paddingBottom:'5%'}}>
                     <Image source={require('../assets/images/friends.png')} style={{ height: 100, width: 100, marginTop: '20%' }} />
@@ -46,7 +46,7 @@ export default function Leadership() {
                                     <View style={{ flexDirection: 'row', alignItems: "center", width: '70%' }}>
                                         <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.black, fontFamily: 'Gilroy-SemiBold', paddingLeft: '2%', marginRight: '2%', width: '15%' }}>{index + 1}</Text>
                                         <Image source={require('../assets/images/friend.png')} style={{ height: 25, width: 25, }} />
-                                        <Text style={{ colors: theme.colors.white, fontSize: 18, color: theme.colors.black, fontFamily: 'Gilroy-SemiBold', paddingLeft: '2%', width: "70%" }}>{item.name}</Text>
+                                        <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.black, fontFamily: 'Gilroy-SemiBold', paddingLeft: '2%', width: "70%" }}>{item.name}</Text>
                                     </View>
                                     <View style={{ flexDirection: 'row', alignItems: "center", width: '20%' }}>
                                         <Image source={require('../assets/images/dollar.gif')} style={{ height: 20, width: 20 }} />

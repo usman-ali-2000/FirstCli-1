@@ -157,9 +157,8 @@ const Home = ({ navigation }) => {
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.colors.purple}
                             colors={[theme.colors.lightGrey, theme.colors.darkGrey, theme.colors.purple]} // Android spinner colors
-                        />
-                    }>
-                    {bannerData.length > 0 ? <View style={{ width: '90%', paddingRight: '2%', height: 130, backgroundColor: theme.colors.lightPink, marginTop: '5%' }}>
+                        />}>
+                    {bannerData?.length > 0 ? <View style={{ width: '90%', paddingRight: '2%', height: 130, backgroundColor: theme.colors.lightPink, marginTop: '5%' }}>
                         <ImageSlider
                             loopBothSides={false}
                             images={bannerData.length > 0 ? bannerData : []}

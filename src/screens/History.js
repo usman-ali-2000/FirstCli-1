@@ -60,7 +60,7 @@ export default function History({ navigation }) {
                         <Text style={{ fontSize: 14, fontFamily: 'Gilroy-Bold', color: theme.colors.white, width: '30%', textAlign: 'center' }}>Transaction</Text>
                         <Text style={{ fontSize: 14, fontFamily: 'Gilroy-Bold', color: theme.colors.white, width: '30%', textAlign: 'center' }}>Amount/Coins</Text>
                     </View>
-                    {data.map((item) => (<View style={{ flexDirection: 'row', alignItems: 'center', width: '90%', justifyContent: 'space-between', marginTop: '3%', padding: '5%', borderRadius: 5, backgroundColor: theme.colors.white, elevation: 5 }}>
+                    {data?.map((item, index) => (<View key={item._id || index} style={{ flexDirection: 'row', alignItems: 'center', width: '90%', justifyContent: 'space-between', marginTop: '3%', padding: '5%', borderRadius: 5, backgroundColor: theme.colors.white, elevation: 5 }}>
                         <Text style={{ fontSize: 12, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, width: '30%', textAlign: 'center' }}>{item.timestamp && timeAgo(item.timestamp)}</Text>
                         <Text style={{ fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, width: '30%', textAlign: 'center' }}>{item.usdt ? item.pending ? "pending" : "withdraw" : item.receiver === id ? 'Receive' : "Send"}</Text>
                         <Text style={{ fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, width: '30%', textAlign: 'center' }}>{item.usdt ? `${item.usdt} $` : `${item.nfuc} Nfuc`}</Text>

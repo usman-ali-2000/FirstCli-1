@@ -51,14 +51,17 @@ export default function Notification({ navigation }) {
                 <ScrollView
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.colors.purple}
-                            colors={[theme.colors.lightGrey, theme.colors.darkGrey, theme.colors.purple]} // Android spinner colors
+                            colors={[theme.colors.lightGrey, theme.colors.darkGrey, theme.colors.purple]}
                         />
                     } style={{ width: '100%' }} contentContainerStyle={{ alignItems: 'center', paddingBottom: '5%' }}>
-                    {data.map((item) => (<TouchableOpacity onPress={() => updateNotification(item._id, { seen: true })} style={{ flexDirection: 'column', alignItems: 'center', width: '90%', justifyContent: 'space-between', marginTop: '3%', padding: '3%', borderRadius: 5, backgroundColor: theme.colors.white, elevation: item.seen ? 0 : 5 }}>
-                        <Text style={{ fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, width: '90%', textAlign: 'start' }}>{item.heading}</Text>
-                        <Text style={{ fontSize: 12, fontFamily: 'Gilroy-Medium', color: theme.colors.darkGrey, width: '90%', textAlign: 'start' }}>{item.subHeading}</Text>
-                        <Text style={{ fontSize: 12, fontFamily: 'Gilroy-Medium', color: theme.colors.black, width: '90%', textAlign: 'right' }}>{item.timestamp && timeAgo(item.timestamp)}</Text>
-                    </TouchableOpacity>))}
+                    {data.length === 0 ? <Text style={{ fontSize: 20, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, marginTop: '50%' }}>No Notification</Text> :
+                        data.map((item, index) => (
+                            <TouchableOpacity key={item._id || index} onPress={() => { updateNotification(item._id, { seen: true }); item.path && navigation.navigate(item?.path) }} style={{ flexDirection: 'column', alignItems: 'center', width: '90%', justifyContent: 'space-between', marginTop: '3%', padding: '3%', borderRadius: 5, backgroundColor: theme.colors.white, elevation: item.seen ? 0 : 5 }}>
+                                <Text style={{ fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, width: '90%', textAlign: 'left' }}>{item.heading}</Text>
+                                <Text style={{ fontSize: 12, fontFamily: 'Gilroy-Medium', color: theme.colors.darkGrey, width: '90%', textAlign: 'left' }}>{item.subHeading}</Text>
+                                <Text style={{ fontSize: 12, fontFamily: 'Gilroy-Medium', color: theme.colors.black, width: '90%', textAlign: 'right' }}>{item.timestamp && timeAgo(item.timestamp)}</Text>
+                            </TouchableOpacity>
+                        ))}
                 </ScrollView>}
         </View>
     )

@@ -42,11 +42,12 @@ const BottomNav = () => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          // handleBackButton();
           setModalVisible(!modalVisible);
         }}
       >
-        <Pressable onPress={() => setModalVisible(!modalVisible)} style={{ flex: 1, width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.55)', justifyContent: 'flex-end' }}>
+        <Pressable onPress={() => setModalVisible(!modalVisible)} 
+        style={{ flex: 1, width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.55)', justifyContent: 'flex-end' }}
+        >
           <View style={{ backgroundColor: theme.colors.white, height: '50%', borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
             <BackgroundTimerExample onCancel={() => setModalVisible(!modalVisible)} />
           </View>
