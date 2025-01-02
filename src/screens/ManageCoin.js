@@ -4,7 +4,7 @@ import theme from "../Theme/GlobalTheme";
 import Icon from "react-native-vector-icons/FontAwesome";
 import LoginInput from "../components/LoginInput";
 import Button from "../components/Button";
-import { decrementNfuc, fetchData, incrementNfuc, sendNotification, transferNfuc, withdraw } from "../assets/Data";
+import { decrementNfuc, fetchData, incrementNfuc, sendEmail, sendNotification, transferNfuc, withdraw } from "../assets/Data";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ManageCoin({ navigation, route }) {
@@ -12,7 +12,7 @@ export default function ManageCoin({ navigation, route }) {
     const types = route?.params?.type;
 
     const [generatedId, setGeneratedId] = useState(null);
-    const [userData, setUserData] = useState([]);
+    const [userData, setUserData] = useState({});
 
     const getId = async () => {
         const generated = await AsyncStorage.getItem("generatedId");
@@ -20,7 +20,7 @@ export default function ManageCoin({ navigation, route }) {
         setGeneratedId(generated);
         const data = await fetchData();
         setUserData(data);
-        console.log(data.usdt);
+        console.log(data);
     }
 
     useEffect(() => {
@@ -45,7 +45,6 @@ export default function ManageCoin({ navigation, route }) {
                     console.log('id & coins:', id, Number(coins), generatedId);
                     setCoins(null);
                     setId(null);
-                    // 2410291
                 } catch (error) {
                     console.error('Error during transfer:', error);
                 } finally {
@@ -77,14 +76,12 @@ export default function ManageCoin({ navigation, route }) {
 
     const Usdt = () => {
 
-
         const [amount, setAmount] = useState(null);
         const [loading, setLoading] = useState(false);
-
+        const [address, setAddress] = useState(null);
 
         const handleSend = async () => {
 
-            // console.log('userdata:', userData.usdt, amount);
             if (amount > userData.usdt) {
                 ToastAndroid.show("Insufficient amount", ToastAndroid.SHORT);
                 return;
@@ -92,11 +89,11 @@ export default function ManageCoin({ navigation, route }) {
             if (generatedId && amount > 0 && amount <= userData.usdt) {
                 setLoading(true);
                 try {
-                    await withdraw(generatedId, 'wingedx-admin', Number(amount));
+                    await withdraw(generatedId, 'wingedx-admin', Number(amount), address);
                     await sendNotification('wingedx-admin', 'You have withdraw request', `you have received withdraw request for ${amount} $`, 'Withdraw');
+                    await sendEmail('wingedxnetwork@gmail.com', 'Withdraw Request', `you have withdraw request ${amount} $`);
                     console.log('id & coins:', Number(amount), generatedId);
                     setAmount(null);
-                    // 2410291
                 } catch (error) {
                     console.error('Error during transfer:', error);
                 } finally {
@@ -111,6 +108,7 @@ export default function ManageCoin({ navigation, route }) {
         return (
             <View style={{ width: '100%', alignItems: 'center', backgroundColor: theme.colors.lightPink, marginTop: '50%' }}>
                 <LoginInput backgroundColor={theme.colors.white} text="Amount" placeholder="Enter Amount in $" keyboardType="numeric" value={amount} onChangeText={(txt) => setAmount(txt)} />
+                <LoginInput backgroundColor={theme.colors.white} text="Address" placeholder="Enter address" value={address} onChangeText={(txt) => setAddress(txt)} />
                 {loading ? <ActivityIndicator color={theme.colors.purple} /> : <View style={{ width: '100%', alignItems: 'center', marginTop: '5%' }}>
                     <Button text="Withdraw" backgroundColor={theme.colors.purple} onPress={handleSend} />
                 </View>}

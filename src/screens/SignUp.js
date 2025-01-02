@@ -23,7 +23,7 @@ export default function SignUp({ navigation }) {
         setLoading(true);
 
         if (!accept) {
-            ToastAndroid.show("Please Accept...", ToastAndroid.SHORT);
+            ToastAndroid.show("Please Accept terms & conditions", ToastAndroid.SHORT);
             setLoading(false);
             return;
         }

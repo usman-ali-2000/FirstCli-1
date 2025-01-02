@@ -104,7 +104,7 @@ const EnterOTP = ({ navigation, route }) => {
         </View>
       </View>
       <View style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-end', marginBottom: '10%' }}>
-        {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.green} text="Verify" onPress={handleSubmit} />}
+        {loading ? <ActivityIndicator size={"small"} color={theme.colors.blue} /> : <Button backgroundColor={theme.colors.purple} text="Verify" onPress={handleSubmit} />}
       </View>
     </View>
   );

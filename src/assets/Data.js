@@ -1,7 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Alert, Linking, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Linking, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import { Menu } from "react-native-popup-menu";
 import theme from "../Theme/GlobalTheme";
+import NetInfo from '@react-native-community/netinfo';
 
 export const BaseUrl = "https://book-shop-api-sage.vercel.app";
 export const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dve7g3iz6/upload";
@@ -200,7 +201,7 @@ export const transferNfuc = async (senderId, receiverId, coins) => {
 };
 
 
-export const withdraw = async (senderId, receiverId, amount) => {
+export const withdraw = async (senderId, receiverId, amount, address) => {
     const url = `${BaseUrl}/transhistory`;
 
     // const url = `http://192.168.100.14:8000/transfer-nfuc`;
@@ -215,6 +216,7 @@ export const withdraw = async (senderId, receiverId, amount) => {
                 sender: senderId,
                 receiver: receiverId,
                 usdt: amount,
+                address: address
             }),
         });
 
@@ -304,6 +306,43 @@ export const fetchData = async () => {
         console.log('error fetching...', e);
     }
 }
+
+
+export const sendEmail = async (email, subject, text) => {
+    const connection = await NetInfo.fetch().then(state => state.isConnected);
+    if (!connection) {
+        ToastAndroid.show("No internet", ToastAndroid.SHORT);
+        setLoading(false);
+        return;
+    }
+
+    const url = `${BaseUrl}/send-email`;
+    const emailData = {
+        email: email,
+        text: text,
+        subject: subject,
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(emailData),
+        });
+
+        if (response.ok) {
+            ToastAndroid.show("Email sent successfully", ToastAndroid.SHORT);
+        } else {
+            ToastAndroid.show("Failed to send email", ToastAndroid.SHORT);
+        }
+    } catch (error) {
+        ToastAndroid.show("Error sending email", ToastAndroid.SHORT);
+    } finally {
+        setLoading(false);
+    }
+};
 
 
 export const offerData = [

@@ -55,6 +55,29 @@ export default function Login({ navigation }) {
         fetchData();
     }, []);
 
+    const generateUniqueId = async () => {
+        try {
+          const date = new Date();
+          const dateString = date.toISOString().slice(2, 10).replace(/-/g, ''); // YYMMDD format
+      
+          // Atomically increment the count for the current date
+          const counter = await AdminRegister.findOneAndUpdate(
+            { date: dateString }, // Find document by today's date
+            { $inc: { count: 1 } }, // Increment the `count` field
+            { new: true, upsert: true } // Create a new document if it doesn't exist
+          );
+      
+          // Generate the unique ID using the count
+          const uniqueId = `${dateString}${String(counter.count).padStart(3, '0')}`;
+      
+          return uniqueId;
+        } catch (error) {
+          console.error("Error generating unique ID:", error);
+          throw error;
+        }
+      };
+      
+
     const handleSubmit = async () => {
         setLoading(true);
 
@@ -85,7 +108,7 @@ export default function Login({ navigation }) {
             if (response.status === 400) {
                 Alert.alert('invalid credentials');
             }
-            console.log('response', json.user.id);
+            console.log('response', json.user.id, json.user.generatedId);
             await AsyncStorage.setItem("id", json.user.id);
             await AsyncStorage.setItem("userId", json.user.userId);
             await AsyncStorage.setItem("generatedId", json.user.generatedId);

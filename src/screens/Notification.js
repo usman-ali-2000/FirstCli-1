@@ -16,10 +16,13 @@ export default function Notification({ navigation }) {
         try {
             setLoading(true);
             const id = await AsyncStorage.getItem('generatedId');
+            console.log('id:', id);
             const response = await fetch(`${BaseUrl}/notification/${id}`);
-            const json = await response.json();
-            setData(json);
-            console.log('json:', json);
+            if (response.ok) {
+                const json = await response?.json();
+                setData(json || []);
+            }
+            console.log('json:', response.ok);
         } catch (e) {
             console.log('error fetching data', e);
         } finally {
@@ -54,8 +57,8 @@ export default function Notification({ navigation }) {
                             colors={[theme.colors.lightGrey, theme.colors.darkGrey, theme.colors.purple]}
                         />
                     } style={{ width: '100%' }} contentContainerStyle={{ alignItems: 'center', paddingBottom: '5%' }}>
-                    {data.length === 0 ? <Text style={{ fontSize: 20, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, marginTop: '50%' }}>No Notification</Text> :
-                        data.map((item, index) => (
+                    {data?.length === 0 ? <Text style={{ fontSize: 20, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, marginTop: '50%' }}>No Notification</Text> :
+                        data?.map((item, index) => (
                             <TouchableOpacity key={item._id || index} onPress={() => { updateNotification(item._id, { seen: true }); item.path && navigation.navigate(item?.path) }} style={{ flexDirection: 'column', alignItems: 'center', width: '90%', justifyContent: 'space-between', marginTop: '3%', padding: '3%', borderRadius: 5, backgroundColor: theme.colors.white, elevation: item.seen ? 0 : 5 }}>
                                 <Text style={{ fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, width: '90%', textAlign: 'left' }}>{item.heading}</Text>
                                 <Text style={{ fontSize: 12, fontFamily: 'Gilroy-Medium', color: theme.colors.darkGrey, width: '90%', textAlign: 'left' }}>{item.subHeading}</Text>

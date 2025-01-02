@@ -5,7 +5,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { launchImageLibrary } from "react-native-image-picker";
-import { BaseUrl, CLOUDINARY_URL } from "../assets/Data";
+import { BaseUrl, CLOUDINARY_URL, sendEmail } from "../assets/Data";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Payment({ navigation, route }) {
@@ -91,13 +91,21 @@ export default function Payment({ navigation, route }) {
     const handleSubmit = async () => {
         setUploading(true);
         const id = await AsyncStorage.getItem("id");
-        const userId = await AsyncStorage.getItem("userId");
+        const userId = await AsyncStorage.getItem("generatedId");
 
         const url1 = await handlePost(image1);
         const url2 = await handlePost(image2);
 
         console.log('images:', url1, url2);
-        const data = { image1: url1, image2: url2, payerId: id, referId: userId, coins: coins, price: price, type: type };
+        const data = {
+            image1: url1,
+            image2: url2,
+            payerId: id,
+            referId: userId,
+            coins: coins,
+            price: price,
+            type: type
+        };
 
         try {
             const response = await fetch(`${BaseUrl}/screenshot`, {
@@ -110,6 +118,7 @@ export default function Payment({ navigation, route }) {
 
             const result = await response.json();
             console.log('Category added:', result);
+            await sendEmail('wingedxnetwork@gmail.com', 'Nfuc Request', `you have Nfuc request for ${price} $ of Id ${userId} `);
             setImage1(null);
             setImage2(null);
             navigation.navigate('Home');

@@ -17,9 +17,11 @@ export default function History({ navigation }) {
             setLoading(true);
             const id = await AsyncStorage.getItem('generatedId');
             const response = await fetch(`${BaseUrl}/transhistory/${id}`);
-            const json = await response.json();
-            setData(json);
-            console.log('json:', json);
+            if (response.ok) {
+                const json = await response.json();
+                setData(json || []);
+            }
+            console.log('json:', response.ok);
         } catch (e) {
             console.log('error fetching data', e);
         } finally {

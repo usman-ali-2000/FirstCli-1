@@ -44,6 +44,7 @@ import ManageCoin from './src/screens/ManageCoin';
 import History from './src/screens/History';
 import Notification from './src/screens/Notification';
 import Help from './src/screens/Help';
+import CustomAlert from './src/components/CustomAlert';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -54,6 +55,7 @@ const MyDrawer = () => {
 
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({});
+  const [showModal, setShowModal] = useState(false);
 
   const fetchData = async () => {
     const id = await AsyncStorage.getItem("id");
@@ -69,10 +71,12 @@ const MyDrawer = () => {
       console.log('error fetching...', e);
     }
   }
-
   useEffect(() => {
     fetchData();
   }, [])
+
+  const hanldeLogout = async () => {
+  }
 
 
 
@@ -92,13 +96,24 @@ const MyDrawer = () => {
             </TouchableOpacity>
             <View style={{ marginLeft: '5%', marginTop: '2%', width: '70%', }}>
               <Text style={{ fontSize: 18, fontFamily: 'Gilroy-Bold', color: theme.colors.black, width: '90%' }}>{userData?.name}</Text>
-              <TouchableOpacity onPress={() => copyToClipboard('abcdef')} style={{ flexDirection: 'row', alignItems: 'center', marginTop: '1%', width: '90%' }}>
-                <Text style={{ fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.darkGrey, }}>ID: {userData?.generatedId}</Text>
-                <Icon name="copy" size={14} color={theme.colors.darkGrey} style={{ marginLeft: '3%' }} />
-              </TouchableOpacity>
+              {/* <TouchableOpacity onPress={() => copyToClipboard('abcdef')} style={{ flexDirection: 'row', alignItems: 'center', marginTop: '1%', width: '90%' }}> */}
+              <Text style={{ fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.darkGrey, }}>ID: {userData?.generatedId}</Text>
+              {/* <Icon name="copy" size={14} color={theme.colors.darkGrey} style={{ marginLeft: '3%' }} />
+              </TouchableOpacity> */}
               <Text style={{ fontSize: 14, fontFamily: 'Gilroy-Bold', color: theme.colors.purple, width: '90%' }}>Level {userData?.accType === 'fresh' ? 0 : userData?.accType === 'working' ? 'A' : 'B'}</Text>
             </View>
           </View>
+          <CustomAlert
+            title="Logout"
+            message="Are you sure you want to logout?"
+            onCancel={() => setShowModal(false)}
+            onConfirm={async () => {
+              await AsyncStorage.removeItem("id");
+              await navigation.replace("Login");
+              setShowModal(false);
+            }}
+            visible={showModal}
+          />
           <View style={{ width: '100%', alignItems: 'center', borderTopWidth: 0, borderBottomWidth: 0, borderColor: theme.colors.white }}>
             <TouchableOpacity onPress={() => navigation.navigate('Wallet')} style={{ flexDirection: 'row', alignItems: 'center', width: '100%', padding: '5%', }}>
               <MaterialIcon name="wallet" size={26} color={theme.colors.darkGrey} />
@@ -108,10 +123,7 @@ const MyDrawer = () => {
               <MaterialIcon name="help" size={26} color={theme.colors.darkGrey} />
               <Text style={{ fontSize: 16, color: theme.colors.darkGrey, marginLeft: '5%', fontFamily: 'Gilroy-SemiBold' }}>Help / Support</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => {
-              await AsyncStorage.removeItem("id");
-              await navigation.replace("Login");
-            }} style={{ flexDirection: 'row', alignItems: 'center', width: '100%', padding: '5%', }}>
+            <TouchableOpacity onPress={() => setShowModal(true)} style={{ flexDirection: 'row', alignItems: 'center', width: '100%', padding: '5%', }}>
               <MaterialIcon name="logout" size={22} color={theme.colors.red} />
               <Text style={{ fontSize: 16, color: theme.colors.red, marginLeft: '5%', fontFamily: 'Gilroy-Bold' }}>Logout</Text>
             </TouchableOpacity>
