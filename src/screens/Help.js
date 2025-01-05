@@ -19,7 +19,6 @@ export default function Help({ navigation }) {
         console.log(data.email);
     };
 
-
     useEffect(() => {
         fetchUserData();
     }, []);

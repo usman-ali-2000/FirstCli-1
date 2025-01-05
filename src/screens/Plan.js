@@ -7,6 +7,7 @@ import { addCoins, addReferCoins, BaseUrl } from "../assets/Data";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LinearGradient from "react-native-linear-gradient";
 import Working from "./Working";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Plan({ navigation }) {
 
@@ -51,7 +52,16 @@ export default function Plan({ navigation }) {
 
     useEffect(() => {
         fetchAccType();
-    }, []);
+    }, [])
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchAccType();
+            return () => {
+                console.log('Screen unfocused');
+            };
+        }, [])
+    );
 
     const handleNonWorking = () => {
         if (accType === "non-working" || accType === "fresh") {

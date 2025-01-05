@@ -150,16 +150,38 @@ const Home = ({ navigation }) => {
 
 
     return (
-        <LinearGradient colors={[theme.colors.lightPink, theme.colors.lightPink, theme.colors.lightPink,]} style={{ width: '100%', flex: 1 }}>
+        <LinearGradient colors={[theme.colors.lightGrey, theme.colors.lightGrey, theme.colors.lightGrey,]} style={{ width: '100%', flex: 1 }}>
             <View style={Styles.container}>
-                <HomeHeader onpress={() => navigation.openDrawer()} rightPress={() => navigation.navigate('Notification')} accType={accType} name={name} coin={coins} generatedId={generatedId} />
-                <ScrollView style={{ width: '100%', backgroundColor: 'transparent', marginTop: '5%' }} contentContainerStyle={{ alignItems: 'center' }}
+                <HomeHeader
+                    onpress={() => navigation.openDrawer()}
+                    rightPress={() => navigation.navigate('Notification')}
+                    accType={accType}
+                    name={name}
+                    coin={coins}
+                    generatedId={generatedId} />
+                <ScrollView style={{ width: '100%', backgroundColor: 'transparent' }} contentContainerStyle={{ alignItems: 'center' }}
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.colors.purple}
                             colors={[theme.colors.lightGrey, theme.colors.darkGrey, theme.colors.purple]} // Android spinner colors
                         />}>
-                    {bannerData?.length > 0 ? <View style={{ width: '90%', paddingRight: '2%', height: 130, backgroundColor: theme.colors.lightPink, marginTop: '5%' }}>
+                    <LinearGradient colors={[theme.colors.purple, '#662d91']}
+                        start={{ x: 0, y: 0.5 }}
+                        end={{ x: 1, y: 0 }}
+                        style={{ width: '90%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: theme.colors.purple, padding: '8%', borderRadius: 10, marginTop: '5%' }}>
+                        <View style={{ width: '48%', alignItems: 'flex-start' }}>
+                            <Text style={{ fontSize: 18, fontFamily: 'Gilroy-SemiBold', color: theme.colors.white, lineHeight: 30, textAlign: 'left' }}>Available </Text>
+                            <Text style={{ fontSize: 18, fontFamily: 'Gilroy-SemiBold', color: theme.colors.white, lineHeight: 30, textAlign: 'left' }}>USDT:</Text>
+                            <Text style={{ fontSize: 18, fontFamily: 'Gilroy-SemiBold', color: theme.colors.white, lineHeight: 30 }}>{usdt}</Text>
+                        </View>
+                        <View style={{ width: '48%', alignItems: 'flex-start' }}>
+                            <Text style={{ fontSize: 18, fontFamily: 'Gilroy-SemiBold', color: theme.colors.white, lineHeight: 30, textAlign: 'left' }}>Available </Text>
+                            <Text style={{ fontSize: 18, fontFamily: 'Gilroy-SemiBold', color: theme.colors.white, lineHeight: 30, textAlign: 'left' }}>NFUC:</Text>
+                            <Text style={{ fontSize: 18, fontFamily: 'Gilroy-SemiBold', color: theme.colors.white, lineHeight: 30 }}>{nfuc}</Text>
+                        </View>
+                    </LinearGradient>
+                    {bannerData?.length > 0 ? <View style={{ width: '90%', paddingRight: '2%', height: 130, backgroundColor: theme.colors.lightGrey, marginTop: '5%' }}>
                         <ImageSlider
+                            // autoPlayWithInterval={5000}
                             loopBothSides={false}
                             images={bannerData.length > 0 ? bannerData : []}
                             position={position}
@@ -169,84 +191,110 @@ const Home = ({ navigation }) => {
                                     <Image source={{ uri: item?.banner }} style={Styles.image} resizeMode="cover" />
                                 </View>
                             )}
-                            customButtons={(position) => (
-                                <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'center', justifyContent: 'space-between' }}>
-                                    {bannerData?.map((image, index) => (
-                                        <TouchableOpacity
-                                            key={index}
-                                            onPress={() => move(index)}
-                                            style={[{
-                                                backgroundColor: position === index ? theme.colors.purple : theme.colors.white,
-                                                marginTop: '2%',
-                                                height: position === index ? 8 : 6,
-                                                width: position === index ? 15 : 6,
-                                                borderRadius: 5,
-                                                margin: 5,
-                                            }]}
-                                        />
-                                    ))}
-                                </View>
+                            customButtons={() => (
+                                <View style={{ height: 0, width: 0 }} />
                             )}
+                        // customButtons={(position) => (
+                        //     <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'center', justifyContent: 'space-between' }}>
+                        //         {bannerData?.map((image, index) => (
+                        //             <TouchableOpacity
+                        //                 key={index}
+                        //                 onPress={() => move(index)}
+                        //                 style={[{
+                        //                     backgroundColor: position === index ? theme.colors.purple : theme.colors.white,
+                        //                     marginTop: '2%',
+                        //                     height: position === index ? 8 : 6,
+                        //                     width: position === index ? 15 : 6,
+                        //                     borderRadius: 5,
+                        //                     margin: 5,
+                        //                 }]}
+                        //             />
+                        //         ))}
+                        //     </View>
+                        // )}
                         />
-                    </View> : <View style={{ width: '100%', height: 130, alignItems: 'center', justifyContent: 'center', marginBottom: '10%' }}><ActivityIndicator color={theme.colors.purple} /></View>}
-                    <View style={{ width: "90%", alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginTop: "10%", }}>
-                        <View style={{ width: '30%' }}>
-                            <TouchableOpacity onPress={() => setOpenMenu({ m1: !openMenu.m1, m2: false, m3: false })} style={{ marginRight: '5%', backgroundColor: theme.colors.whiteTransparent, padding: 5, borderRadius: 5, width: '100%' }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                    <Image source={require('../../assets/images/crown.png')} style={{ height: 10, width: 10 }} />
-                                    <Text style={{ color: theme.colors.black, fontFamily: 'Gilroy-SemiBold', fontSize: 12, }}>Nfuc</Text>
-                                </View>
-                                <Text style={{ color: theme.colors.black, fontFamily: 'Gilroy-Bold', fontSize: 16, textAlign: 'center', width: '100%' }}>{nfuc}</Text>
+                    </View> : <View style={{ width: '100%', height: 130, alignItems: 'center', justifyContent: 'center', marginBottom: '5%' }}><ActivityIndicator color={theme.colors.purple} /></View>}
+                    <View style={{ width: "90%", alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginTop: "3%", }}>
+                        <View style={{ width: '48%' }}>
+                            <TouchableOpacity onPress={() => setOpenMenu({ m1: !openMenu.m1, m2: false, m3: false })} style={{ marginRight: '5%', backgroundColor: theme.colors.white, padding: '7%', borderRadius: 10, width: '100%', flexDirection: 'row', alignItems: 'center', elevation: 2 }}>
+                                <Image source={require('../../assets/images/deposit.png')} style={{ height: 50, width: 50 }} />
+                                <Text style={{ color: theme.colors.black, fontFamily: 'Gilroy-Bold', fontSize: 16, textAlign: 'center', width: '60%' }}>Deposit</Text>
                             </TouchableOpacity>
-                            {openMenu.m1 && <NfucMenu onPress={() => { navigation.navigate('ManageCoin', { type: 'nfuc' }); setOpenMenu({ m1: false, m2: false, m3: false }) }} />}
+                            {/* {openMenu.m1 && <NfucMenu onPress={() => { navigation.navigate('ManageCoin', { type: 'nfuc' }); setOpenMenu({ m1: false, m2: false, m3: false }) }} />} */}
                         </View>
-                        <View style={{ width: '30%' }}>
-                            <TouchableOpacity onPress={() => setOpenMenu({ m1: false, m2: !openMenu.m2, m3: false })} style={{ marginRight: '5%', backgroundColor: theme.colors.whiteTransparent, padding: 5, borderRadius: 5, width: '100%' }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                    <Image source={require('../../assets/images/crown.png')} style={{ height: 10, width: 10 }} />
-                                    <Text style={{ color: theme.colors.black, fontFamily: 'Gilroy-SemiBold', fontSize: 12, }}>Wx</Text>
-                                </View>
-                                <Text style={{ color: theme.colors.black, fontFamily: 'Gilroy-Bold', fontSize: 16, textAlign: 'center', width: '100%' }}>{coins}</Text>
+                        <View style={{ width: '48%' }}>
+                            <TouchableOpacity onPress={() => setOpenMenu({ m1: !openMenu.m1, m2: false, m3: false })} style={{ marginRight: '5%', backgroundColor: theme.colors.white, padding: '7%', borderRadius: 10, width: '100%', flexDirection: 'row', alignItems: 'center', elevation: 2 }}>
+                                <Image source={require('../../assets/images/payout.png')} style={{ height: 50, width: 50 }} />
+                                <Text style={{ color: theme.colors.black, fontFamily: 'Gilroy-Bold', fontSize: 16, textAlign: 'center', width: '60%' }}>Payout</Text>
                             </TouchableOpacity>
-                            {openMenu.m2 && <WxMenu onPress={() => { navigation.navigate('ManageCoin', { type: 'wx' }); setOpenMenu({ m1: false, m2: false, m3: false }) }} />}
-                        </View>
-                        <View style={{ width: '30%' }}>
-                            <TouchableOpacity onPress={() => setOpenMenu({ m1: false, m2: false, m3: !openMenu.m3 })} style={{ marginRight: '5%', backgroundColor: theme.colors.whiteTransparent, padding: 5, borderRadius: 5, width: '100%' }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                    <Image source={require('../../assets/images/crown.png')} style={{ height: 10, width: 10 }} />
-                                    <Text style={{ color: theme.colors.black, fontFamily: 'Gilroy-SemiBold', fontSize: 12, }}>USDT</Text>
-                                </View>
-                                <Text style={{ color: theme.colors.black, fontFamily: 'Gilroy-Bold', fontSize: 16, textAlign: 'center', width: '100%' }}>{usdt}</Text>
-                            </TouchableOpacity>
-                            {openMenu.m3 && <UsdtMenu onPress={() => { navigation.navigate('ManageCoin', { type: 'usdt' }); setOpenMenu({ m1: false, m2: false, m3: false }) }} />}
+                            {/* {openMenu.m2 && <WxMenu onPress={() => { navigation.navigate('ManageCoin', { type: 'wx' }); setOpenMenu({ m1: false, m2: false, m3: false }) }} />} */}
                         </View>
                     </View>
-                    <Text style={{ color: theme.colors.purple, padding: 5, alignSelf: 'center', fontSize: 18, fontFamily: 'Gilroy-Bold', backgroundColor: 'rgba(0, 0, 0, 0)', width: '90%', marginTop: '10%' }}>Community</Text>
-                    <View style={{ width: '90%', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.3)', padding: '5%', borderRadius: 5, marginTop: '5%' }}>
+                    <Text style={{ color: theme.colors.purple, padding: 5, alignSelf: 'center', fontSize: 18, fontFamily: 'Gilroy-Bold', backgroundColor: 'rgba(0, 0, 0, 0)', width: '90%', marginTop: '5%' }}>Basic Tools</Text>
+                    <View style={{ width: '90%', alignItems: 'center', backgroundColor: theme.colors.white, padding: '5%', borderRadius: 10, marginTop: '5%', elevation: 0, marginBottom: '0%' }}>
+                        <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignSelf: 'center', marginTop: '5%' }}>
+                            <TouchableOpacity onPress={() => { isConnected && openLink(links.facebook) }} style={{ alignItems: 'center', width: '30%' }}>
+                                <View style={{ backgroundColor: 'orange', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 50, elevation: 5 }}>
+                                    <Icon name="bell" size={22} color={theme.colors.white} />
+                                </View>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Facebook</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => { isConnected && openLink(links.whatsapp) }} style={{ alignItems: 'center', width: '30%' }}>
+                                <View style={{ backgroundColor: theme.colors.blue, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 50, elevation: 5 }}>
+                                    <Icon name="support" size={20} color={theme.colors.white} />
+                                </View>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold', textAlign: 'center' }}>Customer Service</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => { isConnected && openLink(links.instagram) }} style={{ alignItems: 'center', width: '30%' }}>
+                                <View style={{ backgroundColor: 'rgb(222, 49, 99)', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 50, elevation: 5 }}>
+                                    <Icon name="book" size={20} color={theme.colors.white} />
+                                </View>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold', textAlign: 'center' }}>Beginners Guide</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignSelf: 'center', marginTop: '5%' }}>
+                            <TouchableOpacity onPress={() => { isConnected && openLink(links.twitter) }} style={{ alignItems: 'center', width: '30%' }}>
+                                <View style={{ backgroundColor: theme.colors.blue, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 50, elevation: 5 }}>
+                                    <MaterialIcon name="info" size={22} color={theme.colors.white} />
+                                </View>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Aboutus</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => { isConnected && openLink(links.twitter) }} style={{ alignItems: 'center', width: '30%' }}>
+                                <View style={{ backgroundColor: theme.colors.purple, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 50, elevation: 5 }}>
+                                    <MaterialIcon name="article" size={20} color={theme.colors.white} />
+                                </View>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Task</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{ alignItems: 'center', width: '30%' }}>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <Text style={{ color: theme.colors.purple, padding: 5, alignSelf: 'center', fontSize: 18, fontFamily: 'Gilroy-Bold', backgroundColor: 'rgba(0, 0, 0, 0)', width: '90%', marginTop: '5%' }}>Community</Text>
+                    <View style={{ width: '90%', alignItems: 'center', backgroundColor: theme.colors.white, padding: '5%', borderRadius: 10, marginTop: '5%', elevation: 0, marginBottom: '0%' }}>
                         <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', alignSelf: 'center', marginTop: '5%' }}>
                             <TouchableOpacity onPress={() => { isConnected && openLink(links.facebook) }} style={{ alignItems: 'center', width: '25%' }}>
                                 <View style={{ backgroundColor: theme.colors.white, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 10, elevation: 5 }}>
                                     <Icon name="facebook" size={28} color={'blue'} />
                                 </View>
-                                <Text style={{ color: theme.colors.white, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Facebook</Text>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Facebook</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => { isConnected && openLink(links.whatsapp) }} style={{ alignItems: 'center', width: '25%' }}>
                                 <View style={{ backgroundColor: theme.colors.white, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 10, elevation: 5 }}>
                                     <Icon name="whatsapp" size={28} color={theme.colors.green} />
                                 </View>
-                                <Text style={{ color: theme.colors.white, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Whatsapp</Text>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Whatsapp</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => { isConnected && openLink(links.instagram) }} style={{ alignItems: 'center', width: '25%' }}>
                                 <View style={{ backgroundColor: theme.colors.white, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 10, elevation: 5 }}>
                                     <Icon name="instagram" size={28} color={'rgb(222, 49, 99)'} />
                                 </View>
-                                <Text style={{ color: theme.colors.white, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Instagram</Text>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Instagram</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => { isConnected && openLink(links.twitter) }} style={{ alignItems: 'center', width: '25%' }}>
                                 <View style={{ backgroundColor: theme.colors.white, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 10, elevation: 5 }}>
                                     <Icon name="twitter" size={28} color={theme.colors.blue} />
                                 </View>
-                                <Text style={{ color: theme.colors.white, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Twitter</Text>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Twitter</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', alignSelf: 'center', marginTop: '5%' }}>
@@ -254,39 +302,27 @@ const Home = ({ navigation }) => {
                                 <View style={{ backgroundColor: theme.colors.white, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 10, elevation: 5 }}>
                                     <MaterialIcon name="tiktok" size={28} color={theme.colors.black} />
                                 </View>
-                                <Text style={{ color: theme.colors.white, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>TikTok</Text>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>TikTok</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => { isConnected && openLink(links.youtube) }} style={{ alignItems: 'center', width: '25%' }}>
                                 <View style={{ backgroundColor: theme.colors.white, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 10, elevation: 5 }}>
                                     <Icon name="youtube" size={22} color={theme.colors.red} />
                                 </View>
-                                <Text style={{ color: theme.colors.white, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Youtube</Text>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Youtube</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => { isConnected && openLink(links.telegram) }} style={{ alignItems: 'center', width: '25%' }}>
                                 <View style={{ backgroundColor: theme.colors.white, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 10, elevation: 5 }}>
                                     <Icon name="telegram" size={22} color={theme.colors.blue} />
                                 </View>
-                                <Text style={{ color: theme.colors.white, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Telegram</Text>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Telegram</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => { isConnected && openLink(links.discord) }} style={{ alignItems: 'center', width: '25%' }}>
                                 <View style={{ backgroundColor: theme.colors.white, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 10, elevation: 5 }}>
                                     <MaterialIcon name="discord" size={28} color={'purple'} />
                                 </View>
-                                <Text style={{ color: theme.colors.white, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Discord</Text>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Discord</Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
-                    <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between', marginTop: '8%', }}>
-                        {loading || !isConnected ? <ActivityIndicator size={"large"} color={theme.colors.blue} /> :
-                            <LinearGradient colors={[theme.colors.purple, theme.colors.purple, theme.colors.purple,]} style={{ width: 70, height: 70, borderRadius: 100, alignItems: 'center', elevation: 5, marginBottom: '8%' }}>
-                                <TouchableOpacity onPress={() => navigation.navigate('Task')} style={{ alignSelf: 'center', backgroundColor: 'transparent', height: 70, width: 70, alignItems: 'center', justifyContent: 'space-evenly', flexDirection: 'row' }}>
-                                    <View style={{ alignItems: 'center' }}>
-                                        <MaterialIcon name="article" size={28} color={theme.colors.white} />
-                                        <Text style={{ fontSize: 12, color: theme.colors.white, fontFamily: 'Gilroy-SemiBold' }}>Tasks</Text>
-                                        {/* <Text style={{ fontSize: 10, color: theme.colors.white, fontFamily: 'Gilroy-SemiBold' }}>Game</Text> */}
-                                    </View>
-                                </TouchableOpacity>
-                            </LinearGradient>}
                     </View>
                 </ScrollView>
             </View>

@@ -13,6 +13,7 @@ export default function ManageCoin({ navigation, route }) {
 
     const [generatedId, setGeneratedId] = useState(null);
     const [userData, setUserData] = useState({});
+    const [loading, setLoading] = useState(false);
 
     const getId = async () => {
         const generated = await AsyncStorage.getItem("generatedId");
@@ -93,6 +94,7 @@ export default function ManageCoin({ navigation, route }) {
                     await sendNotification('wingedx-admin', 'You have withdraw request', `you have received withdraw request for ${amount} $`, 'Withdraw');
                     await sendEmail('wingedxnetwork@gmail.com', 'Withdraw Request', `you have withdraw request ${amount} $`);
                     console.log('id & coins:', Number(amount), generatedId);
+                    setAddress('');
                     setAmount(null);
                 } catch (error) {
                     console.error('Error during transfer:', error);

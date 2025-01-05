@@ -36,7 +36,7 @@ const Styles = {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        backgroundColor: 'white',
+        backgroundColor: theme.colors.white,
         elevation: 5
     },
     gear: {
@@ -45,17 +45,16 @@ const Styles = {
         margin: 15
     },
     slide: {
-        backgroundColor: theme.colors.lightPink,
+        backgroundColor: 'rgba(255, 254, 254, 0.91)',
         padding: 5,
         paddingLeft: 15,
         alignItems: 'center',
+        width: width-(width*0.13),
     },
     image: {
-        width: 300,
-        height: 100,
+        width: width-(width*0.15),
+        height: 120,
         borderRadius: 15,
-        borderWidth: 1,
-        borderColor: theme.colors.grey,
     },
     triangle: {
         width: 0,

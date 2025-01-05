@@ -5,7 +5,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { launchImageLibrary } from "react-native-image-picker";
-import { BaseUrl, CLOUDINARY_URL, sendEmail } from "../assets/Data";
+import { BaseUrl, CLOUDINARY_URL, sendEmail, sendNotification } from "../assets/Data";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Payment({ navigation, route }) {
@@ -91,7 +91,7 @@ export default function Payment({ navigation, route }) {
     const handleSubmit = async () => {
         setUploading(true);
         const id = await AsyncStorage.getItem("id");
-        const userId = await AsyncStorage.getItem("generatedId");
+        const userId = await AsyncStorage.getItem("userId");
 
         const url1 = await handlePost(image1);
         const url2 = await handlePost(image2);
@@ -118,6 +118,7 @@ export default function Payment({ navigation, route }) {
 
             const result = await response.json();
             console.log('Category added:', result);
+            await sendNotification('wingedx-admin', 'Payment Request', `payment request of ${price} $`, 'Screenshot');
             await sendEmail('wingedxnetwork@gmail.com', 'Nfuc Request', `you have Nfuc request for ${price} $ of Id ${userId} `);
             setImage1(null);
             setImage2(null);

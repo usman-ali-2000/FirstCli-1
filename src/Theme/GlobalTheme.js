@@ -19,7 +19,9 @@ const theme = {
         cerise: 'rgb(222, 49, 99)',
         darkGrey: '#A9A9A9',
         whiteTransparent: 'rgba(255, 255, 255, 0.6)',
-        lightGrey: "rgba(229, 228, 226, 0.5)"
+        lightGrey: "rgba(229, 228, 226, 0.5)",
+        navyBlue: "rgba(0, 48, 143, 1)",
+        lightBlue: "#0066b2",
     },
     fonts: {
         bold: 'Gilroy-Bold',

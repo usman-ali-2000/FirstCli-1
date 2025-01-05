@@ -90,7 +90,6 @@ export const addCoins = async (additionalCoins) => {
 
 export const addReferNfuc = async (nfucRefer) => {
     const userId = await AsyncStorage.getItem("userId");
-    // console.log("userId", userId);
     if (userId) {
         console.log("userId", userId);
         try {
@@ -271,7 +270,6 @@ export const sendNotification = async (receiverId, heading, subHeading, path) =>
 
 export const updateNotification = async (notificationId, updatedData) => {
     const url = `${BaseUrl}/notification/${notificationId}`;
-
     try {
         const response = await fetch(url, {
             method: 'PATCH',
@@ -280,9 +278,7 @@ export const updateNotification = async (notificationId, updatedData) => {
             },
             body: JSON.stringify(updatedData), // Pass the updated fields here
         });
-
         const data = await response.json();
-
         if (response.ok) {
             console.log('Notification updated successfully:', data);
             return data; // Return the updated notification
@@ -312,7 +308,6 @@ export const sendEmail = async (email, subject, text) => {
     const connection = await NetInfo.fetch().then(state => state.isConnected);
     if (!connection) {
         ToastAndroid.show("No internet", ToastAndroid.SHORT);
-        setLoading(false);
         return;
     }
 
@@ -320,7 +315,8 @@ export const sendEmail = async (email, subject, text) => {
     const emailData = {
         email: email,
         text: text,
-        subject: subject,
+        subject: subject, 
+        
     };
 
     try {
@@ -339,8 +335,6 @@ export const sendEmail = async (email, subject, text) => {
         }
     } catch (error) {
         ToastAndroid.show("Error sending email", ToastAndroid.SHORT);
-    } finally {
-        setLoading(false);
     }
 };
 
