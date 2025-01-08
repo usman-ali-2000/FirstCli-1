@@ -15,7 +15,7 @@ export default function Notification({ navigation }) {
     const fetchNotification = async () => {
         try {
             setLoading(true);
-            const id = await AsyncStorage.getItem('generatedId');
+            const id = await AsyncStorage.getItem('id');
             console.log('id:', id);
             const response = await fetch(`${BaseUrl}/notification/${id}`);
             if (response.ok) {

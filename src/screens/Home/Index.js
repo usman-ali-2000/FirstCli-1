@@ -221,13 +221,13 @@ const Home = ({ navigation }) => {
                     </View> : <View style={{ width: '100%', height: 130, alignItems: 'center', justifyContent: 'center', marginBottom: '5%' }}><ActivityIndicator color={theme.colors.purple} /></View>}
                     <View style={{ width: "90%", alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginTop: "3%", }}>
                         <View style={{ width: '48%' }}>
-                            <TouchableOpacity onPress={()=>navigation.navigate('Deposit')} style={{ marginRight: '5%', backgroundColor: theme.colors.white, padding: '7%', borderRadius: 10, width: '100%', flexDirection: 'row', alignItems: 'center', elevation: 2 }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Deposit')} style={{ marginRight: '5%', backgroundColor: theme.colors.white, padding: '7%', borderRadius: 10, width: '100%', flexDirection: 'row', alignItems: 'center', elevation: 2 }}>
                                 <Image source={require('../../assets/images/deposit.png')} style={{ height: 40, width: 40 }} />
                                 <Text style={{ color: theme.colors.black, fontFamily: 'Gilroy-Bold', fontSize: 16, textAlign: 'center', width: '60%' }}>Deposit</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{ width: '48%' }}>
-                            <TouchableOpacity onPress={() => setOpenMenu({ m1: !openMenu.m1, m2: false, m3: false })} style={{ marginRight: '5%', backgroundColor: theme.colors.white, padding: '7%', borderRadius: 10, width: '100%', flexDirection: 'row', alignItems: 'center', elevation: 2 }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('ManageCoin', { type: 'usdt' })} style={{ marginRight: '5%', backgroundColor: theme.colors.white, padding: '7%', borderRadius: 10, width: '100%', flexDirection: 'row', alignItems: 'center', elevation: 2 }}>
                                 <Image source={require('../../assets/images/payout.png')} style={{ height: 40, width: 40 }} />
                                 <Text style={{ color: theme.colors.black, fontFamily: 'Gilroy-Bold', fontSize: 16, textAlign: 'center', width: '60%' }}>Payout</Text>
                             </TouchableOpacity>
