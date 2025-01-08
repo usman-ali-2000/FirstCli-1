@@ -7,15 +7,12 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import { launchImageLibrary } from "react-native-image-picker";
 import { BaseUrl, CLOUDINARY_URL, sendEmail, sendNotification } from "../assets/Data";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import LoginInput from "../components/LoginInput";
 
 export default function Payment({ navigation, route }) {
 
-    const coins = route?.params?.coins;
-    const price = route?.params?.price;
-    const type = route?.params?.type;
-
+    const [price, setPrice] = useState('');
     const [image1, setImage1] = useState(null);
-    const [image2, setImage2] = useState(null);
     const [uploading, setUploading] = useState(false); // Track the uploading state
 
     const copyToClipboard = async (text) => {
@@ -40,16 +37,16 @@ export default function Payment({ navigation, route }) {
             console.log('Selected image URI:', uri);
             if (no === 1) {
                 setImage1(uri);
-            } else {
-                setImage2(uri);
             }
         }
     };
 
 
     const handlePost = async (imageUrl) => {
-        if (!imageUrl) {
-            Alert.alert('Please select an image first!');
+
+        if (!imageUrl || !price) {
+            Alert.alert('Please add data!');
+            setUploading(false);
             return;
         }
 
@@ -70,13 +67,10 @@ export default function Payment({ navigation, route }) {
 
             const data = await response.json();
             console.log('Cloudinary response data:', data);
-            // setImage1(null);
-            // setImage2(null);
             if (data.secure_url) {
                 const imageUrl = data.secure_url;
                 console.log('Image uploaded successfully! URL:', imageUrl);
                 return (imageUrl);
-                Alert.alert('Image uploaded successfully!');
             } else {
                 Alert.alert('Image upload failed.');
             }
@@ -89,22 +83,26 @@ export default function Payment({ navigation, route }) {
     };
 
     const handleSubmit = async () => {
+
         setUploading(true);
         const id = await AsyncStorage.getItem("id");
         const userId = await AsyncStorage.getItem("userId");
 
         const url1 = await handlePost(image1);
-        const url2 = await handlePost(image2);
 
-        console.log('images:', url1, url2);
+        console.log('images:', url1);
+
+        if (!image1 || !price) {
+            ToastAndroid.show('all fields are madatory', ToastAndroid.SHORT);
+            setUploading(false);
+            return;
+        }
+
         const data = {
             image1: url1,
-            image2: url2,
             payerId: id,
             referId: userId,
-            coins: coins,
             price: price,
-            type: type
         };
 
         try {
@@ -118,11 +116,13 @@ export default function Payment({ navigation, route }) {
 
             const result = await response.json();
             console.log('Category added:', result);
-            await sendNotification('wingedx-admin', 'Payment Request', `payment request of ${price} $`, 'Screenshot');
-            await sendEmail('wingedxnetwork@gmail.com', 'Nfuc Request', `you have Nfuc request for ${price} $ of Id ${userId} `);
-            setImage1(null);
-            setImage2(null);
-            navigation.navigate('Home');
+            if (response.ok) {
+                await sendNotification('wingedx-admin', 'Payment Request', `payment request of ${price} $`, 'Screenshot');
+                await sendEmail('wingedxnetwork@gmail.com', 'USDT Request', `you have USDT request for ${price} $ of Id ${userId} `);
+                setImage1(null);
+                setPrice('');
+                navigation.navigate('Home');
+            }
         } catch (error) {
             console.error('Error submitting category:', error);
             Alert.alert('Failed to submit category');
@@ -133,45 +133,30 @@ export default function Payment({ navigation, route }) {
 
 
     return (
-        <View style={{ flex: 1, width: '100%', alignItems: 'center', backgroundColor: theme.colors.lightPink }}>
+        <View style={{ flex: 1, width: '100%', alignItems: 'center', backgroundColor: theme.colors.white }}>
             <View style={{ height: 50, width: '100%', alignItems: 'center', flexDirection: 'row' }}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginTop: '3%', marginLeft: '5%' }}>
                     <Icon name="chevron-left" size={18} color={theme.colors.black} />
                 </TouchableOpacity>
-                <Text style={{ fontSize: 18, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, marginTop: '3%', marginLeft: '30%' }}>Payment</Text>
+                <Text style={{ fontSize: 18, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, marginTop: '3%', marginLeft: '30%' }}>Screenshot</Text>
             </View>
             <ScrollView style={{ width: '100%' }} contentContainerStyle={{ alignItems: 'center', paddingBottom: '5%' }}>
-                <View style={{ backgroundColor: theme.colors.purple, height: 50, width: 50, alignItems: 'center', justifyContent: 'center', borderRadius: 50, borderWidth: 2, borderColor: theme.colors.white, zIndex: 2, position: 'absolute', top: "3%" }}>
-                    <Icon name="dollar" size={26} color={theme.colors.white} />
+                {image1 && <Image style={{ height: 200, width: '90%', marginTop: '5%', borderRadius: 10 }} source={{ uri: image1 }} resizeMode="contain" />}
+                {!image1 && <View style={{ backgroundColor: theme.colors.lightGrey, width: "90%", marginTop: '5%', alignItems: 'center', justifyContent: 'center', height: 200, borderRadius: 10 }}>
+                    <Icon name="image" size={26} color={theme.colors.darkGrey} />
+                    <Text style={{ fontSize: 12, fontFamily: 'Gilroy-SemiBold', color: theme.colors.darkGrey, paddingTop: '2%' }}>Upload Screenshot</Text>
+                </View>}
+                <View style={{ width: '50%', alignItems: 'center', marginTop: '3%' }}>
+                    <Button backgroundColor={theme.colors.purple} text="Upload Image" image={<Icon name="image" size={14} color={theme.colors.white} style={{ marginRight: '3%' }} />} onPress={() => pickImage(1)} />
                 </View>
-                <View style={{ width: '90%', backgroundColor: theme.colors.white, padding: 10, marginTop: "12%", borderRadius: 10, alignItems: 'center', justifyContent: "center" }}>
-                    <View style={{ padding: "5%", width: '48%', alignItems: 'center', borderRadius: 15, width: '100%' }}>
-                        <Text style={{ paddingLeft: 5, fontSize: 18, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, maxWidth: '90%', textAlign: 'center', marginTop: '10%' }}>Order Amount</Text>
-                        <Text style={{ paddingLeft: 5, fontSize: 20, fontFamily: 'Gilroy-Bold', color: theme.colors.purple, maxWidth: '90%', textAlign: 'center', marginTop: '3%', }}>{price} USDT</Text>
-                        <TouchableOpacity onPress={() => copyToClipboard('abcdef')} style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'center', marginTop: '5%' }}>
-                            <Text style={{ paddingLeft: 5, fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.darkGrey, }}>Order ID:795748098305730</Text>
-                            <Icon name="copy" size={14} color={theme.colors.darkGrey} style={{ marginLeft: '2%' }} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={{ width: '90%', backgroundColor: theme.colors.white, paddingTop: 20, paddingBottom: 20, marginTop: "5%", borderRadius: 10, alignItems: 'center', justifyContent: "center" }}>
-                    <Text style={{ fontSize: 14, fontFamily: 'Gilroy-Bold', width: '90%', color: theme.colors.black }}>Please pay in following way</Text>
-                    <View style={{ height: 1, width: '90%', marginTop: '5%', marginBottom: '2%', backgroundColor: theme.colors.darkGrey }} />
-                    <Text style={{ fontSize: 14, fontFamily: 'Gilroy-SemiBold', width: '90%', color: theme.colors.black, paddingTop: '5%' }}>Contract Address:</Text>
-                    <Text style={{ fontSize: 14, fontFamily: 'Gilroy-SemiBold', width: '90%', color: theme.colors.purple, paddingTop: '3%' }}>TjogjRjoigjFjgoijGjfoghijro</Text>
-                    <View style={{ width: '100%', alignItems: 'center', marginTop: '3%' }}>
-                        <Button backgroundColor={theme.colors.purple} text="Copy" image={<Icon name="copy" size={14} color={theme.colors.white} style={{ marginRight: '2%' }} />} onPress={() => copyToClipboard('abcdef')} />
-                    </View>
-                </View>
-                {image1 && <Image style={{ height: 200, width: '90%', marginTop: '5%' }} source={{ uri: image1 }} resizeMode="contain" />}
-                <View style={{ width: '70%', alignItems: 'center', marginTop: '3%' }}>
-                    <Button backgroundColor={theme.colors.purple} text="Upload 1st" image={<Icon name="upload" size={14} color={theme.colors.white} style={{ marginRight: '2%' }} />} onPress={() => pickImage(1)} />
-                </View>
-                {image2 && <Image style={{ height: 200, width: '90%', marginTop: '5%' }} source={{ uri: image2 }} resizeMode="contain" />}
-                <View style={{ width: '70%', alignItems: 'center', marginTop: '3%' }}>
-                    <Button backgroundColor={theme.colors.purple} text="Upload 2nd" image={<Icon name="upload" size={14} color={theme.colors.white} style={{ marginRight: '2%' }} />} onPress={() => pickImage(2)} />
-                </View>
-                {uploading ? <ActivityIndicator size={"large"} color={theme.colors.purple} /> : <View style={{ width: '100%', alignItems: 'center', marginTop: '3%' }}>
+                <LoginInput
+                    keyboardType="numeric"
+                    text="Amount"
+                    placeholder="Enter Amount in $"
+                    value={price}
+                    onChangeText={(txt) => setPrice(txt)}
+                />
+                {uploading ? <ActivityIndicator size={"large"} color={theme.colors.purple} /> : <View style={{ width: '100%', alignItems: 'center', marginTop: '5%' }}>
                     <Button backgroundColor={theme.colors.purple} text="Send" onPress={() => handleSubmit()} />
                 </View>}
             </ScrollView>

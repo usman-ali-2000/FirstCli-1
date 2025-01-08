@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, StyleSheet, ActivityIndicator } from 'react-native';
 import theme from '../Theme/GlobalTheme';
 
-const CustomAlert = ({ visible, title, message, onConfirm, onCancel }) => {
+const CustomAlert = ({ visible, title, message, onConfirm, onCancel, loading }) => {
     return (
         <Modal
             transparent={true}
@@ -11,7 +11,7 @@ const CustomAlert = ({ visible, title, message, onConfirm, onCancel }) => {
             onRequestClose={onCancel}
         >
             <View style={styles.overlay}>
-                <View style={styles.alertBox}>
+                {loading ? <ActivityIndicator color={theme.colors.blue} /> : <View style={styles.alertBox}>
                     <Text style={styles.title}>{title}</Text>
                     <Text style={styles.message}>{message}</Text>
                     <View style={styles.buttonContainer}>
@@ -22,7 +22,7 @@ const CustomAlert = ({ visible, title, message, onConfirm, onCancel }) => {
                             <Text style={styles.confirmButtonText}>Confirm</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View>}
             </View>
         </Modal>
     );

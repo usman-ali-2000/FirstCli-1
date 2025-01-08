@@ -4,6 +4,12 @@ import theme from "../Theme/GlobalTheme";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
 import { useNavigation } from "@react-navigation/native";
+import { BaseUrl, planData } from "../assets/Data";
+import LinearGradient from "react-native-linear-gradient";
+import CustomAlert from "../components/CustomAlert";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import FastImage from "react-native-fast-image";
+import { useEvent } from "react-native-reanimated";
 
 export default function Working(props) {
 
@@ -12,7 +18,9 @@ export default function Working(props) {
     // const type = route?.params?.type;
     const [price, setPrice] = useState(null);
     const [coins, setCoins] = useState(0);
-    // const [modalVisible, setModalVisible] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
 
     const handleNavigation = () => {
@@ -24,80 +32,123 @@ export default function Working(props) {
         }
     }
 
+    const handleConfirm = async () => {
+
+        setLoading(true);
+        const id = await AsyncStorage.getItem("id");
+        const userId = await AsyncStorage.getItem("userId");
+
+        if (!id) {
+            ToastAndroid.show("error in buying nfuc", ToastAndroid.SHORT);
+            return;
+        }
+        let acctype = null;
+        if (props.type === 'working') {
+            acctype = 'working'
+        } else if (props.type === 'non-working') {
+            acctype = 'non-working'
+        } else {
+            acctype = 'fresh'
+        }
+        try {
+            const response = await fetch(`${BaseUrl}/register/dollarToNfuc/${id}`, {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    coins: coins,
+                    amount: price,
+                    accType: acctype,
+                    referid: userId,
+                })
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Coins added successfully:", data);
+                // ToastAndroid.show("nfuc added successfully", ToastAndroid.SHORT);
+                setModalVisible(true);
+            } else if (response.status === 400) {
+                ToastAndroid.show("insufficient balance", ToastAndroid.SHORT);
+            } else if (response.status === 404) {
+                ToastAndroid.show("user not found", ToastAndroid.SHORT);
+            }
+            else {
+                const errorData = await response.json();
+                console.error("Failed to add coins:", errorData);
+                ToastAndroid.show("error buying nfuc", ToastAndroid.SHORT);
+            }
+        } catch (e) {
+            console.log('error buying nfuc', e);
+            ToastAndroid.show("error buying nfuc", ToastAndroid.SHORT);
+        } finally {
+            setShowAlert(false);
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        setTimeout(() => {
+            setModalVisible(false);
+        }, ((3000)));
+    }, [modalVisible])
+
+    const handleAlert = (price, coins) => {
+        setShowAlert(!showAlert);
+        setPrice(price);
+        setCoins(coins);
+    }
+
     return (
-        <View style={{ flex: 1, width: '100%', alignItems: 'center', backgroundColor: theme.colors.lightPink }}>
-            {/* <View style={{ height: 50, width: '100%', alignItems: 'center', flexDirection: 'row' }}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginTop: '3%', marginLeft: '5%' }}>
-                    <Icon name="chevron-left" size={18} color={theme.colors.purple} />
-                </TouchableOpacity>
-                <Text style={{ fontSize: 18, fontFamily: 'Gilroy-Bold', color: theme.colors.purple, marginTop: '3%', marginLeft: '30%' }}>Recharge</Text>
-            </View> */}
+        <View style={{ flex: 1, width: '100%', alignItems: 'center', backgroundColor: theme.colors.white }}>
             <View style={{ flex: 1, width: "100%", alignItems: 'center', justifyContent: 'space-between', }}>
-                <ScrollView style={{ width: '100%' }} contentContainerStyle={{ alignItems: 'center' }}>
-                    <View style={{ width: "100%", alignItems: 'center' }}>
-                        <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: '10%' }}>
-                            <TouchableOpacity onPress={() => { setPrice(7); setCoins(100000) }} style={{ padding: "5%", width: '48%', alignItems: 'center', backgroundColor: price === 7 ? 'rgba(128, 0, 128, 0.3)' : 'rgba(255, 255, 255, 0.3)', borderRadius: 15 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'center' }}>
-                                    <Image source={require('../assets/images/crown.png')} style={{ height: 20, width: 20 }} />
-                                    <Text style={{ paddingLeft: 5, fontSize: 18, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, maxWidth: '90%', textAlign: 'center' }}>100,000</Text>
+                <View style={{ width: "100%", alignItems: 'center' }}>
+                    {planData.map((item) => (
+                        <TouchableOpacity onPress={() => { handleAlert(item.amount, item.coins); }} style={{ width: '100%', alignItems: 'center' }}>
+                            <LinearGradient colors={['skyblue', theme.colors.blue]}
+                                start={{ x: 0, y: 0.5 }}
+                                end={{ x: 1, y: 0 }}
+                                style={{ width: '90%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: theme.colors.purple, padding: '8%', borderRadius: 20, marginTop: '5%' }}>
+                                <View style={{ width: '48%', alignItems: 'flex-start' }}>
+                                    <Text style={{ fontSize: 16, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, lineHeight: 20, textAlign: 'left' }}>Nfuc: {item.coins}</Text>
+                                    <Text style={{ fontSize: 16, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, lineHeight: 20, textAlign: 'left' }}>The amount staked: ${item.amount}</Text>
+                                    <View style={{ padding: 10, borderRadius: 100, backgroundColor: theme.colors.lightBlue, marginTop: 10 }}>
+                                        <Text style={{ color: theme.colors.white, fontSize: 14, fontFamily: 'Gilroy-SemiBold' }}>Buy Now</Text>
+                                    </View>
                                 </View>
-                                <Text style={{ paddingLeft: 5, fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.darkGrey, paddingTop: '5%' }}>$ 7</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => { setPrice(21); setCoins(300000) }} style={{ padding: "5%", width: '48%', alignItems: 'center', backgroundColor: price === 21 ? 'rgba(128, 0, 128, 0.3)' : 'rgba(255, 255, 255, 0.3)', borderRadius: 15 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'center' }}>
-                                    <Image source={require('../assets/images/crown.png')} style={{ height: 20, width: 20 }} />
-                                    <Text style={{ paddingLeft: 5, fontSize: 18, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, maxWidth: '90%', textAlign: 'center' }}>300,000</Text>
+                                <View style={{ width: '48%', alignItems: 'center' }}>
+                                    <Image source={require('../assets/images/robot.png')} style={{ height: 80, width: 80 }} />
                                 </View>
-                                <Text style={{ paddingLeft: 5, fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.darkGrey, paddingTop: '5%' }}>$ 21</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: '5%' }}>
-                            <TouchableOpacity onPress={() => { setPrice(63); setCoins(900000) }} style={{ padding: "5%", width: '48%', alignItems: 'center', backgroundColor: price === 63 ? 'rgba(128, 0, 128, 0.3)' : 'rgba(255, 255, 255, 0.3)', borderRadius: 15 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'center' }}>
-                                    <Image source={require('../assets/images/crown.png')} style={{ height: 20, width: 20 }} />
-                                    <Text style={{ paddingLeft: 5, fontSize: 18, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, maxWidth: '90%', textAlign: 'center' }}>900,000</Text>
-                                </View>
-                                <Text style={{ paddingLeft: 5, fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.darkGrey, paddingTop: '5%' }}>$ 63</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => { setPrice(189); setCoins(2700000) }} style={{ padding: "5%", width: '48%', alignItems: 'center', backgroundColor: price === 189 ? 'rgba(128, 0, 128, 0.3)' : 'rgba(255, 255, 255, 0.3)', borderRadius: 15 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'center' }}>
-                                    <Image source={require('../assets/images/crown.png')} style={{ height: 20, width: 20 }} />
-                                    <Text style={{ paddingLeft: 5, fontSize: 18, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, maxWidth: '90%', textAlign: 'center' }}>2,700,000</Text>
-                                </View>
-                                <Text style={{ paddingLeft: 5, fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.darkGrey, paddingTop: '5%' }}>$ 189</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: '5%' }}>
-                            <TouchableOpacity onPress={() => { setPrice(567); setCoins(8100000) }} style={{ padding: "5%", width: '48%', alignItems: 'center', backgroundColor: price === 567 ? 'rgba(128, 0, 128, 0.3)' : 'rgba(255, 255, 255, 0.3)', borderRadius: 15 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'center' }}>
-                                    <Image source={require('../assets/images/crown.png')} style={{ height: 20, width: 20 }} />
-                                    <Text style={{ paddingLeft: 5, fontSize: 18, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, maxWidth: '90%', textAlign: 'center' }}>8,100,000</Text>
-                                </View>
-                                <Text style={{ paddingLeft: 5, fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.darkGrey, paddingTop: '5%' }}>$ 567</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    <View style={{ marginTop: "20%", width: '100%', alignItems: 'center' }}>
-                        <Button backgroundColor={theme.colors.purple} text="Recharge" onPress={() => {
-                            handleNavigation();
-                        }} />
-                    </View>
-                </ScrollView>
+                            </LinearGradient>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+                <View style={{ marginTop: "5%", width: '100%', alignItems: 'center' }}>
+                    <Button backgroundColor={theme.colors.lightBlue} text="Recharge" onPress={() => {
+                        handleNavigation();
+                    }} />
+                </View>
             </View>
-            {/* <Modal
+            <CustomAlert
+                visible={showAlert}
+                onCancel={() => setShowAlert(false)}
+                title={`Amount ${price}$`}
+                message={`Are you sure to buy ${coins} Nfuc`}
+                onConfirm={handleConfirm}
+                loading={loading}
+            />
+            <Modal
                 animationType="fade"
                 transparent={true}
                 visible={modalVisible}
-                onRequestClose={() => {
-                    // handleBackButton();
-                    setModalVisible(!modalVisible);
-                }}
             >
-                <Pressable onPress={() => setModalVisible(!modalVisible)} style={{ flex: 1, width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.55)', justifyContent: 'flex-end' }}>
-                    <View style={{ backgroundColor: theme.colors.lightPink, height: '50%', borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
+                <TouchableOpacity onPress={() => setModalVisible(false)} style={{ flex: 1, width: "100%", alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ width: '80%', flexDirection: 'column', alignItems: 'center', backgroundColor: theme.colors.white, borderRadius: 30, padding: '5%', paddingTop: '15%', paddingBottom: '15%' }}>
+                        <FastImage source={require('../assets/images/tick.gif')} style={{ height: 100, width: 100 }} />
+                        <Text style={{ fontSize: 20, fontFamily: 'Gilroy-Bold', color: theme.colors.black }}>Success</Text>
                     </View>
-                </Pressable>
-            </Modal> */}
+                </TouchableOpacity>
+            </Modal>
         </View>
     )
 }

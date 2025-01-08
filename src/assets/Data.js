@@ -315,8 +315,8 @@ export const sendEmail = async (email, subject, text) => {
     const emailData = {
         email: email,
         text: text,
-        subject: subject, 
-        
+        subject: subject,
+
     };
 
     try {
@@ -462,5 +462,30 @@ export const UsdtMenu = (props) => {
     )
 }
 
-// ca-app-pub-1125964563702406~7565257761
-// ca-app-pub-1125964563702406/6295444098
+export const planData = [
+    {
+        id: 0,
+        coins: 70,
+        amount: 7
+    },
+    {
+        id: 1,
+        coins: 210,
+        amount: 21
+    },
+    {
+        id: 2,
+        coins: 630,
+        amount: 63
+    },
+    {
+        id: 3,
+        coins: 1890,
+        amount: 189
+    },
+    {
+        id: 4,
+        coins: 5670,
+        amount: 567
+    },
+]

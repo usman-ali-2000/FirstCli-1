@@ -45,8 +45,8 @@ const BottomNav = () => {
           setModalVisible(!modalVisible);
         }}
       >
-        <Pressable onPress={() => setModalVisible(!modalVisible)} 
-        style={{ flex: 1, width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.55)', justifyContent: 'flex-end' }}
+        <Pressable onPress={() => setModalVisible(!modalVisible)}
+          style={{ flex: 1, width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.55)', justifyContent: 'flex-end' }}
         >
           <View style={{ backgroundColor: theme.colors.white, height: '50%', borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
             <BackgroundTimerExample onCancel={() => setModalVisible(!modalVisible)} />
@@ -75,17 +75,17 @@ const BottomNav = () => {
               fontSize: 12,
               fontFamily: "OpenSans-Regular",
             },
-            tabBarActiveBackgroundColor: theme.colors.lightPink,
-            tabBarInactiveBackgroundColor: theme.colors.lightPink,
+            tabBarActiveBackgroundColor: theme.colors.white,
+            tabBarInactiveBackgroundColor: theme.colors.white,
             tabBarActiveTintColor: theme.colors.purple,
             tabBarIcon: ({ focused }) => (
               <View style={{ alignItems: "center" }}>
-                <Icon name="home" size={28} color={focused ? theme.colors.purple : theme.colors.white} />
+                <Icon name="home" size={28} color={focused ? theme.colors.purple : theme.colors.darkGrey} />
                 <Text
                   style={{
                     fontSize: 12,
                     fontFamily: "Gilroy-SemiBold",
-                    color: focused ? theme.colors.purple : theme.colors.white,
+                    color: focused ? theme.colors.purple : theme.colors.darkGrey,
                   }}>
                   Home
                 </Text>
@@ -103,17 +103,17 @@ const BottomNav = () => {
               fontSize: 12,
               fontFamily: "OpenSans-Regular",
             },
-            tabBarActiveBackgroundColor: theme.colors.lightPink,
-            tabBarInactiveBackgroundColor: theme.colors.lightPink,
-            tabBarActiveTintColor: theme.colors.purple,
+            tabBarActiveBackgroundColor: theme.colors.white,
+            tabBarInactiveBackgroundColor: theme.colors.white,
+            tabBarActiveTintColor: theme.colors.white,
             tabBarIcon: ({ focused }) => (
               <View style={{ alignItems: "center" }}>
-                <MaterialIcon name="attribution" size={28} color={focused ? theme.colors.purple : theme.colors.white} />
+                <MaterialIcon name="attribution" size={28} color={focused ? theme.colors.purple : theme.colors.darkGrey} />
                 <Text
                   style={{
                     fontSize: 12,
                     fontFamily: "Gilroy-SemiBold",
-                    color: focused ? theme.colors.purple : theme.colors.white,
+                    color: focused ? theme.colors.purple : theme.colors.darkGrey,
                   }}>
                   Friends
                 </Text>
@@ -131,9 +131,9 @@ const BottomNav = () => {
               fontSize: 12,
               fontFamily: "OpenSans-Regular",
             },
-            tabBarActiveBackgroundColor: theme.colors.lightPink,
-            tabBarInactiveBackgroundColor: theme.colors.lightPink,
-            tabBarActiveTintColor: theme.colors.purple,
+            tabBarActiveBackgroundColor: theme.colors.white,
+            tabBarInactiveBackgroundColor: theme.colors.white,
+            tabBarActiveTintColor: theme.colors.white,
             tabBarIcon: ({ focused }) => (
               <TouchableOpacity onPress={() => setModalVisible(true)} style={{ alignItems: "center", height: 60, width: 60, backgroundColor: theme.colors.purple, alignItems: 'center', justifyContent: 'center', marginBottom: 50, borderRadius: 100, borderWidth: 2, borderColor: theme.colors.white }}>
                 <MaterialIcon name="rocket-launch" size={36} color={theme.colors.white} />
@@ -151,17 +151,17 @@ const BottomNav = () => {
               fontSize: 12,
               fontFamily: "OpenSans-Regular",
             },
-            tabBarActiveBackgroundColor: theme.colors.lightPink,
-            tabBarInactiveBackgroundColor: theme.colors.lightPink,
-            tabBarActiveTintColor: theme.colors.purple,
+            tabBarActiveBackgroundColor: theme.colors.white,
+            tabBarInactiveBackgroundColor: theme.colors.white,
+            tabBarActiveTintColor: theme.colors.white,
             tabBarIcon: ({ focused }) => (
               <View style={{ alignItems: "center" }}>
-                <MaterialIcon name="assignment" size={26} color={focused ? theme.colors.purple : theme.colors.white} />
+                <MaterialIcon name="assignment" size={26} color={focused ? theme.colors.purple : theme.colors.darkGrey} />
                 <Text
                   style={{
                     fontSize: 12,
                     fontFamily: "Gilroy-SemiBold",
-                    color: focused ? theme.colors.purple : theme.colors.white,
+                    color: focused ? theme.colors.purple : theme.colors.darkGrey,
                   }}>
                   Plan
                 </Text>
@@ -179,17 +179,17 @@ const BottomNav = () => {
               fontSize: 12,
               fontFamily: "OpenSans-Regular",
             },
-            tabBarActiveBackgroundColor: theme.colors.lightPink,
-            tabBarInactiveBackgroundColor: theme.colors.lightPink,
-            tabBarActiveTintColor: theme.colors.purple,
+            tabBarActiveBackgroundColor: theme.colors.white,
+            tabBarInactiveBackgroundColor: theme.colors.white,
+            tabBarActiveTintColor: theme.colors.white,
             tabBarIcon: ({ focused }) => (
               <View style={{ alignItems: "center" }}>
-                <MaterialIcon name="ads-click" size={28} color={focused ? theme.colors.purple : theme.colors.white} />
+                <MaterialIcon name="ads-click" size={28} color={focused ? theme.colors.purple : theme.colors.darkGrey} />
                 <Text
                   style={{
                     fontSize: 12,
                     fontFamily: "Gilroy-SemiBold",
-                    color: focused ? theme.colors.purple : theme.colors.white,
+                    color: focused ? theme.colors.purple : theme.colors.darkGrey,
                   }}>
                   Leadership
                 </Text>

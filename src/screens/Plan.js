@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Alert, FlatList, Image, Linking, Text, ToastAndroid, View } from "react-native";
+import { ActivityIndicator, Alert, FlatList, Image, Linking, ScrollView, Text, ToastAndroid, View } from "react-native";
 import theme from "../Theme/GlobalTheme";
 import { TouchableOpacity } from "react-native";
 import NetInfo from '@react-native-community/netinfo';
@@ -201,29 +201,31 @@ export default function Plan({ navigation }) {
     }
 
     return (
-        <LinearGradient colors={[theme.colors.lightPink, theme.colors.lightPink, theme.colors.lightPink,]} style={{ width: '100%', flex: 1, alignItems: 'center' }}>
-            <Text style={{ color: theme.colors.purple, width: "90%", fontSize: 22, fontFamily: "Gilroy-SemiBold", marginTop: '10%', }}>Plans</Text>
-            <View style={{ flex: 1, width: '100%', alignItems: 'center' }}>
-                <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors.purple, backgroundColor: theme.colors.white, height: 50, borderRadius: 12, marginTop: '10%' }}>
-                    <TouchableOpacity onPress={() => setSelect(1)} style={{ width: '50%', alignItems: 'center', justifyContent: 'center', backgroundColor: select === 1 ? theme.colors.purple : theme.colors.white, height: 50, borderRadius: 12 }}>
-                        <Text style={{ fontSize: 16, fontFamily: 'Gilroy-SemiBold', color: select === 1 ? theme.colors.white : theme.colors.purple }}>Non - Working</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setSelect(2)} style={{
-                        width: '50%', alignItems: 'center', justifyContent: 'center', backgroundColor: select === 2 ? theme.colors.purple : theme.colors.white
-                        , height: 50, borderRadius: 12
-                    }}>
-                        <Text style={{ fontSize: 16, fontFamily: 'Gilroy-SemiBold', color: select === 2 ? theme.colors.white : theme.colors.purple }}>Working</Text>
-                    </TouchableOpacity>
-                </View>
+        <LinearGradient colors={[theme.colors.white, theme.colors.white, theme.colors.white,]} style={{ width: '100%', flex: 1, alignItems: 'center' }}>
+            <ScrollView style={{ width: '100%' }} contentContainerStyle={{ alignItems: 'center', paddingBottom: '10%' }}>
+                <Text style={{ color: theme.colors.black, width: "90%", fontSize: 22, fontFamily: "Gilroy-SemiBold", marginTop: '10%', }}>Plans</Text>
                 <View style={{ flex: 1, width: '100%', alignItems: 'center' }}>
-                    {loading ? <ActivityIndicator size={"large"} color={theme.colors.purple} style={{ marginTop: '50%' }} /> : (
-                        accType === "fresh" ? <Working type={select === 1 ? 'non-working' : select === 2 ? 'working' : 'fresh'} /> :
-                            accType === "non-working" && select === 1 ? <Working type={select === 1 ? 'non-working' : select === 2 ? 'working' : 'fresh'} /> :
-                                accType === "working" && select === 2 ? <Working type={select === 1 ? 'non-working' : select === 2 ? 'working' : 'fresh'} /> :
-                                    <Text style={{ fontSize: 20, fontFamily: 'Gilroy-SemiBold', color: theme.colors.purple, marginTop: '50%', textAlign: 'center', width: '90%' }}>Your account is {accType}. Use other email to get this.</Text>
-                    )}
+                    <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors.purple, backgroundColor: theme.colors.white, height: 50, borderRadius: 12, marginTop: '10%' }}>
+                        <TouchableOpacity onPress={() => setSelect(1)} style={{ width: '50%', alignItems: 'center', justifyContent: 'center', backgroundColor: select === 1 ? theme.colors.lightBlue : theme.colors.white, height: 50, borderRadius: 50 }}>
+                            <Text style={{ fontSize: 16, fontFamily: 'Gilroy-SemiBold', color: select === 1 ? theme.colors.white : theme.colors.lightBlue }}>Non - Working</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => setSelect(2)} style={{
+                            width: '50%', alignItems: 'center', justifyContent: 'center', backgroundColor: select === 2 ? theme.colors.lightBlue : theme.colors.white
+                            , height: 50, borderRadius: 50
+                        }}>
+                            <Text style={{ fontSize: 16, fontFamily: 'Gilroy-SemiBold', color: select === 2 ? theme.colors.white : theme.colors.lightBlue }}>Working</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ flex: 1, width: '100%', alignItems: 'center' }}>
+                        {loading ? <ActivityIndicator size={"large"} color={theme.colors.blue} style={{ marginTop: '50%' }} /> : (
+                            accType === "fresh" ? <Working type={select === 1 ? 'non-working' : select === 2 ? 'working' : 'fresh'} /> :
+                                accType === "non-working" && select === 1 ? <Working type={select === 1 ? 'non-working' : select === 2 ? 'working' : 'fresh'} /> :
+                                    accType === "working" && select === 2 ? <Working type={select === 1 ? 'non-working' : select === 2 ? 'working' : 'fresh'} /> :
+                                        <Text style={{ fontSize: 20, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, marginTop: '50%', textAlign: 'center', width: '90%' }}>Your account is {accType}. Use other email to get this.</Text>
+                        )}
+                    </View>
                 </View>
-            </View>
+            </ScrollView>
         </LinearGradient>
     )
 }

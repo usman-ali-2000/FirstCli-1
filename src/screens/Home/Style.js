@@ -49,10 +49,10 @@ const Styles = {
         padding: 5,
         paddingLeft: 15,
         alignItems: 'center',
-        width: width-(width*0.13),
+        width: width-(width*0.10),
     },
     image: {
-        width: width-(width*0.15),
+        width: width-(width*0.12),
         height: 120,
         borderRadius: 15,
     },

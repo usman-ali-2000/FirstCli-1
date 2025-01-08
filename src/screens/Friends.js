@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Dimensions, FlatList, Image, Text, ToastAndroid, View } from "react-native";
+import { ActivityIndicator, Dimensions, FlatList, Image, ScrollView, Text, ToastAndroid, View } from "react-native";
 import theme from "../Theme/GlobalTheme";
 import { TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -18,6 +18,7 @@ export default function Friends() {
     const [loading, setLoading] = useState(false);
     const [coins, setCoins] = useState(null);
     const [assets, setAssets] = useState({});
+    const [generatedId, setGeneratedId] = useState('');
 
 
     const fetchData = async () => {
@@ -53,9 +54,15 @@ export default function Friends() {
         }
     }
 
+    const getGeneratedId = async () => {
+        const id = await AsyncStorage.getItem("generatedId");
+        setGeneratedId(id);
+    }
+
     useEffect(() => {
         fetchData();
         fetchReferCoin();
+        getGeneratedId();
     }, []);
 
     const shareWithOptions = async () => {
@@ -76,11 +83,10 @@ export default function Friends() {
     };
 
 
-    const copyToClipboard = async () => {
+    const copyToClipboard = async (text) => {
 
-        const id = await AsyncStorage.getItem("generatedId");
-        const textToCopy = `Here is an interesting link ${assets?.appIcon} for you. with referal id ${id}`;
-        Clipboard.setString(textToCopy);
+        // const textToCopy = `Here is an interesting link ${assets?.appIcon} for you. with referal id ${id}`;
+        Clipboard.setString(text);
         ToastAndroid.show('Copied to clipboard', ToastAndroid.SHORT);
     };
 
@@ -103,7 +109,7 @@ export default function Friends() {
                         renderItem={({ item, index }) => (
                             <View style={{ flexDirection: 'row', alignItems: "center", width: '100%', marginTop: '5%' }}>
                                 <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.black, fontFamily: 'Gilroy-SemiBold', paddingLeft: '2%', marginRight: '2%', width: '15%' }}>{index + 1}</Text>
-                                <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.black, fontFamily: 'Gilroy-SemiBold', paddingLeft: '2%', width:'85%' }}>{item.name}</Text>
+                                <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.black, fontFamily: 'Gilroy-SemiBold', paddingLeft: '2%', width: '85%' }}>{item.name}</Text>
                             </View>
                         )} />}
                 </View>
@@ -136,9 +142,10 @@ export default function Friends() {
     return (
         <LinearGradient colors={[theme.colors.white, theme.colors.white, theme.colors.white,]} style={{ width: '100%', flex: 1 }}>
             <View style={{ flex: 1, width: '100%', alignItems: 'center' }}>
-                <Text style={{ color: theme.colors.black, textAlign: 'center', width: "90%", fontSize: 20, fontFamily: "Gilroy-SemiBold", marginTop: '20%' }}>Invite Friends <Image source={require('../assets/images/friend.png')} style={{ height: 20, width: 20 }} /> & Get Rewards</Text>
-                <Text style={{ color: theme.colors.black, textAlign: 'center', width: "90%", fontSize: 14, fontFamily: "Gilroy-Mediums",textDecorationStyle:'solid' }}>Invite Friends and get 50 coins for each</Text>
-                <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors, backgroundColor: theme.colors.white, height: 50, borderRadius: 12, marginTop: '10%' }}>
+                <ScrollView style={{ width: '100%' }} contentContainerStyle={{ alignItems: 'center' }}>
+                    <Text style={{ color: theme.colors.black, textAlign: 'center', width: "90%", fontSize: 20, fontFamily: "Gilroy-SemiBold", marginTop: '20%' }}>Invite Friends <Image source={require('../assets/images/friend.png')} style={{ height: 20, width: 20 }} /> & Get Rewards</Text>
+                    <Text style={{ color: theme.colors.black, textAlign: 'center', width: "90%", fontSize: 14, fontFamily: "Gilroy-Mediums", textDecorationStyle: 'solid' }}>Invite Friends and get upto 7% Nfuc for each</Text>
+                    {/* <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors, backgroundColor: theme.colors.white, height: 50, borderRadius: 12, marginTop: '10%' }}>
                     <TouchableOpacity onPress={() => setSelect(1)} style={{
                         width: '50%', alignItems: 'center', justifyContent: 'center', backgroundColor: select === 1 ? theme.colors.purple : theme.colors.white, height: 50, borderRadius: 12
                     }}>
@@ -150,9 +157,31 @@ export default function Friends() {
                     }}>
                         <Text style={{ fontSize: 20, fontFamily: 'Gilroy-SemiBold', color: select === 2 ? theme.colors.white : theme.colors.purple }}>Coins</Text>
                     </TouchableOpacity>
-                </View>
-                {select === 1 && <Friends />}
-                {select === 2 && <Coins />}
+                </View> */}
+                    {/* {select === 1 && <Friends />}
+                {select === 2 && <Coins />} */}
+                    <View style={{ width: '100%', alignItems: 'center' }}>
+                        <LinearGradient colors={[theme.colors.purple, '#662d91']}
+                            start={{ x: 0, y: 0.5 }}
+                            end={{ x: 1, y: 0 }}
+                            style={{ width: '90%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: theme.colors.purple, padding: '8%', borderRadius: 15, marginTop: '5%' }}>
+                            <View style={{ width: '70%', alignItems: 'flex-start' }}>
+                                <Text style={{ fontSize: 22, fontFamily: 'Gilroy-SemiBold', color: theme.colors.white, textAlign: 'left', lineHeight: 30 }}>Invite friends to get it Upto 7% Rebates</Text>
+                            </View>
+                            <View style={{ width: '30%', alignItems: 'center' }}>
+                                <Image source={require('../assets/images/robot.png')} style={{ height: 80, width: 80 }} />
+                            </View>
+                        </LinearGradient>
+                    </View>
+                    <TouchableOpacity onPress={() => copyToClipboard(assets.appIcon)} style={{ backgroundColor: theme.colors.lightGrey, padding: 10, flexDirection: 'row', alignItems: 'center', width: '90%', borderRadius: 20, marginTop: '10%' }}>
+                        <Text style={{ width: '90%', fontSize: 13, color: theme.colors.black }}>{assets.appIcon}</Text>
+                        <Icon name="copy" size={16} color={theme.colors.darkGrey} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => copyToClipboard(generatedId)} style={{ backgroundColor: theme.colors.lightGrey, padding: 10, flexDirection: 'row', alignItems: 'center', width: '90%', borderRadius: 20, marginTop: '5%' }}>
+                        <Text style={{ width: '90%', fontSize: 13, color: theme.colors.black }}>{generatedId}</Text>
+                        <Icon name="copy" size={16} color={theme.colors.darkGrey} />
+                    </TouchableOpacity>
+                </ScrollView>
             </View>
         </LinearGradient>
     )

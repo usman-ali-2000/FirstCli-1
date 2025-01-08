@@ -45,6 +45,7 @@ import History from './src/screens/History';
 import Notification from './src/screens/Notification';
 import Help from './src/screens/Help';
 import CustomAlert from './src/components/CustomAlert';
+import Deposit from './src/screens/Depost';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -247,6 +248,11 @@ const App = () => {
           <Stack.Screen
             name='Help'
             component={Help}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='Deposit'
+            component={Deposit}
             options={{ headerShown: false }}
           />
           {/* <Stack.Screen
