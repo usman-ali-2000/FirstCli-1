@@ -117,10 +117,10 @@ const MyDrawer = () => {
               <MaterialIcon name="wallet" size={26} color={theme.colors.darkGrey} />
               <Text style={{ fontSize: 16, color: theme.colors.darkGrey, marginLeft: '5%', fontFamily: 'Gilroy-SemiBold' }}>Wallet</Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity onPress={() => navigation.navigate('ManageCoin', { type: 'nfuc' })} style={{ flexDirection: 'row', alignItems: 'center', width: '100%', padding: '5%', }}>
+            <TouchableOpacity onPress={() => navigation.navigate('ManageCoin', { type: 'nfuc' })} style={{ flexDirection: 'row', alignItems: 'center', width: '100%', padding: '5%', }}>
               <Icon name="share" size={24} color={theme.colors.darkGrey} />
               <Text style={{ fontSize: 16, color: theme.colors.darkGrey, marginLeft: '5%', fontFamily: 'Gilroy-SemiBold' }}>Share Nfuc</Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Help')} style={{ flexDirection: 'row', alignItems: 'center', width: '100%', padding: '5%', }}>
               <MaterialIcon name="help" size={26} color={theme.colors.darkGrey} />
               <Text style={{ fontSize: 16, color: theme.colors.darkGrey, marginLeft: '5%', fontFamily: 'Gilroy-SemiBold' }}>Help / Support</Text>

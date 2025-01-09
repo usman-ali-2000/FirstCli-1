@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Image, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import LoginInput from "../components/LoginInput";
 import theme from "../Theme/GlobalTheme";
 import Button from "../components/Button";
@@ -57,26 +57,26 @@ export default function Login({ navigation }) {
 
     const generateUniqueId = async () => {
         try {
-          const date = new Date();
-          const dateString = date.toISOString().slice(2, 10).replace(/-/g, ''); // YYMMDD format
-      
-          // Atomically increment the count for the current date
-          const counter = await AdminRegister.findOneAndUpdate(
-            { date: dateString }, // Find document by today's date
-            { $inc: { count: 1 } }, // Increment the `count` field
-            { new: true, upsert: true } // Create a new document if it doesn't exist
-          );
-      
-          // Generate the unique ID using the count
-          const uniqueId = `${dateString}${String(counter.count).padStart(3, '0')}`;
-      
-          return uniqueId;
+            const date = new Date();
+            const dateString = date.toISOString().slice(2, 10).replace(/-/g, ''); // YYMMDD format
+
+            // Atomically increment the count for the current date
+            const counter = await AdminRegister.findOneAndUpdate(
+                { date: dateString }, // Find document by today's date
+                { $inc: { count: 1 } }, // Increment the `count` field
+                { new: true, upsert: true } // Create a new document if it doesn't exist
+            );
+
+            // Generate the unique ID using the count
+            const uniqueId = `${dateString}${String(counter.count).padStart(3, '0')}`;
+
+            return uniqueId;
         } catch (error) {
-          console.error("Error generating unique ID:", error);
-          throw error;
+            console.error("Error generating unique ID:", error);
+            throw error;
         }
-      };
-      
+    };
+
 
     const handleSubmit = async () => {
         setLoading(true);
@@ -131,8 +131,9 @@ export default function Login({ navigation }) {
 
     return (
         <View style={{ flex: 1, width: '100%', justifyContent: 'space-between', backgroundColor: theme.colors.white, alignItems: 'center' }}>
-            <View style={{ width: '100%', alignItems: 'center', marginTop: '50%', }}>
-                <LoginInput text="Email" placeholder="Enter Your Email" value={email} onChangeText={(text) => setEmail(text)} backgroundColor={theme.colors.lightGrey}/>
+            <View style={{ width: '100%', alignItems: 'center', marginTop: '30%', }}>
+                <Image source={require('../assets/images/sign-in.png')} style={{ height: 150, width: 150, marginTop: '5%' }} />
+                <LoginInput text="Email" placeholder="Enter Your Email" value={email} onChangeText={(text) => setEmail(text)} backgroundColor={theme.colors.lightGrey} />
                 <LoginInput text="Password" placeholder="Enter Your Password" secureTextEntry={true} value={password} onChangeText={(text) => setPassword(text)} backgroundColor={theme.colors.lightGrey} />
                 <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')} style={{ width: '90%', alignItems: 'flex-end', marginTop: '2%' }}>
                     <Text style={{ color: theme.colors.jetBlack, fontSize: 15, textDecorationLine: 'underline' }}>forgot password</Text>
@@ -142,7 +143,6 @@ export default function Login({ navigation }) {
                 <View style={{ width: '100%', alignItems: 'center', marginTop: '10%', marginBottom: '5%' }}>
                     {loading ? <ActivityIndicator size={"small"} color={theme.colors.purple} /> : <Button backgroundColor={theme.colors.purple} text="Login" onPress={handleSubmit} />}
                 </View>
-
                 <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={{ alignSelf: 'center', marginRight: '5%', marginBottom: '10%', justifyContent: 'flex-end' }}>
                     <Text style={{ color: theme.colors.purple, fontSize: 16, fontWeight: 'bold', textDecorationLine: 'underline' }}>SignUp</Text>
                 </TouchableOpacity>

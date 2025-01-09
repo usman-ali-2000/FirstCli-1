@@ -112,6 +112,7 @@ export default function Payment({ navigation, route }) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data),
+                
             });
 
             const result = await response.json();

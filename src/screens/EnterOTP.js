@@ -10,7 +10,6 @@ const CELL_COUNT = 6;
 const EnterOTP = ({ navigation, route }) => {
 
   const name = route.params.name;
-  const phone = route.params.phone;
   const email = route.params.email;
   const password = route.params.password;
   const otp = route.params.otp;
@@ -22,7 +21,7 @@ const EnterOTP = ({ navigation, route }) => {
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({ value, setValue });
 
   useEffect(() => {
-    console.log('data:', name, email, phone, password, typeof (otp.toString()), typeof (value));
+    console.log('data:', name, email, password, typeof (otp.toString()), typeof (value));
   }, []);
 
   const handleSubmit = async () => {
@@ -37,7 +36,6 @@ const EnterOTP = ({ navigation, route }) => {
 
     const data = {
       name,
-      phone: Number(phone),
       email,
       userId: referalId,
       password,

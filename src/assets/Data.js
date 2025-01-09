@@ -168,9 +168,8 @@ export const addAttempt = async (attempt, date) => {
 
 
 export const transferNfuc = async (senderId, receiverId, coins) => {
-    const url = `${BaseUrl}/transfer-nfuc`;
 
-    // const url = `http://192.168.100.14:8000/transfer-nfuc`;
+    const url = `${BaseUrl}/transfer-nfuc`;
 
     try {
         const response = await fetch(url, {
@@ -191,19 +190,26 @@ export const transferNfuc = async (senderId, receiverId, coins) => {
         if (response.ok) {
             console.log('Transfer successful!');
             Alert.alert('Tranfer Successfull');
+            return true;
         } else {
-            console.error('Transfer failed:', data);
+            console.log('Transfer failed:', data);
+            return false;
         }
     } catch (error) {
         console.error('Error:', error);
+        return false;
     }
 };
 
 
-export const withdraw = async (senderId, receiverId, amount, address) => {
+export const withdraw = async (senderId, receiverId, amount, address, account) => {
+
     const url = `${BaseUrl}/transhistory`;
 
-    // const url = `http://192.168.100.14:8000/transfer-nfuc`;
+    if (!senderId || !receiverId || !amount || !address || !account) {
+        ToastAndroid.show('All fields are mandatory', ToastAndroid.SHORT);
+        return false;
+    }
 
     try {
         const response = await fetch(url, {
@@ -215,7 +221,8 @@ export const withdraw = async (senderId, receiverId, amount, address) => {
                 sender: senderId,
                 receiver: receiverId,
                 usdt: amount,
-                address: address
+                address: address,
+                account: account
             }),
         });
 
@@ -225,11 +232,14 @@ export const withdraw = async (senderId, receiverId, amount, address) => {
         if (response.ok) {
             console.log('Withdraw request successful!');
             Alert.alert('Withdraw request sent Successfull');
+            return true;
         } else {
             console.error('Withdraw failed:', data);
+            return false;
         }
     } catch (error) {
         console.error('Error:', error);
+        return false;
     }
 };
 
