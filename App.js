@@ -46,6 +46,8 @@ import Notification from './src/screens/Notification';
 import Help from './src/screens/Help';
 import CustomAlert from './src/components/CustomAlert';
 import Deposit from './src/screens/Depost';
+import Guide from './src/screens/Guide';
+import AboutUs from './src/screens/AboutUs';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -256,76 +258,16 @@ const App = () => {
             component={Deposit}
             options={{ headerShown: false }}
           />
-          {/* <Stack.Screen
-          name='Detail'
-          component={Detail}
-          options={{ headerShown: false }}
-        /> */}
-          {/* <Stack.Screen
-          name='Card'
-          component={Card}
-          options={{ headerShown: false }}
-        /> */}
-          {/* <Stack.Screen
-          name='CardDetail'
-          component={CardDetail}
-          options={{ headerShown: false }}
-        /> */}
-          {/* <Stack.Screen
-          name='Forums'
-          component={Forums}
-          options={{ headerShown: false }}
-        /> */}
-          {/* <Stack.Screen
-          name='Surveys'
-          component={Surveys}
-          options={{ headerShown: false }}
-        /> */}
-          {/* <Stack.Screen
-          name='NewsFeed'
-          component={NewsFeed}
-          options={{ headerShown: false }}
-        /> */}
-          {/* <Stack.Screen
-          name='Settings'
-          component={Settings}
-          options={{ headerShown: false }}
-        /> */}
-          {/* <Stack.Screen
-          name='PrivacyPolicy'
-          component={PriavcyPolicy}
-          options={{ headerShown: false }}
-        /> */}
-          {/* <Stack.Screen
-          name='Terms'
-          component={Terms}
-          options={{ headerShown: false }}
-        /> */}
-          {/* <Stack.Screen
-          name='ContactUs'
-          component={ContactUs}
-          options={{ headerShown: false }}
-        /> */}
-          {/* <Stack.Screen
-          name='AddCategory'
-          component={AddCategory}
-          options={{ headerShown: false }}
-        /> */}
-          {/* <Stack.Screen
-          name='Product'
-          component={Product}
-          options={{ headerShown: false }}
-        /> */}
-          {/* <Stack.Screen
-          name='ProductView'
-          component={ProductView}
-          options={{ headerShown: false }}
-        /> */}
-          {/* <Stack.Screen
-          name='MyOrders'
-          component={MyOrders}
-          options={{ headerShown: false }}
-        /> */}
+          <Stack.Screen
+            name='Guide'
+            component={Guide}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='AboutUs'
+            component={AboutUs}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </MenuProvider>

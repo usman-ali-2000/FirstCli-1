@@ -110,7 +110,7 @@ export default function SignUp({ navigation }) {
             <ScrollView style={{ width: '100%', paddingTop: '10%' }} contentContainerStyle={{ alignItems: 'center', paddingBottom: '5%' }}>
                 <Text style={{ fontSize: 28, fontFamily: 'Gilroy-Bold', color: theme.colors.black }}>Signup new account</Text>
                 <Text style={{ fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.darkGrey, marginLeft: '2%', marginTop: '5%' }}>Your Connection is secure with us</Text>
-                <Image source={require('../assets/images/evaluation.png')} style={{ height: 100, width: 100, marginTop:'5%' }} />
+                <Image source={require('../assets/images/evaluation.png')} style={{ height: 100, width: 100, marginTop: '5%' }} />
                 <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center', paddingBottom: '5%' }}>
                     <LoginInput text="Name" placeholder="Enter Your Name" value={name} onChangeText={(text) => setName(text)} backgroundColor={theme.colors.lightGrey} />
                     {/* <LoginInput text="Phone" placeholder="Enter Your Phone Number" value={phone} onChangeText={(text) => setPhone(text)} keyboardType="numeric" backgroundColor={theme.colors.lightGrey} /> */}

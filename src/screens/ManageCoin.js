@@ -166,9 +166,11 @@ export default function ManageCoin({ navigation, route }) {
                 <Text style={{ fontSize: 20, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, marginLeft: '10%' }}>{types}</Text>
             </View>
             <ScrollView style={{ width: '100%' }} contentContainerStyle={{ alignItems: 'center' }}>
-                {types === 'nfuc' && <Nfuc />}
+                {/* {types === 'nfuc' && <Nfuc />}
                 {types === 'wx' && <Wx />}
-                {types === 'usdt' && <Usdt />}
+                {types === 'usdt' && <Usdt />} */}
+                <Text style={{ fontSize: 18, fontFamily: 'Gilroy-Bold', color: theme.colors.purple, marginTop: '70%' }}>Coming Up on</Text>
+                <Text style={{ fontSize: 18, fontFamily: 'Gilroy-SemiBold', color: theme.colors.black, marginTop: '2%' }}>22 Jan, 2025</Text>
             </ScrollView>
         </View>
     )

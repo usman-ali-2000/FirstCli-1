@@ -112,17 +112,17 @@ export default function Payment({ navigation, route }) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data),
-                
+
             });
 
             const result = await response.json();
             console.log('Category added:', result);
             if (response.ok) {
+                navigation.navigate('Home');
                 await sendNotification('wingedx-admin', 'Payment Request', `payment request of ${price} $`, 'Screenshot');
                 await sendEmail('wingedxnetwork@gmail.com', 'USDT Request', `you have USDT request for ${price} $ of Id ${userId} `);
                 setImage1(null);
                 setPrice('');
-                navigation.navigate('Home');
             }
         } catch (error) {
             console.error('Error submitting category:', error);

@@ -20,14 +20,13 @@ export default function Splash() {
             } else {
                 navigation.replace("Login");
             }
-        }, 3000); // Delay in milliseconds (3000 ms = 3 seconds)
+        }, 3000); 
 
-        // Clear timeout if the component unmounts to avoid memory leaks
         return () => clearTimeout(timer);
     }, []);
 
     return (
-        <LinearGradient colors={[theme.colors.lightyYellow, theme.colors.midYellow, theme.colors.darkYellow,]} style={{ width: '100%', flex: 1, alignItems:'center', justifyContent:'center' }}>
+        <LinearGradient colors={[theme.colors.purple, theme.colors.purple, '#662d91']} style={{ width: '100%', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Image source={require('../assets/images/appIcon.png')} style={{ height: 100, width: 100, borderRadius: 100 }} />
         </LinearGradient>
     )

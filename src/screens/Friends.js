@@ -19,19 +19,24 @@ export default function Friends() {
     const [coins, setCoins] = useState(null);
     const [assets, setAssets] = useState({});
     const [generatedId, setGeneratedId] = useState('');
+    const [referUsdt, setReferUsdt] = useState(0);
 
 
     const fetchData = async () => {
         try {
             setLoading(true);
             const generatedId = await AsyncStorage.getItem("generatedId");
+            const id = await AsyncStorage.getItem("id");
             const response = await fetch(`${BaseUrl}/register`);
             const response2 = await fetch(`${BaseUrl}/asset`);
+            const response3 = await fetch(`${BaseUrl}/register/${id}`);
             const json = await response.json();
             const json2 = await response2.json();
+            const json3 = await response3.json();
             const friendData = await json.filter((item) => item.userId === generatedId);
             setAssets(json2?.assets[0]);
             setFriends(friendData);
+            setReferUsdt(json3.usdtRefer);
             console.log('json:', friendData, json2.assets[0]);
             setLoading(false);
         } catch (e) {
@@ -96,13 +101,14 @@ export default function Friends() {
 
     const Friends = () => {
         return (
-            <View style={{ width: '80%', flex: 1, justifyContent: 'space-between' }}>
+            <View style={{ width: '90%', flex: 1, justifyContent: 'space-between' }}>
+                <Text style={{ colors: theme.colors.white, fontSize: 16, color: theme.colors.purple, fontFamily: 'Gilroy-SemiBold', paddingLeft: '2%', marginRight: '2%', width: '90%', marginTop: '5%' }}>Your friends</Text>
                 <View style={{ flexDirection: 'column', alignItems: 'center', width: '100%' }}>
                     {!loading && friends.length !== 0 && <View style={{ flexDirection: 'row', alignItems: "center", marginTop: '5%', width: '100%' }}>
                         <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.purple, fontFamily: 'Gilroy-Bold', paddingLeft: '2%', marginRight: '2%', width: '15%', }}>No.</Text>
                         <Text style={{ colors: theme.colors.white, fontSize: 14, color: theme.colors.purple, fontFamily: 'Gilroy-Bold', paddingLeft: '2%', width: '85%' }}>Name</Text>
                     </View>}
-                    {loading ? <ActivityIndicator size={"large"} color={theme.colors.purple} style={{ marginTop: '30%' }} /> : friends.length === 0 ? <Text style={{ color: theme.colors.white, alignSelf: 'center', fontSize: 20, marginTop: '30%' }}>No Friends Yet!</Text> : <FlatList
+                    {loading ? <ActivityIndicator size={"small"} color={theme.colors.purple} style={{ marginTop: '30%' }} /> : friends.length === 0 ? <Text style={{ color: theme.colors.white, alignSelf: 'center', fontSize: 20, marginTop: '30%' }}>No Friends Yet!</Text> : <FlatList
                         showsVerticalScrollIndicator={false}
                         style={{ width: '100%' }}
                         data={friends}
@@ -144,7 +150,7 @@ export default function Friends() {
             <View style={{ flex: 1, width: '100%', alignItems: 'center' }}>
                 <ScrollView style={{ width: '100%' }} contentContainerStyle={{ alignItems: 'center' }}>
                     <Text style={{ color: theme.colors.black, textAlign: 'center', width: "90%", fontSize: 20, fontFamily: "Gilroy-SemiBold", marginTop: '20%' }}>Invite Friends <Image source={require('../assets/images/friend.png')} style={{ height: 20, width: 20 }} /> & Get Rewards</Text>
-                    <Text style={{ color: theme.colors.black, textAlign: 'center', width: "90%", fontSize: 14, fontFamily: "Gilroy-Mediums", textDecorationStyle: 'solid' }}>Invite Friends and get upto 7% Nfuc for each</Text>
+                    <Text style={{ color: theme.colors.black, textAlign: 'center', width: "90%", fontSize: 14, fontFamily: "Gilroy-Mediums", textDecorationStyle: 'solid' }}>Invite Friends and get upto 10% Nfuc for each</Text>
                     {/* <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors, backgroundColor: theme.colors.white, height: 50, borderRadius: 12, marginTop: '10%' }}>
                     <TouchableOpacity onPress={() => setSelect(1)} style={{
                         width: '50%', alignItems: 'center', justifyContent: 'center', backgroundColor: select === 1 ? theme.colors.purple : theme.colors.white, height: 50, borderRadius: 12
@@ -166,21 +172,25 @@ export default function Friends() {
                             end={{ x: 1, y: 0 }}
                             style={{ width: '90%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: theme.colors.purple, padding: '8%', borderRadius: 15, marginTop: '5%' }}>
                             <View style={{ width: '70%', alignItems: 'flex-start' }}>
-                                <Text style={{ fontSize: 22, fontFamily: 'Gilroy-SemiBold', color: theme.colors.white, textAlign: 'left', lineHeight: 30 }}>Invite friends to get it Upto 7% Rebates</Text>
+                                <Text style={{ fontSize: 22, fontFamily: 'Gilroy-SemiBold', color: theme.colors.white, textAlign: 'left', lineHeight: 30 }}>Invite friends to get it Upto 10% Rebates</Text>
+                                <Text style={{ fontSize: 14, fontFamily: 'Gilroy-SemiBold', color: theme.colors.white, textAlign: 'left', lineHeight: 30 }}>Earned from friends: {referUsdt && referUsdt}$</Text>
                             </View>
                             <View style={{ width: '30%', alignItems: 'center' }}>
                                 <Image source={require('../assets/images/robot.png')} style={{ height: 80, width: 80 }} />
                             </View>
                         </LinearGradient>
                     </View>
-                    <TouchableOpacity onPress={() => copyToClipboard(assets.appIcon)} style={{ backgroundColor: theme.colors.lightGrey, padding: 10, flexDirection: 'row', alignItems: 'center', width: '90%', borderRadius: 20, marginTop: '10%' }}>
-                        <Text style={{ width: '90%', fontSize: 13, color: theme.colors.black }}>{assets.appIcon}</Text>
+                    <Text style={{ fontSize: 14, fontFamily: 'Gilroy-Bold', color: theme.colors.black, textAlign: 'left', marginTop: '10%', width: '80%' }}>App Link</Text>
+                    <TouchableOpacity onPress={() => copyToClipboard(assets.appIcon)} style={{ backgroundColor: theme.colors.lightGrey, padding: 10, flexDirection: 'row', alignItems: 'center', width: '90%', borderRadius: 20, marginTop: '2%' }}>
+                        {loading ? <ActivityIndicator color={theme.colors.purple} style={{ width: '90%' }} /> : <Text style={{ width: '90%', fontSize: 13, color: theme.colors.jetBlack, fontSize: 14, fontFamily: 'Gilroy-SemiBold' }}>{assets.appIcon}</Text>}
                         <Icon name="copy" size={16} color={theme.colors.darkGrey} />
                     </TouchableOpacity>
+                    <Text style={{ fontSize: 14, fontFamily: 'Gilroy-Bold', color: theme.colors.black, textAlign: 'left', marginTop: '5%', width: '80%' }}>Your Referal Code</Text>
                     <TouchableOpacity onPress={() => copyToClipboard(generatedId)} style={{ backgroundColor: theme.colors.lightGrey, padding: 10, flexDirection: 'row', alignItems: 'center', width: '90%', borderRadius: 20, marginTop: '5%' }}>
-                        <Text style={{ width: '90%', fontSize: 13, color: theme.colors.black }}>{generatedId}</Text>
+                        <Text style={{ width: '90%', fontSize: 13, color: theme.colors.jetBlack, fontSize: 14, fontFamily: 'Gilroy-SemiBold' }}>{generatedId}</Text>
                         <Icon name="copy" size={16} color={theme.colors.darkGrey} />
                     </TouchableOpacity>
+                    <Friends />
                 </ScrollView>
             </View>
         </LinearGradient>

@@ -7,6 +7,7 @@ import { addCoins, addReferCoins, BaseUrl } from "../assets/Data";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LinearGradient from "react-native-linear-gradient";
 import Working from "./Working";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 export default function Task({ navigation }) {
 
@@ -193,8 +194,13 @@ export default function Task({ navigation }) {
 
     return (
         <LinearGradient colors={[theme.colors.lightPink, theme.colors.lightPink, theme.colors.lightPink,]} style={{ width: '100%', flex: 1, alignItems: 'center' }}>
-            <Text style={{ color: theme.colors.purple, width: "90%", fontSize: 22, fontFamily: "Gilroy-SemiBold", marginTop: '10%', }}>Tasks</Text>
             <View style={{ flex: 1, width: '100%', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', padding: '5%' }}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={{ alignSelf: 'flex-start', marginTop: '2%', }}>
+                    <Icon name="chevron-left" size={16} color={theme.colors.purple} style={{  marginLeft: '5%' }} />
+                </TouchableOpacity>
+                <Text style={{ color: theme.colors.purple, fontSize: 20, fontFamily: 'Gilroy-SemiBold', marginLeft: '5%' }}>Tasks</Text>
+            </View>
                 <ScrollView style={{ width: '100%' }} contentContainerStyle={{ alignItems: 'center' }}>
                     <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors.purple, backgroundColor: theme.colors.white, height: 50, borderRadius: 12, marginTop: '10%' }}>
                         <TouchableOpacity onPress={() => setSelect(1)} style={{

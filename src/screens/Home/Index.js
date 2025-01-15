@@ -16,6 +16,8 @@ import NetInfo from '@react-native-community/netinfo';
 import ImageSlider from "react-native-image-slider";
 import LinearGradient from "react-native-linear-gradient";
 import { useFocusEffect } from "@react-navigation/native";
+import CustomAlert from "../../components/CustomAlert";
+import CircularProgress from "../../components/CircularProgress";
 
 const Home = ({ navigation }) => {
 
@@ -34,23 +36,47 @@ const Home = ({ navigation }) => {
     const [accType, setAccType] = useState(null);
     const [generatedId, setGeneratedId] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
+    const [logoutAlert, setLogoutAlert] = useState(false);
+    const [versionAlert, setVersionAlert] = useState(false);
     const [openMenu, setOpenMenu] = useState({
         m1: false,
         m2: false,
         m3: false,
     })
 
+    const targetDate = new Date("2025-02-28T00:00:00");
 
+    const calculateRemainingTime = () => {
+        const now = new Date().getTime();
+        const target = targetDate.getTime();
+        return target - now;
+    };
+
+    const [remainingTime, setRemainingTime] = useState(calculateRemainingTime());
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setRemainingTime(calculateRemainingTime());
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const days = Math.floor(remainingTime / (24 * 60 * 60 * 1000));
+    const hours = Math.floor((remainingTime % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+    const minutes = Math.floor((remainingTime % (60 * 60 * 1000)) / (60 * 1000));
 
 
     const fetchLink = async () => {
         try {
             const response = await fetch(`${BaseUrl}/asset`);
-            const response2 = await fetch(`${BaseUrl}/banner`);
+            // const response2 = await fetch(`${BaseUrl}/banner`);
             const jsondata = await response.json();
-            const json = await response2.json();
-            setBannerData(json.banners);
+            // const json = await response2.json();
+            // setBannerData(json.banners);
             setLinks(jsondata.assets[0]);
+            if (jsondata.assets[0].version !== 1) {
+                setVersionAlert(true);
+            }
             console.log('data:', jsondata.assets[0]);
         } catch (e) {
             console.log('error fetching links...', e);
@@ -68,7 +94,7 @@ const Home = ({ navigation }) => {
             setCoins(formatNumber(json.coin + json.referCoin));
             setAttempts(json.attempts);
             setNfuc(formatNumber(json.nfuc + json.nfucRefer));
-            setUsdt(formatNumber(json.usdt));
+            setUsdt(formatNumber(json.usdt + json.usdtRefer));
             setName(json.name);
             setAccType(json.accType);
             setGeneratedId(json.generatedId);
@@ -133,7 +159,6 @@ const Home = ({ navigation }) => {
     }
 
     useEffect(() => {
-        // Subscribe to network state updates
         const unsubscribe = NetInfo.addEventListener(state => {
             setIsConnected(state.isConnected);
             console.log("Connection type:", state.type);
@@ -184,7 +209,15 @@ const Home = ({ navigation }) => {
                             <Text style={{ fontSize: 18, fontFamily: 'Gilroy-SemiBold', color: theme.colors.white, lineHeight: 30 }}>{nfuc}</Text>
                         </View>
                     </LinearGradient>
-                    {bannerData?.length > 0 ? <View style={{ width: '95%', paddingRight: '2%', height: 130, backgroundColor: theme.colors.lightGrey, marginTop: '5%' }}>
+                    <View style={{ width: '90%', alignItems: 'center', backgroundColor: theme.colors.white, marginTop: '5%', paddingBottom: '5%', borderRadius: 6, elevation: 5 }}>
+                        <Text style={{ fontSize: 14, fontFamily: 'Gilroy-Bold', color: theme.colors.black, marginTop: '5%', width: '90%' }}>Nfuc having countdown</Text>
+                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: '5%' }}>
+                            <CircularProgress size={60} progress={days} totalProgress={45} color={theme.colors.purple} total={'days'} backgroundColor="#d3d3d3" strokeWidth={6} />
+                            <CircularProgress size={60} progress={hours} totalProgress={24} color={theme.colors.green} total={'hrs'} backgroundColor="#d3d3d3" strokeWidth={6} />
+                            <CircularProgress size={60} progress={minutes} totalProgress={60} color={theme.colors.darkYellow} total={'mins'} backgroundColor="#d3d3d3" strokeWidth={6} />
+                        </View>
+                    </View>
+                    {/* {bannerData?.length > 0 ? <View style={{ width: '95%', paddingRight: '2%', height: 130, backgroundColor: theme.colors.lightGrey, marginTop: '5%' }}>
                         <ImageSlider
                             // autoPlayWithInterval={5000}
                             loopBothSides={false}
@@ -218,7 +251,7 @@ const Home = ({ navigation }) => {
                         //     </View>
                         // )}
                         />
-                    </View> : <View style={{ width: '100%', height: 130, alignItems: 'center', justifyContent: 'center', marginBottom: '5%' }}><ActivityIndicator color={theme.colors.purple} /></View>}
+                    </View> : <View style={{ width: '100%', height: 130, alignItems: 'center', justifyContent: 'center', marginBottom: '5%' }}><ActivityIndicator color={theme.colors.purple} /></View>} */}
                     <View style={{ width: "90%", alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginTop: "3%", }}>
                         <View style={{ width: '48%' }}>
                             <TouchableOpacity onPress={() => navigation.navigate('Deposit')} style={{ marginRight: '5%', backgroundColor: theme.colors.white, padding: '7%', borderRadius: 10, width: '100%', flexDirection: 'row', alignItems: 'center', elevation: 2 }}>
@@ -236,19 +269,19 @@ const Home = ({ navigation }) => {
                     <Text style={{ color: theme.colors.purple, padding: 5, alignSelf: 'center', fontSize: 18, fontFamily: 'Gilroy-Bold', backgroundColor: 'rgba(0, 0, 0, 0)', width: '90%', marginTop: '5%' }}>Basic Tools</Text>
                     <View style={{ width: '90%', alignItems: 'center', backgroundColor: theme.colors.white, padding: '5%', borderRadius: 10, marginTop: '5%', elevation: 0, marginBottom: '0%' }}>
                         <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignSelf: 'center', marginTop: '5%' }}>
-                            <TouchableOpacity onPress={() => { isConnected && openLink(links.facebook) }} style={{ alignItems: 'center', width: '30%' }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Notification')} style={{ alignItems: 'center', width: '30%' }}>
                                 <View style={{ backgroundColor: 'orange', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 50, elevation: 5 }}>
                                     <Icon name="bell" size={22} color={theme.colors.white} />
                                 </View>
-                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Notifcations</Text>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Notification</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => { isConnected && openLink(links.whatsapp) }} style={{ alignItems: 'center', width: '30%' }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Help')} style={{ alignItems: 'center', width: '30%' }}>
                                 <View style={{ backgroundColor: theme.colors.blue, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 50, elevation: 5 }}>
                                     <Icon name="support" size={20} color={theme.colors.white} />
                                 </View>
                                 <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold', textAlign: 'center' }}>Customer Service</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => { isConnected && openLink(links.instagram) }} style={{ alignItems: 'center', width: '30%' }}>
+                            <TouchableOpacity onPress={() => { navigation.navigate('Guide') }} style={{ alignItems: 'center', width: '30%' }}>
                                 <View style={{ backgroundColor: 'rgb(222, 49, 99)', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 50, elevation: 5 }}>
                                     <Icon name="book" size={20} color={theme.colors.white} />
                                 </View>
@@ -256,28 +289,48 @@ const Home = ({ navigation }) => {
                             </TouchableOpacity>
                         </View>
                         <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignSelf: 'center', marginTop: '5%' }}>
-                            <TouchableOpacity onPress={() => { isConnected && openLink(links.twitter) }} style={{ alignItems: 'center', width: '30%' }}>
+                            <TouchableOpacity onPress={() => { navigation.navigate('AboutUs') }} style={{ alignItems: 'center', width: '30%' }}>
                                 <View style={{ backgroundColor: theme.colors.green, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 50, elevation: 5 }}>
                                     <MaterialIcon name="info" size={22} color={theme.colors.white} />
                                 </View>
-                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Aboutus</Text>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>About Us</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => { isConnected && openLink(links.twitter) }} style={{ alignItems: 'center', width: '30%' }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Task')} style={{ alignItems: 'center', width: '30%' }}>
                                 <View style={{ backgroundColor: theme.colors.purple, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 50, elevation: 5 }}>
                                     <MaterialIcon name="article" size={20} color={theme.colors.white} />
                                 </View>
                                 <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Task</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={{ alignItems: 'center', width: '30%' }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Friends')} style={{ alignItems: 'center', width: '30%' }}>
                                 <View style={{ backgroundColor: theme.colors.darkGrey, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 50, elevation: 5 }}>
                                     <Icon name="envelope" size={18} color={theme.colors.white} />
                                 </View>
                                 <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Invite</Text>
                             </TouchableOpacity>
                         </View>
+                        <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignSelf: 'center', marginTop: '5%' }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('ManageCoin', { type: 'nfuc' })} style={{ alignItems: 'center', width: '30%' }}>
+                                <View style={{ backgroundColor: theme.colors.blue, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 50, elevation: 5 }}>
+                                    <Icon name="share" size={20} color={theme.colors.white} />
+                                </View>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Send Nfuc</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => navigation.navigate('Wallet')} style={{ alignItems: 'center', width: '30%' }}>
+                                <View style={{ backgroundColor: theme.colors.darkYellow, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 50, elevation: 5 }}>
+                                    <MaterialIcon name="wallet" size={20} color={theme.colors.white} />
+                                </View>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Wallet</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => setLogoutAlert(true)} style={{ alignItems: 'center', width: '30%' }}>
+                                <View style={{ backgroundColor: theme.colors.red, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 50, elevation: 5 }}>
+                                    <MaterialIcon name="logout" size={18} color={theme.colors.white} />
+                                </View>
+                                <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Logout</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                     <Text style={{ color: theme.colors.purple, padding: 5, alignSelf: 'center', fontSize: 18, fontFamily: 'Gilroy-Bold', backgroundColor: 'rgba(0, 0, 0, 0)', width: '90%', marginTop: '5%' }}>Community</Text>
-                    <View style={{ width: '90%', alignItems: 'center', backgroundColor: theme.colors.white, padding: '5%', borderRadius: 10, marginTop: '5%', elevation: 0, marginBottom: '10%' }}>
+                    {loading ? (<ActivityIndicator color={theme.colors.purple} style={{ marginTop: "10%" }} />) : (<View style={{ width: '90%', alignItems: 'center', backgroundColor: theme.colors.white, padding: '5%', borderRadius: 10, marginTop: '5%', elevation: 0, marginBottom: '10%' }}>
                         <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', alignSelf: 'center', marginTop: '5%' }}>
                             <TouchableOpacity onPress={() => { isConnected && openLink(links.facebook) }} style={{ alignItems: 'center', width: '25%' }}>
                                 <View style={{ backgroundColor: theme.colors.white, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 10, elevation: 5 }}>
@@ -330,8 +383,26 @@ const Home = ({ navigation }) => {
                                 <Text style={{ color: theme.colors.darkGrey, paddingTop: 5, fontSize: 12, fontFamily: 'Gilroy-SemiBold' }}>Discord</Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
+                    </View>)}
                 </ScrollView>
+                <CustomAlert
+                    title={"Logout"}
+                    message={"Do you want to logout!"}
+                    visible={logoutAlert}
+                    onCancel={() => setLogoutAlert(false)}
+                    onConfirm={async () => {
+                        await AsyncStorage.removeItem("id");
+                        await navigation.replace("Login");
+                        setLogoutAlert(false);
+                    }}
+                />
+                <CustomAlert
+                    title={"New Version"}
+                    message={"Download latest version of WingedX \n \n Confirm -> to Download latest version"}
+                    hideCancel={true}
+                    visible={versionAlert}
+                    onConfirm={() => { links && openLink(links.appIcon) }}
+                />
             </View>
         </LinearGradient>
     )
